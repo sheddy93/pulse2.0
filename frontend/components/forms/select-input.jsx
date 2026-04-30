@@ -1,0 +1,124 @@
+'use client';
+
+import { ChevronDown } from 'lucide-react';
+
+/**
+ * SelectInput Component
+ * 
+ * Custom select dropdown with consistent styling
+ * 
+ * @param {Object} props
+ * @param {string} props.label - Select label
+ * @param {string} props.value - Selected value
+ * @param {Function} props.onChange - Change handler
+ * @param {Array<{value: string, label: string}>} props.options - Select options
+ * @param {string} props.placeholder - Placeholder text
+ * @param {string} props.error - Error message
+ * @param {boolean} props.required - Required field
+ * @param {React.ReactNode} props.leftIcon - Icon component for left side
+ * @param {string} props.size - Size variant: 'sm', 'md', 'lg'
+ * @param {string} props.className - Additional CSS classes
+ * @param {string} props.name - Select name attribute
+ * @param {string} props.id - Select id attribute
+ * @param {boolean} props.disabled - Disabled state
+ */
+export default function SelectInput({
+  label,
+  value,
+  onChange,
+  options = [],
+  placeholder = 'Seleziona un\'opzione',
+  error,
+  required = false,
+  leftIcon,
+  size = 'md',
+  className = '',
+  name,
+  id,
+  disabled = false,
+  ...props
+}) {
+  const sizeClasses = {
+    sm: 'px-3 py-1.5 text-sm',
+    md: 'px-4 py-2.5 text-sm',
+    lg: 'px-4 py-3 text-base',
+  };
+
+  const iconSizes = {
+    sm: 'w-4 h-4',
+    md: 'w-5 h-5',
+    lg: 'w-5 h-5',
+  };
+
+  return (
+    <div className="relative">
+      {/* Left Icon */}
+      {leftIcon && (
+        <div className={`
+          absolute left-3 top-1/2 -translate-y-1/2 z-10
+          text-gray-400 dark:text-gray-500
+          ${iconSizes[size]}
+          pointer-events-none
+        `}>
+          {leftIcon}
+        </div>
+      )}
+
+      {/* Select */}
+      <select
+        value={value}
+        onChange={onChange}
+        name={name}
+        id={id}
+        disabled={disabled}
+        aria-invalid={error ? 'true' : 'false'}
+        aria-describedby={error ? `${id}-error` : undefined}
+        className={`
+          w-full rounded-lg border transition-all duration-200
+          appearance-none cursor-pointer
+          ${sizeClasses[size]}
+          ${leftIcon ? 'pl-10' : ''}
+          pr-10
+          ${error
+            ? 'border-red-300 dark:border-red-700 focus:border-red-500 focus:ring-red-500 dark:focus:border-red-500'
+            : 'border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500'
+          }
+          ${disabled
+            ? 'bg-gray-100 dark:bg-gray-800 text-gray-500 cursor-not-allowed'
+            : 'bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100'
+          }
+          ${!value ? 'text-gray-400 dark:text-gray-500' : ''}
+          focus:outline-none focus:ring-2 focus:ring-offset-0
+          dark:focus:ring-offset-gray-900
+          ${className}
+        `}
+        {...props}
+      >
+        {placeholder && (
+          <option value="" disabled>
+            {placeholder}
+          </option>
+        )}
+        {options.map((option) => (
+          <option
+            key={option.value}
+            value={option.value}
+            className="text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-900"
+          >
+            {option.label}
+          </option>
+        ))}
+      </select>
+
+      {/* Chevron Icon */}
+      <div className={`
+        absolute right-3 top-1/2 -translate-y-1/2
+        text-gray-400 dark:text-gray-500
+        pointer-events-none
+        ${iconSizes[size]}
+      `}>
+        <ChevronDown className={iconSizes[size]} />
+      </div>
+    </div>
+  );
+}

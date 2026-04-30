@@ -1,0 +1,87 @@
+# ============================================================
+# PulseHR - Clean Build .gitignore
+# ============================================================
+
+# Dependencies
+node_modules/
+.npm
+.yarn
+.pnp/
+.pnp.js
+
+# Build outputs
+.next/
+out/
+build/
+dist/
+
+# Environment variables (never commit real .env files)
+.env
+.env.*
+!.env.example
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+ENV/
+
+# Agent/Credentials (never commit)
+.minimax/
+credentials.json
+service-account.json
+
+# Backup files
+backup_pre_sync/
+app_backup/
+frontend/app_backup/
+components_backup/
+frontend/components_backup/
+backup_old_pages/
+
+# Misc
+.vercel/
+
+# SQLite databases
+*.sqlite3
+*.db
+
+# Media files (generated at runtime)
+media/
+backend/media/
+
+# Logs
+logs/
+backend/logs/
+
+# Coverage
+coverage/
+htmlcov/
+
+# Test results
+test-results/
+playwright-report/
+
+# Zips
+*.zip
+PulseHR_*.zip

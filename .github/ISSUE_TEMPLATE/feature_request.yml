@@ -1,0 +1,100 @@
+name: Feature Request
+
+description: Suggest an idea for this project
+title: "[FEATURE] "
+labels: ["enhancement", "triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Feature Request
+        Please describe the feature you'd like to request.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear and concise description of the feature or improvement you want.
+      placeholder: Describe your feature request here...
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or Use Case
+      description: |
+        Describe the problem or use case this feature would address.
+        Why do you need this feature?
+      placeholder: |
+        Describe the problem or use case...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the solution you'd like to have.
+      placeholder: Describe your proposed solution...
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Describe any alternative solutions you've considered.
+      placeholder: Alternatives considered...
+    validations:
+      required: false
+
+  - type: textarea
+    id: mockups
+    attributes:
+      label: Mockups or Designs
+      description: If applicable, add mockups, wireframes, or designs to help illustrate the feature.
+      placeholder: Drag and drop or paste design files here...
+    validations:
+      required: false
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature?
+      options:
+        - Low
+        - Medium
+        - High
+        - Critical
+      default: 0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: complexity
+    attributes:
+      label: Complexity
+      description: Estimate the complexity of implementing this feature.
+      options:
+        - Low (quick fix)
+        - Medium (standard feature)
+        - High (significant effort)
+        - Unknown
+      default: 0
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have searched the existing issues
+          required: true
+        - label: I have checked the roadmap
+          required: false
+        - label: This feature is not already planned
+          required: true

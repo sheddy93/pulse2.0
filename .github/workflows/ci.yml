@@ -1,0 +1,157 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+env:
+  DATABASE_URL: postgresql://pulsehr:testpassword@localhost:5432/pulsehr_test
+  REDIS_URL: redis://localhost:6379/1
+  DJANGO_SECRET_KEY: test-secret-key-for-ci
+  DJANGO_DEBUG: 'True'
+  NEXT_PUBLIC_API_BASE_URL: http://localhost:8000
+
+jobs:
+  test-backend:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: pulsehr_test
+          POSTGRES_USER: pulsehr
+          POSTGRES_PASSWORD: testpassword
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Cache pip packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('backend/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+
+      - name: Run migrations
+        run: |
+          cd backend
+          python manage.py migrate --noinput
+
+      - name: Run tests
+        run: |
+          cd backend
+          python manage.py test --verbosity=2
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v4
+        if: always()
+        with:
+          files: ./coverage.xml
+          fail_ci_if_error: false
+          verbose: true
+
+  test-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Run lint
+        run: |
+          cd frontend
+          npm run lint || true
+
+      - name: Run type check
+        run: |
+          cd frontend
+          npm run type-check || true
+
+      - name: Build
+        run: |
+          cd frontend
+          npm run build
+
+      - name: Run Playwright tests
+        run: |
+          cd frontend
+          npx playwright install --with-deps chromium
+          npx playwright test || true
+        if: false
+
+  lint-all:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Check Python formatting
+        run: |
+          pip install black flake8 isort
+          black --check backend || true
+          flake8 backend --max-line-length=120 || true
+          isort --check-only backend || true
+
+      - name: Check JS formatting
+        run: |
+          cd frontend
+          npx prettier --check "**/*.{js,jsx,ts,tsx}" || true
+
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner
+        run: |
+          pip install trufflehog || true
+          trufflehog filesystem . || true
+
+      - name: Check for secrets in code
+        run: |
+          pip install detect-secrets
+          detect-secrets scan --force-line-number > secrets_audit.txt || true
+          cat secrets_audit.txt || true

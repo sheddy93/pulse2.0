@@ -1,0 +1,32 @@
+# Git
+.git
+
+# IDE
+.idea
+.vscode
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment files (keep .env.docker as template)
+.env
+.env.*
+!.env.docker
+
+# Documentation
+*.md
+docs
+LICENSE
+
+# Backups
+backups
+*.bak
+
+# Docker
+docker-compose.yml
+Dockerfile*
+.dockerignore
+
+# Makefile
+Makefile

@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PulseHR - Gestione HR Semplice</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-strong: #1d4ed8;
+      --success: #10b981;
+      --info: #3b82f6;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --secondary: #8b5cf6;
+      --background: #ffffff;
+      --surface: #f8fafc;
+      --foreground: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--background);
+      color: var(--foreground);
+      line-height: 1.6;
+    }
+    
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+    
+    /* Navbar */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+    }
+    
+    nav .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 18px;
+      text-decoration: none;
+      color: var(--foreground);
+    }
+    
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--primary);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      font-size: 14px;
+    }
+    
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+    
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+    
+    .nav-links a:hover { color: var(--foreground); }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+    
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .btn-primary:hover { background: var(--primary-strong); }
+    
+    .btn-outline {
+      background: var(--surface);
+      color: var(--foreground);
+      border: 2px solid var(--border);
+    }
+    
+    .btn-outline:hover {
+      border-color: var(--primary);
+      background: rgba(37,99,235,0.05);
+    }
+    
+    /* Hero */
+    .hero {
+      padding: 80px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 25%;
+      width: 400px;
+      height: 400px;
+      background: rgba(37,99,235,0.08);
+      border-radius: 50%;
+      filter: blur(80px);
+    }
+    
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+    
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: rgba(37,99,235,0.1);
+      border: 1px solid rgba(37,99,235,0.2);
+      border-radius: 100px;
+      font-size: 14px;
+      color: var(--primary);
+      font-weight: 500;
+    }
+    
+    .badge svg { width: 16px; height: 16px; }
+    
+    h1 {
+      font-size: 48px;
+      font-weight: 800;
+      line-height: 1.1;
+      margin: 16px 0 24px;
+      letter-spacing: -0.02em;
+    }
+    
+    h1 span { color: var(--primary); }
+    
+    .subtitle {
+      font-size: 20px;
+      color: var(--muted);
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+    
+    .cta-group {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    
+    .trust-badges {
+      display: flex;
+      gap: 24px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    
+    .trust-badges span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .trust-badges svg { color: var(--success); width: 16px; height: 16px; }
+    
+    /* Dashboard Preview */
+    .dashboard-preview {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);
+    }
+    
+    .browser-header {
+      background: var(--background);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .browser-dots {
+      display: flex;
+      gap: 6px;
+    }
+    
+    .browser-dots span {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    
+    .browser-dots span:nth-child(1) { background: rgba(239,68,68,0.3); }
+    .browser-dots span:nth-child(2) { background: rgba(245,158,11,0.3); }
+    .browser-dots span:nth-child(3) { background: rgba(16,185,129,0.3); }
+    
+    .browser-title {
+      flex: 1;
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    
+    .dashboard-content {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    
+    .stat-card {
+      background: var(--background);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+    }
+    
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+    }
+    
+    .bar-chart {
+      background: var(--background);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      height: 100px;
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+    }
+    
+    .bar {
+      flex: 1;
+      background: rgba(37,99,235,0.2);
+      border-radius: 4px 4px 0 0;
+      transition: background 0.2s;
+    }
+    
+    .bar:hover { background: rgba(37,99,235,0.4); }
+    
+    .activity-list {
+      background: var(--background);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    
+    .activity-title {
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    
+    .activity-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    
+    .activity-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--primary);
+      border-radius: 50%;
+    }
+    
+    .floating-badge {
+      position: absolute;
+      top: -16px;
+      right: -16px;
+      background: var(--primary);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(37,99,235,0.4);
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    /* Features */
+    .features {
+      padding: 80px 0;
+      background: var(--surface);
+    }
+    
+    .section-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+    
+    .section-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: rgba(37,99,235,0.1);
+      border: 1px solid rgba(37,99,235,0.2);
+      border-radius: 100px;
+      font-size: 14px;
+      color: var(--primary);
+      font-weight: 500;
+      margin-bottom: 16px;
+    }
+    
+    .section-title {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    
+    .section-subtitle {
+      font-size: 18px;
+      color: var(--muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    
+    .feature-card {
+      background: var(--background);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      transition: all 0.3s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .feature-card:hover {
+      border-color: rgba(37,99,235,0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px -12px rgba(37,99,235,0.1);
+    }
+    
+    .feature-tag {
+      display: inline-flex;
+      padding: 4px 10px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 500;
+      margin-bottom: 16px;
+      background: rgba(37,99,235,0.1);
+      color: var(--primary);
+      border: 1px solid rgba(37,99,235,0.2);
+    }
+    
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      background: rgba(37,99,235,0.1);
+      color: var(--primary);
+    }
+    
+    .feature-icon svg { width: 24px; height: 24px; }
+    
+    .feature-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    
+    .feature-desc {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    
+    .feature-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+    
+    .feature-card:hover::after { transform: scaleX(1); }
+    
+    /* Pricing */
+    .pricing {
+      padding: 80px 0;
+    }
+    
+    .pricing-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+    
+    .pricing-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      text-align: center;
+      position: relative;
+      transition: all 0.3s;
+    }
+    
+    .pricing-card:hover { border-color: rgba(37,99,235,0.2); }
+    
+    .pricing-card.popular {
+      background: rgba(37,99,235,0.05);
+      border-color: rgba(37,99,235,0.3);
+      transform: scale(1.05);
+      box-shadow: 0 20px 40px -12px rgba(37,99,235,0.15);
+    }
+    
+    .popular-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--primary);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .popular-badge svg { width: 12px; height: 12px; }
+    
+    .pricing-name {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    
+    .pricing-desc {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+    
+    .pricing-price {
+      font-size: 48px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    
+    .pricing-period {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+    
+    .pricing-features {
+      text-align: left;
+      margin-bottom: 32px;
+    }
+    
+    .pricing-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 12px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    
+    .pricing-features svg {
+      color: var(--success);
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    
+    .pricing-cta {
+      width: 100%;
+    }
+    
+    /* Footer */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 64px 0 32px;
+    }
+    
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(3, 1fr);
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+    
+    .footer-brand p {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 16px;
+      line-height: 1.6;
+    }
+    
+    .footer-title {
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+    
+    .footer-links a:hover { color: var(--foreground); }
+    
+    .trust-badges-footer {
+      display: flex;
+      gap: 24px;
+      margin-top: 24px;
+    }
+    
+    .trust-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    
+    .trust-badge svg { width: 16px; height: 16px; color: var(--success); }
+    
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 32px;
+      text-align: center;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    
+    /* Responsive */
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .pricing-cards { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      h1 { font-size: 36px; }
+    }
+    
+    @media (max-width: 600px) {
+      .features-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .cta-group { flex-direction: column; }
+      .trust-badges { flex-direction: column; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav>
+  <div class="container">
+    <a href="#" class="logo">
+      <div class="logo-icon">P</div>
+      PulseHR
+    </a>
+    <div class="nav-links">
+      <a href="#features">Funzionalità</a>
+      <a href="#pricing">Prezzi</a>
+      <a href="/login">Accedi</a>
+      <a href="/register/company" class="btn btn-primary">Prova Gratis</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <!-- Left: Content -->
+      <div>
+        <div class="badge">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+          </svg>
+          Pensato per PMI e consulenti
+        </div>
+        
+        <h1>Gestisci HR in un'unica piattaforma. <span>Semplice.</span></h1>
+        
+        <p class="subtitle">
+          PulseHR centralizza presenze, ferie, documenti e compliance.
+          Flussi guidati, automazioni operative, report automatici.
+        </p>
+        
+        <div class="cta-group">
+<a href="/register/company" class="btn btn-primary">
+            Registra azienda
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </a>
+          <a href="/register/consultant" class="btn btn-outline">
+            Sono un consulente
+          </a>
+        </div>
+        
+        <div class="trust-badges">
+          <span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Setup guidato
+          </span>
+          <span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            GDPR-ready
+          </span>
+          <span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Pensato per PMI
+          </span>
+        </div>
+      </div>
+      
+      <!-- Right: Dashboard Preview -->
+      <div style="position: relative;">
+        <div class="dashboard-preview">
+          <div class="browser-header">
+            <div class="browser-dots">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="browser-title">Dashboard PulseHR</div>
+          </div>
+          <div class="dashboard-content">
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-label">Presenze oggi</div>
+                <div class="stat-value">42</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Ferie pending</div>
+                <div class="stat-value">8</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Doc scaduti</div>
+                <div class="stat-value">3</div>
+              </div>
+            </div>
+            <div class="bar-chart">
+              <div class="bar" style="height: 65%"></div>
+              <div class="bar" style="height: 45%"></div>
+              <div class="bar" style="height: 80%"></div>
+              <div class="bar" style="height: 55%"></div>
+              <div class="bar" style="height: 70%"></div>
+              <div class="bar" style="height: 90%"></div>
+              <div class="bar" style="height: 60%"></div>
+            </div>
+            <div class="activity-list">
+              <div class="activity-title">Attività Recenti</div>
+              <div class="activity-item">
+                <div class="activity-dot"></div>
+                Nuova richiesta ferie - Mario Rossi
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot"></div>
+                Documento firmato - Luca Bianchi
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot"></div>
+                Check-in in ritardo - Giulia Verdi
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="floating-badge">Dashboard operativa</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section id="features" class="features">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-badge">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+        </svg>
+        Funzionalità Complete
+      </div>
+      <h2 class="section-title">Tutto ciò che serve per gestire il tuo team</h2>
+      <p class="section-subtitle">
+        Funzionalità pensate per semplificare il lavoro HR quotidiano.
+        Nessuna configurazione complessa, tutto funziona out-of-the-box.
+      </p>
+    </div>
+    
+    <div class="features-grid">
+      <!-- Feature 1 -->
+      <div class="feature-card">
+        <div class="feature-tag">Attendance</div>
+        <div class="feature-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+        </div>
+        <h3 class="feature-title">Presenze & Timbrature</h3>
+        <p class="feature-desc">Check-in/check-out semplici, geolocalizzazione, report automatici delle presenze.</p>
+      </div>
+      
+      <!-- Feature 2 -->
+      <div class="feature-card">
+        <div class="feature-tag">Leave Management</div>
+        <div class="feature-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <h3 class="feature-title">Ferie & Permessi</h3>
+        <p class="feature-desc">Flussi di approvazione automatizzati, calendario condiviso, tracking balance ferie.</p>
+      </div>
+      
+      <!-- Feature 3 -->
+      <div class="feature-card">
+        <div class="feature-tag">Documents</div>
+        <div class="feature-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+        </div>
+        <h3 class="feature-title">Documenti HR</h3>
+        <p class="feature-desc">Firma digitale, archiviazione sicura, scadenze automatiche e notifiche.</p>
+      </div>
+      
+      <!-- Feature 4 -->
+      <div class="feature-card">
+        <div class="feature-tag">Compliance</div>
+        <div class="feature-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+        </div>
+        <h3 class="feature-title">Compliance GDPR</h3>
+        <p class="feature-desc">Conformità completa al GDPR italiano, audit trail, gestione consenso.</p>
+      </div>
+      
+      <!-- Feature 5 -->
+      <div class="feature-card">
+        <div class="feature-tag">Analytics</div>
+        <div class="feature-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+        </div>
+        <h3 class="feature-title">Report & Analytics</h3>
+        <p class="feature-desc">Dashboard operativa real-time, export PDF/Excel, insight per decisioni strategiche.</p>
+      </div>
+      
+      <!-- Feature 6 -->
+      <div class="feature-card">
+        <div class="feature-tag">Notifications</div>
+        <div class="feature-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          </svg>
+        </div>
+        <h3 class="feature-title">Alert Operativi</h3>
+        <p class="feature-desc">Notifiche automatiche per approvazioni, scadenze, richieste ferie e anomalie presenze.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section id="pricing" class="pricing">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-badge">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+        </svg>
+        Prezzi Trasparenti
+      </div>
+      <h2 class="section-title">Scegli il piano perfetto per la tua azienda</h2>
+      <p class="section-subtitle">
+        Nessun costo nascosto. Cambia piano quando vuoi. Cancella in qualsiasi momento.
+      </p>
+    </div>
+    
+    <div class="pricing-cards">
+      <!-- Starter -->
+      <div class="pricing-card">
+        <h3 class="pricing-name">Starter</h3>
+        <p class="pricing-desc">Per piccole aziende fino a 5 dipendenti</p>
+        <div class="pricing-price">Gratis</div>
+        <div class="pricing-period"></div>
+        <ul class="pricing-features">
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Fino a 5 dipendenti
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Gestione presenze base
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Richieste ferie semplici
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            1 utente admin
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Supporto email
+          </li>
+        </ul>
+        <a href="/register/company" class="btn btn-outline pricing-cta">Inizia Gratis</a>
+      </div>
+      
+      <!-- Professional -->
+      <div class="pricing-card popular">
+        <div class="popular-badge">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+          </svg>
+          Più Popolare
+        </div>
+        <h3 class="pricing-name">Professional</h3>
+        <p class="pricing-desc">Per aziende in crescita</p>
+        <div class="pricing-price">9€</div>
+        <div class="pricing-period">EUR/dipendente/mese</div>
+        <ul class="pricing-features">
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Dipendenti illimitati
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Tutte le funzionalità Starter
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Report avanzati
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Multi-utente (fino a 10 admin)
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Integrazione consulente completa
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Supporto prioritario
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            API access
+          </li>
+        </ul>
+        <a href="/register/company" class="btn btn-primary pricing-cta">Prova 14 giorni</a>
+      </div>
+      
+      <!-- Enterprise -->
+      <div class="pricing-card">
+        <h3 class="pricing-name">Enterprise</h3>
+        <p class="pricing-desc">Per grandi organizzazioni</p>
+        <div class="pricing-price">19€</div>
+        <div class="pricing-period">EUR/dipendente/mese</div>
+        <ul class="pricing-features">
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Tutto in Professional
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Account manager dedicato
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Customizzazioni
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Training personalizzato
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Integrazioni premium
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Supporto telefonico
+          </li>
+        </ul>
+        <a href="/register/company" class="btn btn-outline pricing-cta">Richiedi Demo</a>
+      </div>
+    </div>
+    
+    <p style="text-align: center; margin-top: 48px; color: var(--muted); font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16" style="color: var(--primary)">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+      </svg>
+      Tutti i piani includono: Setup guidato, Supporto in italiano, Aggiornamenti automatici
+    </p>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="logo">
+          <div class="logo-icon">P</div>
+          PulseHR
+        </a>
+        <p>Gestione HR semplice e moderna per aziende e consulenti del lavoro italiani.</p>
+        <div class="trust-badges-footer">
+          <div class="trust-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+            GDPR-ready
+          </div>
+          <div class="trust-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+            Dati protetti
+          </div>
+          <div class="trust-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+            </svg>
+            Pensato per PMI
+          </div>
+        </div>
+      </div>
+      
+      <div>
+        <h4 class="footer-title">Prodotto</h4>
+        <div class="footer-links">
+          <a href="#features">Funzionalità</a>
+          <a href="#pricing">Prezzi</a>
+          <a href="#">Roadmap</a>
+          <a href="#">Changelog</a>
+        </div>
+      </div>
+      
+      <div>
+        <h4 class="footer-title">Azienda</h4>
+        <div class="footer-links">
+          <a href="#">Chi siamo</a>
+          <a href="#">Blog</a>
+          <a href="#">Carriere</a>
+          <a href="#">Contatti</a>
+        </div>
+      </div>
+      
+      <div>
+        <h4 class="footer-title">Legale</h4>
+        <div class="footer-links">
+          <a href="#">Privacy (coming soon)</a>
+          <a href="#">Terms (coming soon)</a>
+          <a href="#">Cookie Policy</a>
+          <a href="#">GDPR</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      © 2026 PulseHR. Tutti i diritti riservati. P.IVA: 12345678901
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

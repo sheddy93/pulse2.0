@@ -1,0 +1,54 @@
+# Dependencies
+node_modules/
+.npm
+.yarn
+.pnp/
+
+# Build outputs
+.next/
+out/
+build/
+
+# Environment
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.py[cod]
+venv/
+ENV/
+
+# Misc
+*.log
+.vercel
+.turbo
+*.tsbuildinfo
+next-env.d.ts
+
+# Large files
+*.zip
+*.tar.gz
+*.rar
+*.psd
+*.ai
+
+# Backup
+*.backup
+*.bak
+*.old
+
+# Agent
+.minimax/

@@ -1,0 +1,45 @@
+# Git
+.git
+.gitignore
+
+# Node
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Next.js
+.cache
+.next/out
+.next/static
+
+# Environment
+.env
+.env.*
+.env.local
+.env.development
+.env.production
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# Testing
+tests
+coverage
+*.test.ts
+*.spec.ts
+
+# Documentation
+*.md
+docs
+
+# Misc
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+dist
+build
+out

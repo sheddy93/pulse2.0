@@ -1,0 +1,335 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Fonts */
+  --font-sans: "Inter", "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Geist", ui-sans-serif, system-ui, sans-serif;
+
+  /* Colors - Premium SaaS Palette */
+  --color-background: var(--bg);
+  --color-foreground: var(--text);
+  
+  --color-card: var(--card);
+  --color-card-foreground: var(--text);
+
+  --color-border: var(--border);
+  --color-border-muted: var(--border);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-strong: var(--primary-strong);
+  --color-primary-soft: var(--primary-soft);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-muted: var(--bg-muted);
+  --color-muted-foreground: var(--text-muted);
+
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  
+  --color-danger: var(--danger);
+  --color-danger-foreground: var(--danger-foreground);
+  
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+
+  /* Shadows - Soft, elegant, subtle */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 8px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 12px 24px -4px rgba(0, 0, 0, 0.08), 0 4px 8px -2px rgba(0, 0, 0, 0.04);
+  --shadow-xl: 0 24px 48px -8px rgba(0, 0, 0, 0.1), 0 8px 16px -4px rgba(0, 0, 0, 0.06);
+  
+  /* Radius - Premium rounded corners */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.5rem;
+}
+
+@layer base {
+  :root {
+    --bg: #f8fafc;
+    --bg-muted: #f1f5f9;
+    --surface: #ffffff;
+    --surface-elevated: #ffffff;
+    --card: #ffffff;
+    --border: #e2e8f0;
+    --text: #0f172a;
+    --text-muted: #475569;
+    --primary: #3b82f6;
+    --primary-foreground: #ffffff;
+    --primary-strong: #2563eb;
+    --primary-soft: #dbeafe;
+    --secondary: #7c3aed;
+    --secondary-foreground: #ffffff;
+    --accent: #0f766e;
+    --accent-foreground: #ffffff;
+    --accent-soft: #ccfbf1;
+    --success: #16a34a;
+    --success-foreground: #ffffff;
+    --success-soft: #dcfce7;
+    --warning: #d97706;
+    --warning-foreground: #ffffff;
+    --warning-soft: #fef3c7;
+    --danger: #dc2626;
+    --danger-foreground: #ffffff;
+    --danger-soft: #fee2e2;
+    --info: #0284c7;
+    --info-foreground: #ffffff;
+    --info-soft: #e0f2fe;
+    --glass-bg: rgba(255,255,255,0.72);
+    --glass-border: rgba(17,24,39,0.08);
+  }
+
+  .dark {
+    --bg: #0f172a;
+    --bg-muted: #1e293b;
+    --surface: #1e293b;
+    --surface-elevated: #182338;
+    --card: #1e293b;
+    --border: #334155;
+    --text: #f8fafc;
+    --text-muted: #94a3b8;
+    --primary: #3b82f6;
+    --primary-foreground: #ffffff;
+    --primary-strong: #60a5fa;
+    --primary-soft: rgba(59, 130, 246, 0.15);
+    --secondary: #8b5cf6;
+    --secondary-foreground: #ffffff;
+    --accent: #14b8a6;
+    --accent-foreground: #ffffff;
+    --accent-soft: rgba(20, 184, 166, 0.15);
+    --success: #22c55e;
+    --success-foreground: #ffffff;
+    --success-soft: rgba(34, 197, 94, 0.15);
+    --warning: #f59e0b;
+    --warning-foreground: #ffffff;
+    --warning-soft: rgba(245, 158, 11, 0.15);
+    --danger: #ef4444;
+    --danger-foreground: #ffffff;
+    --danger-soft: rgba(239, 68, 68, 0.15);
+    --info: #38bdf8;
+    --info-foreground: #ffffff;
+    --info-soft: rgba(56, 189, 248, 0.15);
+    --glass-bg: rgba(30, 41, 59, 0.66);
+    --glass-border: rgba(255,255,255,0.08);
+  }
+}
+
+@layer base {
+  /* Smooth theme transitions */
+  html {
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading tracking-tight;
+  }
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.6); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
+}
+
+/* Fade In Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+/* Fade In Up Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* Scale In Animation */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.4s ease-out forwards;
+}
+
+/* Staggered Children Animation */
+.stagger-children > * {
+  opacity: 0;
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+.stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-children > *:nth-child(2) { animation-delay: 100ms; }
+.stagger-children > *:nth-child(3) { animation-delay: 200ms; }
+.stagger-children > *:nth-child(4) { animation-delay: 300ms; }
+.stagger-children > *:nth-child(5) { animation-delay: 400ms; }
+.stagger-children > *:nth-child(6) { animation-delay: 500ms; }
+
+/* ===== CUSTOM COMPONENTS ===== */
+@layer components {
+  /* Glass Effect */
+  .glass {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(14px);
+  }
+
+  /* Focus Ring */
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
+  }
+
+  /* Container Max Width */
+  .container-tight {
+    @apply max-w-3xl mx-auto px-4;
+  }
+
+  .container-normal {
+    @apply max-w-5xl mx-auto px-4;
+  }
+
+  .container-wide {
+    @apply max-w-7xl mx-auto px-4;
+  }
+
+  /* Section Spacing */
+  .section-gap {
+    @apply gap-6 md:gap-8;
+  }
+
+  /* Card Premium */
+  .card-premium {
+    @apply bg-white dark:bg-slate-800 rounded-xl border border-slate-200/60 dark:border-slate-700/60 shadow-sm;
+  }
+
+  /* Text Gradient */
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent;
+  }
+
+  /* Hover Lift */
+  .hover-lift {
+    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-xl;
+  }
+
+  /* Shimmer Loading */
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      var(--bg-muted) 0%,
+      var(--surface) 50%,
+      var(--bg-muted) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+  }
+
+  /* Glass Card */
+  .glass-card {
+    @apply bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border border-white/20 dark:border-slate-700/20;
+  }
+
+  /* Gradient Border */
+  .gradient-border {
+    position: relative;
+  }
+  
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    background: linear-gradient(135deg, #8b5cf6, #3b82f6, #06b6d4);
+    z-index: -1;
+  }
+
+  /* Text Balance */
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* ===== ONBOARDING ANIMATIONS ===== */
+@layer utilities {
+  /* Animation Delays for Blob */
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+  
+  .animation-delay-4000 {
+    animation-delay: 4s;
+  }
+}

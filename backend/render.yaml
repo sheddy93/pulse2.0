@@ -1,0 +1,20 @@
+build:
+  parallel: false
+
+services:
+  - type: web
+    name: pulsehr-backend
+    env: python
+    pythonVersion: "3.12"
+    rootDir: hr-app/backend
+    buildCommand: pip install -r requirements.txt && python manage.py migrate --noinput && python manage.py collectstatic --noinput
+    startCommand: gunicorn backend.wsgi:application --log-file - --bind 0.0.0.0:$PORT
+    healthCheckPath: /healthz/
+    autoDeploy: false
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_DEBUG
+        value: "False"
+      - key: DJANGO_ALLOWED_HOSTS
+        value: "pulsehr-backend.onrender.com,localhost,127.0.0.1,.onrender.com"

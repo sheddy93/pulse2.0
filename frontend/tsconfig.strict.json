@@ -1,0 +1,50 @@
+/**
+ * PulseHR Strict TypeScript Configuration
+ * =======================================
+ * Extended tsconfig for gradual strict mode adoption.
+ *
+ * Usage:
+ * - For new files, add: // @ts-check at the top to enable strict checking
+ * - For existing files being migrated, gradually enable strict checking
+ * - Use `any` temporarily where needed during migration, then replace with proper types
+ *
+ * This config extends the base tsconfig.json with strict type checking enabled.
+ * Files can opt-in to strict checking incrementally.
+ */
+
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    /* Strict Type Checking */
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+
+    /* Additional Checking */
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+
+    /* Module Resolution */
+    "forceConsistentCasingInFileNames": true,
+    "preserveSymlinks": true
+  },
+  "include": [
+    "types/**/*.ts",
+    "lib/**/*.ts",
+    "components/**/*.ts",
+    "components/**/*.tsx",
+    "hooks/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    ".next"
+  ]
+}

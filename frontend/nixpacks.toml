@@ -1,0 +1,5 @@
+[phases.setup]
+nixPkgs = ["python311", "python311Packages.pip", "nodejs_20"]
+
+[start]
+cmd = "bash deploy/railway/frontend-start.sh"
