@@ -38,6 +38,7 @@ import JobPostings from './pages/company/JobPostings';
 import CandidateTracking from './pages/company/CandidateTracking';
 import TrainingManagement from './pages/company/TrainingManagement';
 import TrainingPortal from './pages/employee/TrainingPortal';
+import PersonalDocuments from './pages/employee/PersonalDocuments';
 
 // Consultant
 import LinkRequests from './pages/consultant/LinkRequests';
@@ -133,6 +134,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/employee/skills" element={<SkillsPage />} />
       <Route path="/dashboard/employee/benefits" element={<BenefitsPage />} />
       <Route path="/dashboard/employee/training" element={<TrainingPortal />} />
+      <Route path="/dashboard/employee/documents" element={<PersonalDocuments />} />
       <Route path="/dashboard/employee/profile" element={<EmployeeProfilePage />} />
       <Route path="/dashboard/employee/contract" element={<ComingSoon title="Il mio contratto" dashboardPath="/dashboard/employee" />} />
 

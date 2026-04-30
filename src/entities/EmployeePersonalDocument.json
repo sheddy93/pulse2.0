@@ -1,0 +1,72 @@
+{
+  "name": "EmployeePersonalDocument",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "employee_id": {
+      "type": "string"
+    },
+    "employee_name": {
+      "type": "string"
+    },
+    "document_name": {
+      "type": "string"
+    },
+    "document_type": {
+      "type": "string",
+      "enum": [
+        "identity",
+        "certificate",
+        "attestation",
+        "license",
+        "passport",
+        "driving_license",
+        "health_insurance",
+        "vaccination",
+        "other"
+      ]
+    },
+    "file_url": {
+      "type": "string"
+    },
+    "issue_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "expiry_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "description": {
+      "type": "string"
+    },
+    "is_public": {
+      "type": "boolean",
+      "default": false,
+      "description": "Se visibile ai manager/HR"
+    },
+    "uploaded_at": {
+      "type": "string"
+    },
+    "last_updated": {
+      "type": "string"
+    },
+    "notification_sent": {
+      "type": "boolean",
+      "default": false,
+      "description": "Notifica scadenza già inviata"
+    },
+    "last_notification_date": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "company_id",
+    "employee_id",
+    "document_name",
+    "document_type",
+    "file_url"
+  ]
+}

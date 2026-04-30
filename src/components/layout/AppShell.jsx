@@ -49,6 +49,7 @@ const NAV = {
     { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard/employee" },
     { label: "Timbratura", icon: Clock, path: "/dashboard/employee/attendance" },
     { label: "Calendario Presenze", icon: ClipboardList, path: "/dashboard/employee/calendar" },
+    { label: "Miei Documenti", icon: FileText, path: "/dashboard/employee/documents" },
     { label: "Le mie presenze", icon: ClipboardList, path: "/dashboard/employee/history" },
     { label: "Ferie & Permessi", icon: CalendarDays, path: "/dashboard/employee/leave" },
     { label: "Straordinari", icon: Clock, path: "/dashboard/employee/overtime" },
