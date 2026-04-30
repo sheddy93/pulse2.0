@@ -16,20 +16,20 @@ import ConsultantDashboard from './pages/dashboard/ConsultantDashboard';
 import CompanyDashboard from './pages/dashboard/CompanyDashboard';
 import EmployeeDashboard from './pages/dashboard/EmployeeDashboard';
 
-// Company area
+// Company
 import EmployeeList from './pages/company/EmployeeList';
 import NewEmployee from './pages/company/NewEmployee';
 import CompanyConsultants from './pages/company/CompanyConsultants';
 
-// Consultant area
+// Consultant
 import LinkRequests from './pages/consultant/LinkRequests';
 
-// Employee area
+// Employee
 import AttendancePage from './pages/employee/AttendancePage';
 import LeaveRequestPage from './pages/employee/LeaveRequestPage';
-import EmployeeProfile from './pages/employee/EmployeeProfile';
+import EmployeeProfilePage from './pages/employee/EmployeeProfilePage';
 
-// Shared coming soon
+// Shared
 import ComingSoon from './components/layout/ComingSoon';
 
 const AuthenticatedApp = () => {
@@ -38,40 +38,37 @@ const AuthenticatedApp = () => {
   if (isLoadingPublicSettings || isLoadingAuth) {
     return (
       <div className="fixed inset-0 flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin"></div>
+        <div className="w-8 h-8 border-4 border-slate-200 border-t-blue-600 rounded-full animate-spin" />
       </div>
     );
   }
 
   if (authError) {
-    if (authError.type === 'user_not_registered') {
-      return <UserNotRegisteredError />;
-    } else if (authError.type === 'auth_required') {
-      navigateToLogin();
-      return null;
-    }
+    if (authError.type === 'user_not_registered') return <UserNotRegisteredError />;
+    if (authError.type === 'auth_required') { navigateToLogin(); return null; }
   }
 
   return (
     <Routes>
-      {/* Root → role redirect */}
+      {/* Root */}
       <Route path="/" element={<RoleRedirect />} />
       <Route path="/dashboard" element={<RoleRedirect />} />
-
-      {/* Error */}
       <Route path="/error/unknown-role" element={<UnknownRole />} />
 
-      {/* Admin */}
+      {/* Super Admin */}
       <Route path="/dashboard/admin" element={<AdminDashboard />} />
-      <Route path="/dashboard/admin/*" element={<AdminDashboard />} />
+      <Route path="/dashboard/admin/companies" element={<ComingSoon title="Gestione Aziende" dashboardPath="/dashboard/admin" />} />
+      <Route path="/dashboard/admin/users" element={<ComingSoon title="Gestione Utenti" dashboardPath="/dashboard/admin" />} />
+      <Route path="/dashboard/admin/system" element={<ComingSoon title="Sistema" dashboardPath="/dashboard/admin" />} />
 
       {/* Consultant */}
       <Route path="/dashboard/consultant" element={<ConsultantDashboard />} />
       <Route path="/dashboard/consultant/companies" element={<EmployeeList />} />
       <Route path="/dashboard/consultant/employees" element={<EmployeeList />} />
       <Route path="/dashboard/consultant/link-requests" element={<LinkRequests />} />
-      <Route path="/dashboard/consultant/documents" element={<ComingSoon title="Documenti consulente" dashboardPath="/dashboard/consultant" />} />
+      <Route path="/dashboard/consultant/documents" element={<ComingSoon title="Documenti" dashboardPath="/dashboard/consultant" />} />
       <Route path="/dashboard/consultant/settings" element={<ComingSoon title="Impostazioni" dashboardPath="/dashboard/consultant" />} />
+      <Route path="/dashboard/consultant/employees/:id" element={<ComingSoon title="Scheda dipendente" dashboardPath="/dashboard/consultant/employees" />} />
 
       {/* Company */}
       <Route path="/dashboard/company" element={<CompanyDashboard />} />
@@ -88,7 +85,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/employee/attendance" element={<AttendancePage />} />
       <Route path="/dashboard/employee/history" element={<AttendancePage />} />
       <Route path="/dashboard/employee/leave" element={<LeaveRequestPage />} />
-      <Route path="/dashboard/employee/profile" element={<EmployeeProfile />} />
+      <Route path="/dashboard/employee/profile" element={<EmployeeProfilePage />} />
       <Route path="/dashboard/employee/documents" element={<ComingSoon title="I miei documenti" dashboardPath="/dashboard/employee" />} />
       <Route path="/dashboard/employee/contract" element={<ComingSoon title="Il mio contratto" dashboardPath="/dashboard/employee" />} />
 
@@ -107,7 +104,7 @@ function App() {
         <Toaster />
       </QueryClientProvider>
     </AuthProvider>
-  )
+  );
 }
 
-export default App
+export default App;

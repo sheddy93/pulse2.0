@@ -5,16 +5,12 @@ import { getDashboardPath } from "@/lib/roles";
 
 export default function RoleRedirect() {
   const navigate = useNavigate();
-
   useEffect(() => {
     base44.auth.me().then((user) => {
       if (!user) { base44.auth.redirectToLogin(); return; }
       const path = getDashboardPath(user.role);
-      if (path) navigate(path, { replace: true });
-      else navigate("/error/unknown-role", { replace: true });
-    }).catch(() => {
-      base44.auth.redirectToLogin();
-    });
+      navigate(path || "/error/unknown-role", { replace: true });
+    }).catch(() => base44.auth.redirectToLogin());
   }, []);
 
   return (

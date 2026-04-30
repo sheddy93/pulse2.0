@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import AppShell from "@/components/layout/AppShell";
-import { Briefcase, Link2, Check, X, Send } from "lucide-react";
+import PageLoader from "@/components/layout/PageLoader";
+import { Briefcase, Send, Check, X } from "lucide-react";
 
 const STATUS_MAP = {
   approved: { label: "Collegato", cls: "bg-emerald-100 text-emerald-700" },
@@ -16,10 +17,11 @@ export default function CompanyConsultants() {
   const [company, setCompany] = useState(null);
   const [links, setLinks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [consultantId, setConsultantId] = useState("");
+  const [idInput, setIdInput] = useState("");
   const [sending, setSending] = useState(false);
+  const [msg, setMsg] = useState("");
 
-  const load = async (me, comp) => {
+  const loadLinks = async (comp) => {
     const l = await base44.entities.ConsultantCompanyLink.filter({ company_id: comp.id });
     setLinks(l);
   };
@@ -31,19 +33,20 @@ export default function CompanyConsultants() {
         const companies = await base44.entities.Company.filter({ id: me.company_id });
         const comp = companies[0];
         setCompany(comp || null);
-        if (comp) await load(me, comp);
+        if (comp) await loadLinks(comp);
       }
     }).finally(() => setLoading(false));
   }, []);
 
   const handleInvite = async () => {
-    if (!consultantId.trim() || !company) return;
-    setSending(true);
+    if (!idInput.trim() || !company) return;
+    setSending(true); setMsg("");
     try {
-      // Look up consultant by public_id in User
-      const users = await base44.entities.User.filter({ public_id: consultantId.trim() });
-      if (!users.length) { alert("Nessun consulente trovato con questo ID."); return; }
+      const users = await base44.entities.User.filter({ public_id: idInput.trim(), role: "consultant" });
+      if (!users.length) { setMsg("Nessun consulente trovato con questo ID."); return; }
       const consultant = users[0];
+      const existing = links.find(l => l.consultant_email === consultant.email && l.status !== "rejected" && l.status !== "removed");
+      if (existing) { setMsg("Richiesta già esistente per questo consulente."); return; }
       await base44.entities.ConsultantCompanyLink.create({
         consultant_email: consultant.email,
         consultant_public_id: consultant.public_id,
@@ -53,25 +56,24 @@ export default function CompanyConsultants() {
         status: "pending_consultant",
         requested_by: "company",
       });
-      setConsultantId("");
-      await load(null, company);
+      setIdInput(""); setMsg("✓ Richiesta inviata!");
+      await loadLinks(company);
     } finally {
       setSending(false);
+      setTimeout(() => setMsg(""), 4000);
     }
   };
 
-  const handleDecision = async (link, decision) => {
+  const handleDecision = async (link, status) => {
     await base44.entities.ConsultantCompanyLink.update(link.id, {
-      status: decision,
-      approved_at: decision === "approved" ? new Date().toISOString() : undefined,
-      rejected_at: decision === "rejected" ? new Date().toISOString() : undefined,
+      status,
+      approved_at: status === "approved" ? new Date().toISOString() : undefined,
+      rejected_at: status === "rejected" ? new Date().toISOString() : undefined,
     });
-    await load(null, company);
+    await loadLinks(company);
   };
 
-  if (loading) return (
-    <AppShell user={user}><div className="flex h-64 items-center justify-center"><div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" /></div></AppShell>
-  );
+  if (loading) return <PageLoader />;
 
   const pendingForCompany = links.filter(l => l.status === "pending_company");
 
@@ -79,50 +81,39 @@ export default function CompanyConsultants() {
     <AppShell user={user}>
       <div className="p-6 max-w-4xl mx-auto space-y-6">
         <div>
-          <h1 className="text-xl font-bold text-slate-800">Consulenti collegati</h1>
+          <h1 className="text-xl font-bold text-slate-800">Consulenti</h1>
           <p className="text-sm text-slate-500">Gestisci i consulenti autorizzati ad accedere ai dati aziendali</p>
         </div>
 
-        {/* Invite */}
         <div className="bg-white rounded-xl border border-slate-200 p-5">
-          <h2 className="font-semibold text-slate-800 mb-3">Invita consulente tramite ID</h2>
+          <h2 className="font-semibold text-slate-800 mb-3">Invita consulente tramite ID pubblico</h2>
           <div className="flex gap-3">
-            <input
-              value={consultantId}
-              onChange={e => setConsultantId(e.target.value)}
+            <input value={idInput} onChange={e => setIdInput(e.target.value)} onKeyDown={e => e.key === "Enter" && handleInvite()}
               placeholder="Es. CONS-8KD92FJX"
-              className="flex-1 px-3 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <button
-              onClick={handleInvite}
-              disabled={sending || !consultantId}
-              className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 disabled:opacity-50"
-            >
-              <Send className="w-4 h-4" />
-              {sending ? "Invio..." : "Invia richiesta"}
+              className="flex-1 px-3 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            <button onClick={handleInvite} disabled={sending || !idInput}
+              className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 disabled:opacity-50">
+              <Send className="w-4 h-4" /> {sending ? "Invio..." : "Invia"}
             </button>
           </div>
+          {msg && <p className="text-sm mt-2 text-slate-600">{msg}</p>}
         </div>
 
-        {/* Pending approvals */}
         {pendingForCompany.length > 0 && (
           <div className="bg-orange-50 border border-orange-200 rounded-xl p-5">
-            <h2 className="font-semibold text-slate-800 mb-3 flex items-center gap-2">
-              <Link2 className="w-4 h-4 text-orange-500" />
-              Richieste in attesa ({pendingForCompany.length})
-            </h2>
+            <h2 className="font-semibold text-slate-800 mb-3">Richieste in attesa ({pendingForCompany.length})</h2>
             <div className="space-y-3">
               {pendingForCompany.map(link => (
                 <div key={link.id} className="flex items-center justify-between gap-4 bg-white rounded-lg p-3 border border-orange-100">
                   <div>
                     <p className="font-medium text-slate-800">{link.consultant_email}</p>
-                    <p className="text-xs text-slate-400">ID: {link.consultant_public_id}</p>
+                    <p className="text-xs text-slate-400">ID: {link.consultant_public_id || "—"}</p>
                   </div>
                   <div className="flex gap-2">
                     <button onClick={() => handleDecision(link, "approved")} className="flex items-center gap-1 px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-semibold hover:bg-emerald-700">
                       <Check className="w-3.5 h-3.5" /> Approva
                     </button>
-                    <button onClick={() => handleDecision(link, "rejected")} className="flex items-center gap-1 px-3 py-1.5 bg-red-50 text-red-600 border border-red-200 rounded-lg text-xs font-semibold hover:bg-red-100">
+                    <button onClick={() => handleDecision(link, "rejected")} className="flex items-center gap-1 px-3 py-1.5 bg-white border border-red-200 text-red-600 rounded-lg text-xs font-semibold hover:bg-red-50">
                       <X className="w-3.5 h-3.5" /> Rifiuta
                     </button>
                   </div>
@@ -132,7 +123,6 @@ export default function CompanyConsultants() {
           </div>
         )}
 
-        {/* All links */}
         <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
           <div className="px-5 py-4 border-b border-slate-100">
             <h2 className="font-semibold text-slate-800">Tutti i consulenti ({links.length})</h2>

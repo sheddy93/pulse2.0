@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import AppShell from "@/components/layout/AppShell";
+import PageLoader from "@/components/layout/PageLoader";
 import { Link2, Check, X } from "lucide-react";
 
 export default function LinkRequests() {
@@ -8,7 +9,7 @@ export default function LinkRequests() {
   const [links, setLinks] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const load = async (email) => {
+  const loadLinks = async (email) => {
     const l = await base44.entities.ConsultantCompanyLink.filter({ consultant_email: email });
     setLinks(l);
   };
@@ -16,39 +17,42 @@ export default function LinkRequests() {
   useEffect(() => {
     base44.auth.me().then(async (me) => {
       setUser(me);
-      await load(me.email);
+      await loadLinks(me.email);
     }).finally(() => setLoading(false));
   }, []);
 
-  const handleDecision = async (link, decision) => {
+  const handleDecision = async (link, status) => {
     await base44.entities.ConsultantCompanyLink.update(link.id, {
-      status: decision,
-      approved_at: decision === "approved" ? new Date().toISOString() : undefined,
-      rejected_at: decision === "rejected" ? new Date().toISOString() : undefined,
+      status,
+      approved_at: status === "approved" ? new Date().toISOString() : undefined,
+      rejected_at: status === "rejected" ? new Date().toISOString() : undefined,
     });
-    await load(user.email);
+    await loadLinks(user.email);
   };
 
-  if (loading) return (
-    <AppShell user={user}><div className="flex h-64 items-center justify-center"><div className="w-8 h-8 border-4 border-violet-600 border-t-transparent rounded-full animate-spin" /></div></AppShell>
-  );
+  if (loading) return <PageLoader color="violet" />;
 
   const pendingForMe = links.filter(l => l.status === "pending_consultant");
   const others = links.filter(l => l.status !== "pending_consultant");
+  const statusMap = {
+    approved: { l: "Approvato", c: "bg-emerald-100 text-emerald-700" },
+    rejected: { l: "Rifiutato", c: "bg-red-100 text-red-600" },
+    pending_company: { l: "In attesa azienda", c: "bg-blue-100 text-blue-700" },
+    removed: { l: "Rimosso", c: "bg-slate-100 text-slate-500" },
+  };
 
   return (
     <AppShell user={user}>
       <div className="p-6 max-w-4xl mx-auto space-y-6">
         <div>
           <h1 className="text-xl font-bold text-slate-800">Richieste di collegamento</h1>
-          <p className="text-sm text-slate-500">Gestisci le richieste di accesso da parte delle aziende</p>
+          <p className="text-sm text-slate-500">Accetta o rifiuta le richieste di accesso da parte delle aziende</p>
         </div>
 
         {pendingForMe.length > 0 && (
           <div className="bg-orange-50 border border-orange-200 rounded-xl p-5">
             <h2 className="font-semibold text-slate-800 mb-3 flex items-center gap-2">
-              <Link2 className="w-4 h-4 text-orange-500" />
-              In attesa della tua approvazione ({pendingForMe.length})
+              <Link2 className="w-4 h-4 text-orange-500" /> In attesa della tua approvazione ({pendingForMe.length})
             </h2>
             <div className="space-y-3">
               {pendingForMe.map(link => (
@@ -61,7 +65,7 @@ export default function LinkRequests() {
                     <button onClick={() => handleDecision(link, "approved")} className="flex items-center gap-1 px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-semibold hover:bg-emerald-700">
                       <Check className="w-3.5 h-3.5" /> Accetta
                     </button>
-                    <button onClick={() => handleDecision(link, "rejected")} className="flex items-center gap-1 px-3 py-1.5 bg-red-50 text-red-600 border border-red-200 rounded-lg text-xs font-semibold hover:bg-red-100">
+                    <button onClick={() => handleDecision(link, "rejected")} className="flex items-center gap-1 px-3 py-1.5 bg-white border border-red-200 text-red-600 rounded-lg text-xs font-semibold hover:bg-red-50">
                       <X className="w-3.5 h-3.5" /> Rifiuta
                     </button>
                   </div>
@@ -85,8 +89,7 @@ export default function LinkRequests() {
           ) : (
             <div className="divide-y divide-slate-100">
               {others.map(link => {
-                const statusMap = { approved: { l: "Approvato", c: "text-emerald-600 bg-emerald-50" }, rejected: { l: "Rifiutato", c: "text-red-600 bg-red-50" }, pending_company: { l: "Inviata, in attesa azienda", c: "text-blue-600 bg-blue-50" }, removed: { l: "Rimosso", c: "text-slate-500 bg-slate-100" } };
-                const s = statusMap[link.status] || { l: link.status, c: "text-slate-600 bg-slate-100" };
+                const s = statusMap[link.status] || { l: link.status, c: "bg-slate-100 text-slate-500" };
                 return (
                   <div key={link.id} className="flex items-center justify-between px-5 py-4">
                     <div>
