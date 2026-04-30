@@ -1,0 +1,33 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "role": {
+      "type": "string",
+      "enum": [
+        "super_admin",
+        "consultant",
+        "company",
+        "employee"
+      ],
+      "default": "employee"
+    },
+    "public_id": {
+      "type": "string"
+    },
+    "company_id": {
+      "type": "string"
+    },
+    "must_change_password": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "display_name": {
+      "type": "string"
+    }
+  }
+}

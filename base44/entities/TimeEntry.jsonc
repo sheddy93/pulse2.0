@@ -1,0 +1,42 @@
+{
+  "name": "TimeEntry",
+  "type": "object",
+  "properties": {
+    "employee_id": {
+      "type": "string"
+    },
+    "employee_name": {
+      "type": "string"
+    },
+    "company_id": {
+      "type": "string"
+    },
+    "user_email": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "check_in",
+        "check_out",
+        "break_start",
+        "break_end"
+      ]
+    },
+    "notes": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "employee_id",
+    "company_id",
+    "type",
+    "timestamp"
+  ]
+}

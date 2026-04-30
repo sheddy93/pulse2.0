@@ -1,0 +1,46 @@
+{
+  "name": "ConsultantCompanyLink",
+  "type": "object",
+  "properties": {
+    "consultant_email": {
+      "type": "string"
+    },
+    "consultant_public_id": {
+      "type": "string"
+    },
+    "company_id": {
+      "type": "string"
+    },
+    "company_public_id": {
+      "type": "string"
+    },
+    "company_name": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending_company",
+        "pending_consultant",
+        "approved",
+        "rejected",
+        "removed"
+      ],
+      "default": "pending_company"
+    },
+    "requested_by": {
+      "type": "string"
+    },
+    "approved_at": {
+      "type": "string"
+    },
+    "rejected_at": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "consultant_email",
+    "company_id",
+    "status"
+  ]
+}

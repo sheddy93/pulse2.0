@@ -1,0 +1,64 @@
+{
+  "name": "EmployeeContract",
+  "type": "object",
+  "properties": {
+    "employee_id": {
+      "type": "string"
+    },
+    "company_id": {
+      "type": "string"
+    },
+    "contract_type": {
+      "type": "string",
+      "enum": [
+        "indeterminato",
+        "determinato",
+        "apprendistato",
+        "stage",
+        "collaborazione"
+      ]
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "weekly_hours": {
+      "type": "number"
+    },
+    "job_title": {
+      "type": "string"
+    },
+    "ccnl": {
+      "type": "string"
+    },
+    "level": {
+      "type": "string"
+    },
+    "probation_end_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "expired",
+        "terminated"
+      ],
+      "default": "active"
+    },
+    "document_url": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "employee_id",
+    "company_id",
+    "contract_type",
+    "start_date"
+  ]
+}
