@@ -39,6 +39,7 @@ import CandidateTracking from './pages/company/CandidateTracking';
 import TrainingManagement from './pages/company/TrainingManagement';
 import PerformanceManagement from './pages/company/PerformanceManagement';
 import GivePerformanceReview from './pages/company/GivePerformanceReview';
+import HRAnalytics from './pages/company/HRAnalytics';
 import TrainingPortal from './pages/employee/TrainingPortal';
 import PersonalDocuments from './pages/employee/PersonalDocuments';
 import PerformanceFeedback from './pages/employee/PerformanceFeedback';
@@ -126,6 +127,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/company/training" element={<TrainingManagement />} />
       <Route path="/dashboard/company/performance" element={<PerformanceManagement />} />
       <Route path="/dashboard/company/give-feedback" element={<GivePerformanceReview />} />
+      <Route path="/dashboard/company/analytics" element={<HRAnalytics />} />
       <Route path="/dashboard/company/settings" element={<ComingSoon title="Impostazioni azienda" dashboardPath="/dashboard/company" />} />
 
       {/* Employee */}
