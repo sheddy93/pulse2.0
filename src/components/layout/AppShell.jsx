@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import {
   LayoutDashboard, Users, Building2, FileText, Clock, LogOut,
   Menu, X, ChevronRight, UserCog, Link2, Shield, Settings,
-  ClipboardList, Briefcase, CalendarDays, FileBadge, Activity
+  ClipboardList, Briefcase, CalendarDays, FileBadge, Activity, Monitor
 } from "lucide-react";
 import NotificationBell from "./NotificationBell";
 
@@ -33,6 +33,8 @@ const NAV = {
     { label: "Presenze", icon: Clock, path: "/dashboard/company/attendance" },
     { label: "Straordinari", icon: Clock, path: "/dashboard/company/overtime" },
     { label: "Annunci", icon: FileText, path: "/dashboard/company/announcements" },
+    { label: "Gestione asset", icon: Monitor, path: "/dashboard/company/assets" },
+    { label: "Assegnazioni", icon: Monitor, path: "/dashboard/company/asset-assignments" },
     { label: "Documenti", icon: FileText, path: "/dashboard/company/documents" },
     { label: "Impostazioni", icon: Settings, path: "/dashboard/company/settings" },
   ],

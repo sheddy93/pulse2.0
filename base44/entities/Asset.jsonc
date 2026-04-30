@@ -1,0 +1,52 @@
+{
+  "name": "Asset",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "asset_type": {
+      "type": "string",
+      "enum": [
+        "computer",
+        "telefono",
+        "badge",
+        "altro"
+      ]
+    },
+    "asset_name": {
+      "type": "string"
+    },
+    "model": {
+      "type": "string"
+    },
+    "serial_number": {
+      "type": "string"
+    },
+    "purchase_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "cost": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "disponibile",
+        "assegnato",
+        "in_manutenzione",
+        "dismesso"
+      ],
+      "default": "disponibile"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "company_id",
+    "asset_type",
+    "asset_name"
+  ]
+}
