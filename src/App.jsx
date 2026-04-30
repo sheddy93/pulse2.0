@@ -24,6 +24,7 @@ import DocumentsPage from './pages/company/DocumentsPage';
 import ExpiryCalendar from './pages/company/ExpiryCalendar';
 import OvertimePage from './pages/company/OvertimePage';
 import ShiftManagement from './pages/company/ShiftManagement';
+import AnnouncementBoard from './pages/company/AnnouncementBoard';
 
 // Consultant
 import LinkRequests from './pages/consultant/LinkRequests';
@@ -87,6 +88,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/company/attendance" element={<ComingSoon title="Presenze aziendali" dashboardPath="/dashboard/company" />} />
       <Route path="/dashboard/company/overtime" element={<OvertimePage />} />
       <Route path="/dashboard/company/shifts" element={<ShiftManagement />} />
+      <Route path="/dashboard/company/announcements" element={<AnnouncementBoard />} />
       <Route path="/dashboard/company/documents" element={<DocumentsPage />} />
       <Route path="/dashboard/company/documents/expiring" element={<ExpiryCalendar />} />
       <Route path="/dashboard/company/settings" element={<ComingSoon title="Impostazioni azienda" dashboardPath="/dashboard/company" />} />

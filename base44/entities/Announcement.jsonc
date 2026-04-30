@@ -1,0 +1,50 @@
+{
+  "name": "Announcement",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string"
+    },
+    "author_email": {
+      "type": "string"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "normal",
+        "high",
+        "urgent"
+      ],
+      "default": "normal"
+    },
+    "visibility": {
+      "type": "string",
+      "enum": [
+        "all",
+        "employees",
+        "managers"
+      ],
+      "default": "all"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "is_pinned": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "company_id",
+    "title",
+    "content"
+  ]
+}

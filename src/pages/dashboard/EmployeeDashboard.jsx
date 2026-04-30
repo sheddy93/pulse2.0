@@ -8,6 +8,7 @@ import { Clock, CalendarDays, FileText, LogIn, LogOut, CheckCircle2 } from "luci
 import { format, startOfMonth } from "date-fns";
 import { it } from "date-fns/locale";
 import UpcomingShifts from "@/components/employee/UpcomingShifts";
+import AnnouncementWidget from "@/components/employee/AnnouncementWidget";
 
 export default function EmployeeDashboard() {
   const [user, setUser] = useState(null);
@@ -147,6 +148,18 @@ export default function EmployeeDashboard() {
             </div>
           )}
         </div>
+
+        {/* Announcements */}
+        {employee && (
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-5 py-4 border-b border-slate-100">
+              <h2 className="font-semibold text-slate-800">📢 Annunci aziendali</h2>
+            </div>
+            <div className="p-5">
+              <AnnouncementWidget companyId={employee.company_id} />
+            </div>
+          </div>
+        )}
 
         {/* Upcoming shifts */}
         {employee && (

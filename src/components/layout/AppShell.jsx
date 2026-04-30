@@ -32,6 +32,7 @@ const NAV = {
     { label: "Turni settimanali", icon: CalendarDays, path: "/dashboard/company/shifts" },
     { label: "Presenze", icon: Clock, path: "/dashboard/company/attendance" },
     { label: "Straordinari", icon: Clock, path: "/dashboard/company/overtime" },
+    { label: "Annunci", icon: FileText, path: "/dashboard/company/announcements" },
     { label: "Documenti", icon: FileText, path: "/dashboard/company/documents" },
     { label: "Impostazioni", icon: Settings, path: "/dashboard/company/settings" },
   ],
