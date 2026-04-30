@@ -5,6 +5,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
+import InstallPrompt from '@/components/pwa/InstallPrompt';
+import NotificationManager from '@/components/pwa/NotificationManager';
 
 // Auth
 import RoleRedirect from './pages/auth/RoleRedirect';
@@ -47,7 +49,7 @@ import SkillsPage from './pages/employee/SkillsPage';
 import ComingSoon from './components/layout/ComingSoon';
 
 const AuthenticatedApp = () => {
-  const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
+  const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin, user } = useAuth();
 
   if (isLoadingPublicSettings || isLoadingAuth) {
     return (
@@ -63,7 +65,10 @@ const AuthenticatedApp = () => {
   }
 
   return (
-    <Routes>
+    <>
+      <NotificationManager user={user} />
+      <InstallPrompt />
+      <Routes>
       {/* Root */}
       <Route path="/" element={<RoleRedirect />} />
       <Route path="/dashboard" element={<RoleRedirect />} />
@@ -117,6 +122,7 @@ const AuthenticatedApp = () => {
 
       <Route path="*" element={<PageNotFound />} />
     </Routes>
+    </>
   );
 };
 

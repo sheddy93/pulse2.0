@@ -4,7 +4,8 @@ import { base44 } from "@/api/base44Client";
 import AppShell from "@/components/layout/AppShell";
 import StatCard from "@/components/layout/StatCard";
 import PageLoader from "@/components/layout/PageLoader";
-import { Clock, CalendarDays, FileText, LogIn, LogOut, CheckCircle2 } from "lucide-react";
+import QuickAttendanceCard from "@/components/pwa/QuickAttendanceCard";
+import { Clock, CalendarDays, FileText, CheckCircle2 } from "lucide-react";
 import { format, startOfMonth } from "date-fns";
 import { it } from "date-fns/locale";
 import UpcomingShifts from "@/components/employee/UpcomingShifts";
@@ -79,38 +80,22 @@ export default function EmployeeDashboard() {
   return (
     <AppShell user={user}>
       <div className="p-6 max-w-4xl mx-auto space-y-6">
-        {/* Hero */}
-        <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 rounded-2xl p-6 text-white">
+        {/* Quick Attendance (Mobile-First) */}
+        {employee && (
+          <div className="lg:hidden">
+            <QuickAttendanceCard 
+              employee={employee}
+              onStamped={() => window.location.reload()}
+            />
+          </div>
+        )}
+
+        {/* Hero (Desktop only) */}
+        <div className="hidden lg:block bg-gradient-to-r from-emerald-600 to-emerald-700 rounded-2xl p-6 text-white">
           <h1 className="text-2xl font-bold mb-0.5">
             Ciao, {employee?.first_name || user?.full_name?.split(" ")[0] || "👋"}
           </h1>
           <p className="text-emerald-200 text-sm mb-5">{format(new Date(), "EEEE d MMMM yyyy", { locale: it })}</p>
-
-          <div className="bg-white/10 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <div className="flex-1">
-              {firstIn ? (
-                <div className="flex items-center gap-2 text-sm">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-300" />
-                  <span>Entrata registrata alle <strong>{format(new Date(firstIn.timestamp), "HH:mm")}</strong></span>
-                </div>
-              ) : (
-                <p className="text-sm text-emerald-200">Non hai ancora timbrato oggi.</p>
-              )}
-              <p className="text-xs text-emerald-300 mt-1">
-                {isClockedIn ? "● In servizio" : lastEntry ? "Uscita registrata" : "Nessuna timbratura oggi"}
-              </p>
-            </div>
-            <button
-              onClick={handleStamp}
-              disabled={stamping}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-colors disabled:opacity-50 flex-shrink-0 ${
-                isClockedIn ? "bg-white text-emerald-700 hover:bg-emerald-50" : "bg-emerald-500 hover:bg-emerald-400 border border-white/20"
-              }`}
-            >
-              {isClockedIn ? <LogOut className="w-4 h-4" /> : <LogIn className="w-4 h-4" />}
-              {stamping ? "Attendere..." : isClockedIn ? "Timbra uscita" : "Timbra entrata"}
-            </button>
-          </div>
         </div>
 
         {/* KPI */}
