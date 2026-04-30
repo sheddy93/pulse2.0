@@ -58,6 +58,121 @@ export const subscribeToPushNotifications = async () => {
   }
 };
 
+/**
+ * Offline Time Entry Storage (IndexedDB)
+ */
+const DB_NAME = 'PulseHR';
+const STORE_NAME = 'pending_time_entries';
+
+const openDB = () => {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(DB_NAME, 1);
+    request.onerror = () => reject(request.error);
+    request.onsuccess = () => resolve(request.result);
+    request.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        db.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true });
+      }
+    };
+  });
+};
+
+/**
+ * Salva una timbratura offline in IndexedDB
+ */
+export const saveTimeEntryOffline = async (entry) => {
+  try {
+    const db = await openDB();
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    const store = tx.objectStore(STORE_NAME);
+    store.add({ ...entry, savedAt: new Date().toISOString(), synced: false });
+    return new Promise((resolve, reject) => {
+      tx.oncomplete = () => resolve(true);
+      tx.onerror = () => reject(tx.error);
+    });
+  } catch (error) {
+    console.error('Offline save failed:', error);
+    return false;
+  }
+};
+
+/**
+ * Legge tutte le timbrature non sincronizzate
+ */
+export const getPendingTimeEntries = async () => {
+  try {
+    const db = await openDB();
+    const tx = db.transaction(STORE_NAME, 'readonly');
+    const store = tx.objectStore(STORE_NAME);
+    const entries = store.getAll();
+    return new Promise((resolve, reject) => {
+      entries.onsuccess = () => resolve(entries.result.filter(e => !e.synced));
+      entries.onerror = () => reject(entries.error);
+    });
+  } catch (error) {
+    console.error('Failed to get pending entries:', error);
+    return [];
+  }
+};
+
+/**
+ * Sincronizza timbrature offline con il server
+ */
+export const syncOfflineTimeEntries = async (base44) => {
+  const pending = await getPendingTimeEntries();
+  if (pending.length === 0) return { synced: 0, failed: 0 };
+
+  let synced = 0;
+  let failed = 0;
+
+  for (const entry of pending) {
+    try {
+      const { id, synced: _, ...data } = entry;
+      await base44.entities.TimeEntry.create(data);
+      
+      // Marca come sincronizzato
+      const db = await openDB();
+      const tx = db.transaction(STORE_NAME, 'readwrite');
+      const store = tx.objectStore(STORE_NAME);
+      const updated = { ...entry, synced: true };
+      store.put(updated);
+      
+      synced++;
+    } catch (error) {
+      console.error(`Sync failed for entry:`, error);
+      failed++;
+    }
+  }
+
+  return { synced, failed };
+};
+
+/**
+ * Pulisce le timbrature sincronizzate da IndexedDB
+ */
+export const cleanupSyncedEntries = async () => {
+  try {
+    const db = await openDB();
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    const store = tx.objectStore(STORE_NAME);
+    const allEntries = store.getAll();
+    
+    return new Promise((resolve, reject) => {
+      allEntries.onsuccess = () => {
+        const toDelete = allEntries.result.filter(e => e.synced);
+        toDelete.forEach(e => store.delete(e.id));
+        tx.oncomplete = () => resolve(toDelete.length);
+        tx.onerror = () => reject(tx.error);
+      };
+      allEntries.onerror = () => reject(allEntries.error);
+    });
+  } catch (error) {
+    console.error('Cleanup failed:', error);
+    return 0;
+  }
+};
+
 export const unsubscribeFromPushNotifications = async () => {
   if (!('serviceWorker' in navigator)) {
     return;

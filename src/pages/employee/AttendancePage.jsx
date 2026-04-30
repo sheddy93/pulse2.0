@@ -3,9 +3,11 @@ import { base44 } from "@/api/base44Client";
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import GPSValidator from "@/components/attendance/GPSValidator";
+import OfflineStatus from "@/components/attendance/OfflineStatus";
 import { Clock, LogIn, LogOut, Coffee } from "lucide-react";
 import { format } from "date-fns";
 import { it } from "date-fns/locale";
+import { saveTimeEntryOffline, syncOfflineTimeEntries, getPendingTimeEntries, cleanupSyncedEntries } from "@/lib/pwa-utils";
 
 const TYPES = {
   check_in: { label: "Entrata", icon: LogIn, btnLabel: "Timbra entrata", color: "text-emerald-600 bg-emerald-50", enabledWhen: false },
@@ -22,6 +24,9 @@ export default function AttendancePage() {
   const [stamping, setStamping] = useState(null);
   const [location, setLocation] = useState(null);
   const [gpsPosition, setGpsPosition] = useState(null);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [pendingCount, setPendingCount] = useState(0);
 
   const loadEntries = async (me) => {
     const all = await base44.entities.TimeEntry.filter({ user_email: me.email });
@@ -29,22 +34,66 @@ export default function AttendancePage() {
   };
 
   useEffect(() => {
-    base44.auth.me().then(async (me) => {
-      setUser(me);
-      const emps = await base44.entities.EmployeeProfile.filter({ user_email: me.email });
-      setEmployee(emps[0] || null);
-      await loadEntries(me);
-      
-      // Carica la sede primaria se esiste
-      if (emps[0]) {
-        const locs = await base44.entities.CompanyLocation.filter({
-          company_id: emps[0].company_id,
-          is_primary: true
-        });
-        setLocation(locs[0] || null);
-      }
-    }).finally(() => setLoading(false));
+    const init = async () => {
+      base44.auth.me().then(async (me) => {
+        setUser(me);
+        const emps = await base44.entities.EmployeeProfile.filter({ user_email: me.email });
+        setEmployee(emps[0] || null);
+        await loadEntries(me);
+        
+        // Carica la sede primaria se esiste
+        if (emps[0]) {
+          const locs = await base44.entities.CompanyLocation.filter({
+            company_id: emps[0].company_id,
+            is_primary: true
+          });
+          setLocation(locs[0] || null);
+        }
+
+        // Carica timbrature in sospeso offline
+        const pending = await getPendingTimeEntries();
+        setPendingCount(pending.length);
+
+        // Sincronizza se online
+        if (navigator.onLine) {
+          await syncEntries(me);
+        }
+      }).finally(() => setLoading(false));
+    };
+    init();
   }, []);
+
+  // Ascolta cambio di connettività
+  useEffect(() => {
+    const handleOnline = async () => {
+      setIsOnline(true);
+      // Sincronizza quando torna online
+      if (user) {
+        await syncEntries(user);
+      }
+    };
+    
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, [user]);
+
+  const syncEntries = async (me) => {
+    setIsSyncing(true);
+    const result = await syncOfflineTimeEntries(base44);
+    if (result.synced > 0) {
+      await cleanupSyncedEntries();
+      await loadEntries(me);
+      const pending = await getPendingTimeEntries();
+      setPendingCount(pending.length);
+    }
+    setIsSyncing(false);
+  };
 
   const today = format(new Date(), "yyyy-MM-dd");
   const todayEntries = entries.filter(e => e.timestamp?.startsWith(today));
@@ -55,7 +104,7 @@ export default function AttendancePage() {
     if (!employee || !user) return;
     setStamping(type);
     
-    await base44.entities.TimeEntry.create({
+    const entry = {
       employee_id: employee.id,
       employee_name: `${employee.first_name} ${employee.last_name}`,
       company_id: employee.company_id,
@@ -65,11 +114,23 @@ export default function AttendancePage() {
       latitude: gpsPosition?.latitude,
       longitude: gpsPosition?.longitude,
       location: location?.name,
-    });
-    
-    await loadEntries(user);
-    setGpsPosition(null);
-    setStamping(null);
+    };
+
+    try {
+      if (isOnline) {
+        // Online: salva direttamente al server
+        await base44.entities.TimeEntry.create(entry);
+      } else {
+        // Offline: salva in IndexedDB
+        await saveTimeEntryOffline(entry);
+        setPendingCount(prev => prev + 1);
+      }
+      
+      await loadEntries(user);
+      setGpsPosition(null);
+    } finally {
+      setStamping(null);
+    }
   };
 
   const grouped = entries.reduce((acc, e) => {
@@ -83,6 +144,7 @@ export default function AttendancePage() {
 
   return (
     <AppShell user={user}>
+      <OfflineStatus isOnline={isOnline} isSyncing={isSyncing} pendingCount={pendingCount} />
       <div className="p-6 max-w-3xl mx-auto space-y-6">
         <h1 className="text-xl font-bold text-slate-800">Timbratura</h1>
 
