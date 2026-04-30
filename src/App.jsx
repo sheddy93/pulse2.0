@@ -25,6 +25,7 @@ import ExpiryCalendar from './pages/company/ExpiryCalendar';
 
 // Consultant
 import LinkRequests from './pages/consultant/LinkRequests';
+import DocumentReviewPage from './pages/consultant/DocumentReviewPage';
 
 // Employee
 import AttendancePage from './pages/employee/AttendancePage';
@@ -68,6 +69,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/consultant/companies" element={<EmployeeList />} />
       <Route path="/dashboard/consultant/employees" element={<EmployeeList />} />
       <Route path="/dashboard/consultant/link-requests" element={<LinkRequests />} />
+      <Route path="/dashboard/consultant/document-review" element={<DocumentReviewPage />} />
       <Route path="/dashboard/consultant/documents" element={<ComingSoon title="Documenti" dashboardPath="/dashboard/consultant" />} />
       <Route path="/dashboard/consultant/settings" element={<ComingSoon title="Impostazioni" dashboardPath="/dashboard/consultant" />} />
       <Route path="/dashboard/consultant/employees/:id" element={<ComingSoon title="Scheda dipendente" dashboardPath="/dashboard/consultant/employees" />} />

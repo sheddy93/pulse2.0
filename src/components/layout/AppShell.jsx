@@ -20,7 +20,7 @@ const NAV = {
     { label: "Aziende clienti", icon: Building2, path: "/dashboard/consultant/companies" },
     { label: "Dipendenti", icon: Users, path: "/dashboard/consultant/employees" },
     { label: "Richieste collegamento", icon: Link2, path: "/dashboard/consultant/link-requests" },
-    { label: "Documenti", icon: FileText, path: "/dashboard/consultant/documents" },
+    { label: "Revisione Documenti", icon: FileText, path: "/dashboard/consultant/document-review" },
     { label: "Impostazioni", icon: Settings, path: "/dashboard/consultant/settings" },
   ],
   company: [

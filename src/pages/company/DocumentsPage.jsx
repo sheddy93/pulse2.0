@@ -9,6 +9,11 @@ import { it } from "date-fns/locale";
 
 const DOC_TYPES = { contratto: "Contratto", busta_paga: "Busta paga", certificato: "Certificato", corso: "Corso", altro: "Altro" };
 const VISIBILITY = { employee: "Solo dipendente", company: "Solo azienda", consultant: "Solo consulente", all: "Tutti" };
+const STATUS_BADGE = {
+  in_revisione: { label: "In revisione", cls: "bg-amber-100 text-amber-700" },
+  approvato: { label: "Approvato", cls: "bg-emerald-100 text-emerald-700" },
+  rifiutato: { label: "Rifiutato", cls: "bg-red-100 text-red-700" },
+};
 
 function ExpiryBadge({ date }) {
   if (!date) return null;
@@ -69,6 +74,7 @@ export default function DocumentsPage() {
       visibility: form.visibility,
       expiry_date: form.expiry_date || undefined,
       notes: form.notes || undefined,
+      status: "in_revisione",
     });
     setForm({ title: "", doc_type: "contratto", employee_id: "", visibility: "all", expiry_date: "", notes: "", file: null });
     setShowForm(false);
@@ -196,7 +202,7 @@ export default function DocumentsPage() {
               <table className="w-full text-sm">
                 <thead className="bg-slate-50 border-b border-slate-100">
                   <tr>
-                    {["Titolo", "Tipo", "Dipendente", "Scadenza", "Visibilità", ""].map(h => (
+                    {["Titolo", "Tipo", "Dipendente", "Stato", "Scadenza", "Visibilità", ""].map(h => (
                       <th key={h} className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase">{h}</th>
                     ))}
                   </tr>
@@ -209,6 +215,7 @@ export default function DocumentsPage() {
                         <td className="px-5 py-3 font-medium text-slate-800 max-w-[200px] truncate">{doc.title}</td>
                         <td className="px-5 py-3 text-slate-500">{DOC_TYPES[doc.doc_type] || doc.doc_type}</td>
                         <td className="px-5 py-3 text-slate-500">{emp ? `${emp.first_name} ${emp.last_name}` : <span className="text-slate-300">—</span>}</td>
+                        <td className="px-5 py-3"><span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${STATUS_BADGE[doc.status]?.cls || STATUS_BADGE.in_revisione.cls}`}>{STATUS_BADGE[doc.status]?.label || "In revisione"}</span></td>
                         <td className="px-5 py-3"><ExpiryBadge date={doc.expiry_date} /></td>
                         <td className="px-5 py-3 text-slate-400 text-xs">{VISIBILITY[doc.visibility]}</td>
                         <td className="px-5 py-3">

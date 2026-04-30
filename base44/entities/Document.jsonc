@@ -43,6 +43,24 @@
     },
     "notes": {
       "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "in_revisione",
+        "approvato",
+        "rifiutato"
+      ],
+      "default": "in_revisione"
+    },
+    "reviewed_by": {
+      "type": "string"
+    },
+    "reviewed_at": {
+      "type": "string"
+    },
+    "review_notes": {
+      "type": "string"
     }
   },
   "required": [
