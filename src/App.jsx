@@ -33,6 +33,7 @@ import AssetManagement from './pages/company/AssetManagement';
 import AssetAssignmentPage from './pages/company/AssetAssignmentPage';
 import AuditLogPage from './pages/company/AuditLogPage';
 import BenefitManagement from './pages/company/BenefitManagement';
+import IntegrationSettings from './pages/company/IntegrationSettings';
 
 // Consultant
 import LinkRequests from './pages/consultant/LinkRequests';
@@ -110,6 +111,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/company/documents" element={<DocumentsPage />} />
       <Route path="/dashboard/company/documents/expiring" element={<ExpiryCalendar />} />
       <Route path="/dashboard/company/benefits" element={<BenefitManagement />} />
+      <Route path="/dashboard/company/integrations" element={<IntegrationSettings />} />
       <Route path="/dashboard/company/settings" element={<ComingSoon title="Impostazioni azienda" dashboardPath="/dashboard/company" />} />
 
       {/* Employee */}

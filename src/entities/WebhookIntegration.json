@@ -1,0 +1,74 @@
+{
+  "name": "WebhookIntegration",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "integration_type": {
+      "type": "string",
+      "enum": [
+        "quickbooks",
+        "zucchetti",
+        "slack",
+        "teams",
+        "custom"
+      ]
+    },
+    "webhook_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "api_key": {
+      "type": "string",
+      "description": "Chiave API per autenticazione"
+    },
+    "api_secret": {
+      "type": "string",
+      "description": "Secret per HMAC signature verification"
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "employee_created",
+          "employee_updated",
+          "employee_deleted",
+          "time_entry_created",
+          "leave_request_approved",
+          "overtime_approved"
+        ]
+      },
+      "description": "Eventi che triggerano il webhook"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "last_triggered_at": {
+      "type": "string"
+    },
+    "last_error": {
+      "type": "string"
+    },
+    "retry_count": {
+      "type": "number",
+      "default": 0
+    },
+    "config": {
+      "type": "object",
+      "description": "Configurazione specifica per ogni integrazione"
+    }
+  },
+  "required": [
+    "company_id",
+    "name",
+    "integration_type",
+    "webhook_url",
+    "api_key"
+  ]
+}

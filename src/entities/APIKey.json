@@ -1,0 +1,52 @@
+{
+  "name": "APIKey",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string",
+      "description": "Nome descrittivo della chiave"
+    },
+    "key_hash": {
+      "type": "string",
+      "description": "Hash SHA-256 della chiave (non memorizzare la chiave in chiaro)"
+    },
+    "prefix": {
+      "type": "string",
+      "description": "Prefisso visibile della chiave (es. pk_live_abc123)"
+    },
+    "permissions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "read:employees",
+          "read:time_entries",
+          "read:leave_requests",
+          "read:payroll",
+          "write:webhooks"
+        ]
+      }
+    },
+    "last_used_at": {
+      "type": "string"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "company_id",
+    "name",
+    "key_hash",
+    "prefix",
+    "permissions"
+  ]
+}
