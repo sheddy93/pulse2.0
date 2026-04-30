@@ -6,6 +6,7 @@ import StatCard from "@/components/layout/StatCard";
 import PageLoader from "@/components/layout/PageLoader";
 import { Users, Briefcase, CalendarDays, UserPlus, Copy, Check, Building2 } from "lucide-react";
 import PayrollExport from "@/components/company/PayrollExport";
+import PayrollArchive from "@/components/company/PayrollArchive";
 
 const STATUS_BADGE = {
   active: { label: "Attivo", cls: "bg-emerald-100 text-emerald-700" },
@@ -75,6 +76,7 @@ export default function CompanyDashboard() {
               <Briefcase className="w-4 h-4" /> Gestisci consulenti
             </Link>
             {company && <PayrollExport companyId={company.id} employees={employees} />}
+            {company && <PayrollArchive companyId={company.id} employees={employees} />}
           </div>
         </div>
 
