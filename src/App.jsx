@@ -7,6 +7,7 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import InstallPrompt from '@/components/pwa/InstallPrompt';
 import NotificationManager from '@/components/pwa/NotificationManager';
+import Landing from './pages/Landing';
 
 // Auth
 import RoleRedirect from './pages/auth/RoleRedirect';
@@ -87,6 +88,9 @@ const AuthenticatedApp = () => {
       <NotificationManager user={user} />
       <InstallPrompt />
       <Routes>
+      {/* Landing Page */}
+      <Route path="/landing" element={<Landing />} />
+
       {/* Root */}
       <Route path="/" element={<RoleRedirect />} />
       <Route path="/dashboard" element={<RoleRedirect />} />
