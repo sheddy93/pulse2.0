@@ -42,6 +42,8 @@ import GivePerformanceReview from './pages/company/GivePerformanceReview';
 import HRAnalytics from './pages/company/HRAnalytics';
 import ExpenseManagement from './pages/company/ExpenseManagement';
 import EmployeeExpenses from './pages/employee/EmployeeExpenses';
+import LeaveBalance from './pages/employee/LeaveBalance';
+import ManagerLeaveRequests from './pages/company/ManagerLeaveRequests';
 import TrainingPortal from './pages/employee/TrainingPortal';
 import PersonalDocuments from './pages/employee/PersonalDocuments';
 import PerformanceFeedback from './pages/employee/PerformanceFeedback';
@@ -132,6 +134,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/company/give-feedback" element={<GivePerformanceReview />} />
       <Route path="/dashboard/company/analytics" element={<HRAnalytics />} />
       <Route path="/dashboard/company/expenses" element={<ExpenseManagement />} />
+      <Route path="/dashboard/company/leave-requests" element={<ManagerLeaveRequests />} />
       <Route path="/dashboard/company/settings" element={<ComingSoon title="Impostazioni azienda" dashboardPath="/dashboard/company" />} />
 
       {/* Employee */}
@@ -140,6 +143,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/employee/calendar" element={<AttendanceCalendarPage />} />
       <Route path="/dashboard/employee/history" element={<AttendancePage />} />
       <Route path="/dashboard/employee/leave" element={<LeaveRequestPage />} />
+      <Route path="/dashboard/employee/leave-balance" element={<LeaveBalance />} />
       <Route path="/dashboard/employee/overtime" element={<OvertimeRequestPage />} />
       <Route path="/dashboard/employee/documents" element={<DocumentSignaturePage />} />
       <Route path="/dashboard/employee/skills" element={<SkillsPage />} />

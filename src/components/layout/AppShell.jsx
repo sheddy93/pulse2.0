@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import {
   LayoutDashboard, Users, Building2, FileText, Clock, LogOut,
   Menu, X, ChevronRight, UserCog, Link2, Shield, Settings,
-  ClipboardList, Briefcase, CalendarDays, FileBadge, Activity, Monitor, BookOpen, Award, Heart, GraduationCap, BarChart3, MessageCircle, TrendingUp, MessageSquare, Receipt
+  ClipboardList, Briefcase, CalendarDays, FileBadge, Activity, Monitor, BookOpen, Award, Heart, GraduationCap, BarChart3, MessageCircle, TrendingUp, MessageSquare, Receipt, Calendar
 } from "lucide-react";
 import NotificationBell from "./NotificationBell";
 
@@ -46,6 +46,7 @@ const NAV = {
     { label: "Dai Feedback", icon: MessageCircle, path: "/dashboard/company/give-feedback" },
     { label: "HR Analytics", icon: TrendingUp, path: "/dashboard/company/analytics" },
     { label: "Rimborsi Spese", icon: Receipt, path: "/dashboard/company/expenses" },
+    { label: "Approvazione Ferie", icon: CalendarDays, path: "/dashboard/company/leave-requests" },
     { label: "Integrazioni API", icon: Settings, path: "/dashboard/company/integrations" },
     { label: "Impostazioni", icon: Settings, path: "/dashboard/company/settings" },
   ],
@@ -56,6 +57,7 @@ const NAV = {
     { label: "Miei Documenti", icon: FileText, path: "/dashboard/employee/documents" },
     { label: "Le mie presenze", icon: ClipboardList, path: "/dashboard/employee/history" },
     { label: "Ferie & Permessi", icon: CalendarDays, path: "/dashboard/employee/leave" },
+    { label: "Saldo Ferie", icon: Calendar, path: "/dashboard/employee/leave-balance" },
     { label: "Straordinari", icon: Clock, path: "/dashboard/employee/overtime" },
     { label: "I miei benefit", icon: Heart, path: "/dashboard/employee/benefits" },
     { label: "Documenti da firmare", icon: FileText, path: "/dashboard/employee/documents" },
