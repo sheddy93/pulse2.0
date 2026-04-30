@@ -1,7 +1,7 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
-// deno-lint-ignore no-undef
-Deno.serve(async (req) => {
+// deno-lint-ignore-next-line no-undef
+globalThis.Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
     const { action, entity_type, entity_id, entity_name, old_data, new_data, changed_fields } = await req.json();

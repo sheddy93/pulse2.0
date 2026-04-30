@@ -51,6 +51,9 @@ import ManagerLeaveRequests from './pages/company/ManagerLeaveRequests';
 import AdminAnalytics from './pages/dashboard/AdminAnalytics';
 import OnboardingWizard from './pages/employee/OnboardingWizard';
 import OnboardingTracking from './pages/company/OnboardingTracking';
+import TrainingPlanManagement from './pages/company/TrainingPlanManagement';
+import TrainingDashboard from './pages/employee/TrainingDashboard';
+import CertificationExpiry from './pages/company/CertificationExpiry';
 import TrainingPortal from './pages/employee/TrainingPortal';
 import PersonalDocuments from './pages/employee/PersonalDocuments';
 import PerformanceFeedback from './pages/employee/PerformanceFeedback';
@@ -150,6 +153,8 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/company/expenses" element={<ExpenseManagement />} />
       <Route path="/dashboard/company/leave-requests" element={<ManagerLeaveRequests />} />
       <Route path="/dashboard/company/onboarding-tracking" element={<OnboardingTracking />} />
+      <Route path="/dashboard/company/training-plans" element={<TrainingPlanManagement />} />
+      <Route path="/dashboard/company/certification-expiry" element={<CertificationExpiry />} />
       <Route path="/dashboard/company/settings" element={<ComingSoon title="Impostazioni azienda" dashboardPath="/dashboard/company" />} />
 
       {/* Employee */}
@@ -164,6 +169,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/employee/skills" element={<SkillsPage />} />
       <Route path="/dashboard/employee/benefits" element={<BenefitsPage />} />
       <Route path="/dashboard/employee/training" element={<TrainingPortal />} />
+      <Route path="/dashboard/employee/training-plans" element={<TrainingDashboard />} />
       <Route path="/dashboard/employee/documents" element={<PersonalDocuments />} />
       <Route path="/dashboard/employee/feedback" element={<PerformanceFeedback />} />
       <Route path="/dashboard/employee/chat" element={<Chat />} />
