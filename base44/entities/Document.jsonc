@@ -61,6 +61,30 @@
     },
     "review_notes": {
       "type": "string"
+    },
+    "signature_required": {
+      "type": "boolean",
+      "default": false
+    },
+    "signature_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "signed",
+        "rejected"
+      ]
+    },
+    "signed_by": {
+      "type": "string"
+    },
+    "signed_at": {
+      "type": "string"
+    },
+    "signature_notes": {
+      "type": "string"
+    },
+    "last_reminder_sent": {
+      "type": "string"
     }
   },
   "required": [

@@ -31,6 +31,7 @@ import DocumentReviewPage from './pages/consultant/DocumentReviewPage';
 import AttendancePage from './pages/employee/AttendancePage';
 import LeaveRequestPage from './pages/employee/LeaveRequestPage';
 import EmployeeProfilePage from './pages/employee/EmployeeProfilePage';
+import DocumentSignaturePage from './pages/employee/DocumentSignaturePage';
 
 // Shared
 import ComingSoon from './components/layout/ComingSoon';
@@ -90,8 +91,8 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/employee/attendance" element={<AttendancePage />} />
       <Route path="/dashboard/employee/history" element={<AttendancePage />} />
       <Route path="/dashboard/employee/leave" element={<LeaveRequestPage />} />
+      <Route path="/dashboard/employee/documents" element={<DocumentSignaturePage />} />
       <Route path="/dashboard/employee/profile" element={<EmployeeProfilePage />} />
-      <Route path="/dashboard/employee/documents" element={<ComingSoon title="I miei documenti" dashboardPath="/dashboard/employee" />} />
       <Route path="/dashboard/employee/contract" element={<ComingSoon title="Il mio contratto" dashboardPath="/dashboard/employee" />} />
 
       <Route path="*" element={<PageNotFound />} />

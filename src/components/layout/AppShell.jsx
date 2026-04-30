@@ -37,7 +37,7 @@ const NAV = {
     { label: "Timbratura", icon: Clock, path: "/dashboard/employee/attendance" },
     { label: "Le mie presenze", icon: ClipboardList, path: "/dashboard/employee/history" },
     { label: "Ferie & Permessi", icon: CalendarDays, path: "/dashboard/employee/leave" },
-    { label: "Documenti", icon: FileText, path: "/dashboard/employee/documents" },
+    { label: "Documenti da firmare", icon: FileText, path: "/dashboard/employee/documents" },
     { label: "Contratto", icon: FileBadge, path: "/dashboard/employee/contract" },
     { label: "Profilo", icon: UserCog, path: "/dashboard/employee/profile" },
   ],

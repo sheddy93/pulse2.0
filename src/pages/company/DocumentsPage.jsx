@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
-import { FileText, Upload, AlertTriangle, CalendarDays, Trash2, ExternalLink, X } from "lucide-react";
+import { FileText, Upload, AlertTriangle, CalendarDays, Trash2, ExternalLink, X, Signature } from "lucide-react";
 import { format, differenceInDays } from "date-fns";
 import { it } from "date-fns/locale";
 
@@ -33,7 +33,7 @@ export default function DocumentsPage() {
   const [showForm, setShowForm] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [filterType, setFilterType] = useState("all");
-  const [form, setForm] = useState({ title: "", doc_type: "contratto", employee_id: "", visibility: "all", expiry_date: "", notes: "", file: null });
+  const [form, setForm] = useState({ title: "", doc_type: "contratto", employee_id: "", visibility: "all", expiry_date: "", notes: "", file: null, signature_required: false });
 
   const loadDocs = async (companyId) => {
     const d = await base44.entities.Document.filter({ company_id: companyId });
@@ -75,8 +75,10 @@ export default function DocumentsPage() {
       expiry_date: form.expiry_date || undefined,
       notes: form.notes || undefined,
       status: "in_revisione",
+      signature_required: form.signature_required,
+      signature_status: form.signature_required ? "pending" : undefined,
     });
-    setForm({ title: "", doc_type: "contratto", employee_id: "", visibility: "all", expiry_date: "", notes: "", file: null });
+    setForm({ title: "", doc_type: "contratto", employee_id: "", visibility: "all", expiry_date: "", notes: "", file: null, signature_required: false });
     setShowForm(false);
     await loadDocs(company.id);
     setUploading(false);
@@ -172,6 +174,11 @@ export default function DocumentsPage() {
                 <textarea value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} rows={2}
                   className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none" />
               </div>
+              <div className="sm:col-span-2 flex items-center gap-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <input type="checkbox" id="sig_req" checked={form.signature_required} onChange={e => setForm(f => ({ ...f, signature_required: e.target.checked }))}
+                  className="w-4 h-4 text-blue-600 rounded cursor-pointer" />
+                <label htmlFor="sig_req" className="text-sm font-medium text-slate-700 cursor-pointer">Richiedi firma del dipendente</label>
+              </div>
             </div>
             <button type="submit" disabled={uploading} className="w-full py-2.5 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 disabled:opacity-50">
               {uploading ? "Caricamento in corso..." : "Carica documento"}
@@ -202,7 +209,7 @@ export default function DocumentsPage() {
               <table className="w-full text-sm">
                 <thead className="bg-slate-50 border-b border-slate-100">
                   <tr>
-                    {["Titolo", "Tipo", "Dipendente", "Stato", "Scadenza", "Visibilità", ""].map(h => (
+                    {["Titolo", "Tipo", "Dipendente", "Stato", "Firma", "Scadenza", "Visibilità", ""].map(h => (
                       <th key={h} className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase">{h}</th>
                     ))}
                   </tr>
@@ -216,6 +223,18 @@ export default function DocumentsPage() {
                         <td className="px-5 py-3 text-slate-500">{DOC_TYPES[doc.doc_type] || doc.doc_type}</td>
                         <td className="px-5 py-3 text-slate-500">{emp ? `${emp.first_name} ${emp.last_name}` : <span className="text-slate-300">—</span>}</td>
                         <td className="px-5 py-3"><span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${STATUS_BADGE[doc.status]?.cls || STATUS_BADGE.in_revisione.cls}`}>{STATUS_BADGE[doc.status]?.label || "In revisione"}</span></td>
+                        <td className="px-5 py-3">
+                          {doc.signature_required ? (
+                            <span className={`px-2 py-0.5 rounded-full text-xs font-semibold flex items-center gap-1 w-fit ${
+                              doc.signature_status === 'signed' ? 'bg-emerald-100 text-emerald-700' :
+                              doc.signature_status === 'rejected' ? 'bg-red-100 text-red-700' :
+                              'bg-amber-100 text-amber-700'
+                            }`}>
+                              <Signature className="w-3 h-3" />
+                              {doc.signature_status === 'signed' ? 'Firmato' : doc.signature_status === 'rejected' ? 'Rifiutato' : 'In attesa'}
+                            </span>
+                          ) : <span className="text-slate-300 text-xs">—</span>}
+                        </td>
                         <td className="px-5 py-3"><ExpiryBadge date={doc.expiry_date} /></td>
                         <td className="px-5 py-3 text-slate-400 text-xs">{VISIBILITY[doc.visibility]}</td>
                         <td className="px-5 py-3">
