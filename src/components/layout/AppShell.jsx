@@ -47,6 +47,7 @@ const NAV = {
     { label: "HR Analytics", icon: TrendingUp, path: "/dashboard/company/analytics" },
     { label: "Rimborsi Spese", icon: Receipt, path: "/dashboard/company/expenses" },
     { label: "Approvazione Ferie", icon: CalendarDays, path: "/dashboard/company/leave-requests" },
+    { label: "Onboarding Dipendenti", icon: Users, path: "/dashboard/company/onboarding-tracking" },
     { label: "Integrazioni API", icon: Settings, path: "/dashboard/company/integrations" },
     { label: "Impostazioni", icon: Settings, path: "/dashboard/company/settings" },
   ],
