@@ -1,0 +1,70 @@
+{
+  "name": "EmployeeSkill",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "employee_id": {
+      "type": "string"
+    },
+    "employee_name": {
+      "type": "string"
+    },
+    "skill_name": {
+      "type": "string"
+    },
+    "skill_type": {
+      "type": "string",
+      "enum": [
+        "technical",
+        "certification",
+        "course"
+      ]
+    },
+    "skill_category": {
+      "type": "string"
+    },
+    "proficiency_level": {
+      "type": "string",
+      "enum": [
+        "beginner",
+        "intermediate",
+        "advanced",
+        "expert"
+      ]
+    },
+    "acquired_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "expiry_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "issuer": {
+      "type": "string"
+    },
+    "certification_number": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "expired",
+        "pending"
+      ]
+    }
+  },
+  "required": [
+    "company_id",
+    "employee_id",
+    "skill_name",
+    "skill_type",
+    "acquired_date"
+  ]
+}
