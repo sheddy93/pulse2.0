@@ -42,18 +42,38 @@
       "type": "string",
       "enum": [
         "pending",
+        "manager_approved",
+        "manager_rejected",
         "approved",
         "rejected"
       ],
       "default": "pending"
     },
-    "admin_note": {
+    "manager_email": {
+      "type": "string"
+    },
+    "manager_name": {
+      "type": "string"
+    },
+    "manager_approved_at": {
+      "type": "string"
+    },
+    "manager_note": {
+      "type": "string"
+    },
+    "admin_email": {
+      "type": "string"
+    },
+    "admin_name": {
       "type": "string"
     },
     "reviewed_by": {
       "type": "string"
     },
     "reviewed_at": {
+      "type": "string"
+    },
+    "admin_note": {
       "type": "string"
     }
   },

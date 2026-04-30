@@ -7,8 +7,10 @@ import { format, differenceInCalendarDays } from "date-fns";
 import { it } from "date-fns/locale";
 
 const STATUS = {
-  pending: { label: "In attesa", cls: "bg-orange-100 text-orange-700" },
-  approved: { label: "Approvata", cls: "bg-emerald-100 text-emerald-700" },
+  pending: { label: "In attesa approvazione manager", cls: "bg-orange-100 text-orange-700" },
+  manager_approved: { label: "Approvata dal manager", cls: "bg-blue-100 text-blue-700" },
+  manager_rejected: { label: "Rifiutata dal manager", cls: "bg-red-100 text-red-600" },
+  approved: { label: "Approvata definitivamente", cls: "bg-emerald-100 text-emerald-700" },
   rejected: { label: "Rifiutata", cls: "bg-red-100 text-red-600" },
 };
 const TYPE_LABELS = { ferie: "Ferie", permesso: "Permesso", malattia: "Malattia", extra: "Straordinario" };
@@ -47,6 +49,8 @@ export default function LeaveRequestPage() {
       employee_name: `${employee.first_name} ${employee.last_name}`,
       employee_email: user.email,
       company_id: employee.company_id,
+      manager_email: employee.manager,
+      manager_name: undefined,
       ...form,
       days_count: days,
       status: "pending",
@@ -131,7 +135,8 @@ export default function LeaveRequestPage() {
                           {l.days_count ? <span className="ml-2 text-slate-400">({l.days_count} giorni)</span> : null}
                         </p>
                         {l.note && <p className="text-xs text-slate-400 mt-1">{l.note}</p>}
-                        {l.admin_note && <p className="text-xs text-blue-600 mt-1 font-medium">Nota HR: {l.admin_note}</p>}
+                        {l.manager_note && <p className="text-xs text-blue-600 mt-1 font-medium">Nota manager: {l.manager_note}</p>}
+                        {l.admin_note && <p className="text-xs text-emerald-600 mt-1 font-medium">Nota HR: {l.admin_note}</p>}
                       </div>
                       <span className={`px-2.5 py-1 rounded-full text-xs font-semibold flex-shrink-0 ${badge.cls}`}>{badge.label}</span>
                     </div>
