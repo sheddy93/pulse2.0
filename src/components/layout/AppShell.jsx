@@ -29,6 +29,7 @@ const NAV = {
     { label: "Dipendenti", icon: Users, path: "/dashboard/company/employees" },
     { label: "Aggiungi lavoratore", icon: UserCog, path: "/dashboard/company/employees/new" },
     { label: "Consulenti", icon: Briefcase, path: "/dashboard/company/consultants" },
+    { label: "Turni settimanali", icon: CalendarDays, path: "/dashboard/company/shifts" },
     { label: "Presenze", icon: Clock, path: "/dashboard/company/attendance" },
     { label: "Straordinari", icon: Clock, path: "/dashboard/company/overtime" },
     { label: "Documenti", icon: FileText, path: "/dashboard/company/documents" },

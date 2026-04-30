@@ -7,6 +7,7 @@ import PageLoader from "@/components/layout/PageLoader";
 import { Clock, CalendarDays, FileText, LogIn, LogOut, CheckCircle2 } from "lucide-react";
 import { format, startOfMonth } from "date-fns";
 import { it } from "date-fns/locale";
+import UpcomingShifts from "@/components/employee/UpcomingShifts";
 
 export default function EmployeeDashboard() {
   const [user, setUser] = useState(null);
@@ -146,6 +147,18 @@ export default function EmployeeDashboard() {
             </div>
           )}
         </div>
+
+        {/* Upcoming shifts */}
+        {employee && (
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-5 py-4 border-b border-slate-100">
+              <h2 className="font-semibold text-slate-800">I tuoi turni settimanali</h2>
+            </div>
+            <div className="p-5">
+              <UpcomingShifts employeeId={employee.id} companyId={employee.company_id} />
+            </div>
+          </div>
+        )}
 
         {/* Quick links */}
         <div className="grid grid-cols-2 gap-4">
