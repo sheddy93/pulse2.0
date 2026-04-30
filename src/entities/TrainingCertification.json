@@ -1,0 +1,63 @@
+{
+  "name": "TrainingCertification",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "employee_id": {
+      "type": "string"
+    },
+    "employee_name": {
+      "type": "string"
+    },
+    "certification_name": {
+      "type": "string"
+    },
+    "issuer": {
+      "type": "string"
+    },
+    "issue_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "expiry_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "certificate_number": {
+      "type": "string"
+    },
+    "certificate_url": {
+      "type": "string"
+    },
+    "uploaded_by": {
+      "type": "string"
+    },
+    "uploaded_at": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "expired",
+        "pending_renewal"
+      ],
+      "default": "active"
+    },
+    "related_course_id": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "company_id",
+    "employee_id",
+    "certification_name",
+    "issue_date",
+    "certificate_url"
+  ]
+}

@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import {
   LayoutDashboard, Users, Building2, FileText, Clock, LogOut,
   Menu, X, ChevronRight, UserCog, Link2, Shield, Settings,
-  ClipboardList, Briefcase, CalendarDays, FileBadge, Activity, Monitor, BookOpen, Award, Heart
+  ClipboardList, Briefcase, CalendarDays, FileBadge, Activity, Monitor, BookOpen, Award, Heart, GraduationCap
 } from "lucide-react";
 import NotificationBell from "./NotificationBell";
 
@@ -41,6 +41,7 @@ const NAV = {
     { label: "Audit Log", icon: BookOpen, path: "/dashboard/company/audit-log" },
     { label: "Offerte di Lavoro", icon: FileText, path: "/dashboard/company/job-postings" },
     { label: "Candidati", icon: Users, path: "/dashboard/company/candidates" },
+    { label: "Corsi di Formazione", icon: GraduationCap, path: "/dashboard/company/training" },
     { label: "Integrazioni API", icon: Settings, path: "/dashboard/company/integrations" },
     { label: "Impostazioni", icon: Settings, path: "/dashboard/company/settings" },
   ],
@@ -54,6 +55,7 @@ const NAV = {
     { label: "I miei benefit", icon: Heart, path: "/dashboard/employee/benefits" },
     { label: "Documenti da firmare", icon: FileText, path: "/dashboard/employee/documents" },
     { label: "Le mie competenze", icon: Award, path: "/dashboard/employee/skills" },
+    { label: "Formazione", icon: GraduationCap, path: "/dashboard/employee/training" },
     { label: "Contratto", icon: FileBadge, path: "/dashboard/employee/contract" },
     { label: "Profilo", icon: UserCog, path: "/dashboard/employee/profile" },
   ],

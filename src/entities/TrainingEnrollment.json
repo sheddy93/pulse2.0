@@ -1,0 +1,67 @@
+{
+  "name": "TrainingEnrollment",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "course_id": {
+      "type": "string"
+    },
+    "course_title": {
+      "type": "string"
+    },
+    "employee_id": {
+      "type": "string"
+    },
+    "employee_name": {
+      "type": "string"
+    },
+    "employee_email": {
+      "type": "string"
+    },
+    "enrollment_date": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "enrolled",
+        "in_progress",
+        "completed",
+        "failed",
+        "expired",
+        "cancelled"
+      ],
+      "default": "enrolled"
+    },
+    "completion_date": {
+      "type": "string"
+    },
+    "completion_percentage": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 0
+    },
+    "expiry_date": {
+      "type": "string"
+    },
+    "certificate_url": {
+      "type": "string"
+    },
+    "custom_certificate_url": {
+      "type": "string",
+      "description": "Certificato caricato dal dipendente"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "company_id",
+    "course_id",
+    "employee_id",
+    "enrollment_date"
+  ]
+}

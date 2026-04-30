@@ -1,0 +1,75 @@
+{
+  "name": "TrainingCourse",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "safety",
+        "compliance",
+        "technical",
+        "leadership",
+        "general",
+        "other"
+      ]
+    },
+    "is_mandatory": {
+      "type": "boolean",
+      "default": false
+    },
+    "provider": {
+      "type": "string",
+      "description": "Nome provider o interno"
+    },
+    "duration_hours": {
+      "type": "number"
+    },
+    "expiry_months": {
+      "type": "number",
+      "description": "Numero di mesi prima che la certificazione scada (null = senza scadenza)"
+    },
+    "max_participants": {
+      "type": "number",
+      "description": "null = illimitato"
+    },
+    "cost": {
+      "type": "number"
+    },
+    "course_url": {
+      "type": "string"
+    },
+    "course_material_url": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "active",
+        "archived"
+      ],
+      "default": "active"
+    },
+    "created_by": {
+      "type": "string"
+    },
+    "enrollments_count": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "company_id",
+    "title",
+    "category"
+  ]
+}
