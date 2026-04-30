@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useI18n, LANGUAGES } from "@/hooks/useI18n";
-import { Users, Clock, FileText, TrendingUp, Shield, Zap, CheckCircle2, ArrowRight, Menu, X, Star } from "lucide-react";
+import { Users, Clock, FileText, TrendingUp, Shield, Zap, CheckCircle2, ArrowRight, Menu, X, Star, Instagram, Facebook, Linkedin, Music } from "lucide-react";
 import { motion } from "framer-motion";
 
 const LOGO = "https://media.base44.com/images/public/69f3ad50c2e669c8723343df/a5026eec8_generated_image.png";
@@ -309,8 +309,22 @@ export default function LandingNew() {
               </ul>
             </div>
           </div>
-          <div className="text-center text-sm text-slate-500">
-            <p>&copy; 2026 PulseHR. Tutti i diritti riservati.</p>
+          <div className="text-center space-y-6">
+            <div className="flex items-center justify-center gap-6">
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center hover:scale-110 transition-transform">
+                <Instagram className="w-5 h-5 text-white" />
+              </a>
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center hover:scale-110 transition-transform">
+                <Facebook className="w-5 h-5 text-white" />
+              </a>
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-blue-700 flex items-center justify-center hover:scale-110 transition-transform">
+                <Linkedin className="w-5 h-5 text-white" />
+              </a>
+              <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gradient-to-br from-slate-900 to-black flex items-center justify-center hover:scale-110 transition-transform border border-slate-700">
+                <Music className="w-5 h-5 text-white" />
+              </a>
+            </div>
+            <p className="text-sm text-slate-500">&copy; 2026 PulseHR. Tutti i diritti riservati.</p>
           </div>
         </div>
       </footer>
