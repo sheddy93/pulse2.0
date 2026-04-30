@@ -43,6 +43,7 @@ import DocumentReviewPage from './pages/consultant/DocumentReviewPage';
 
 // Employee
 import AttendancePage from './pages/employee/AttendancePage';
+import AttendanceCalendarPage from './pages/employee/AttendanceCalendar';
 import LeaveRequestPage from './pages/employee/LeaveRequestPage';
 import EmployeeProfilePage from './pages/employee/EmployeeProfilePage';
 import DocumentSignaturePage from './pages/employee/DocumentSignaturePage';
@@ -121,6 +122,7 @@ const AuthenticatedApp = () => {
       {/* Employee */}
       <Route path="/dashboard/employee" element={<EmployeeDashboard />} />
       <Route path="/dashboard/employee/attendance" element={<AttendancePage />} />
+      <Route path="/dashboard/employee/calendar" element={<AttendanceCalendarPage />} />
       <Route path="/dashboard/employee/history" element={<AttendancePage />} />
       <Route path="/dashboard/employee/leave" element={<LeaveRequestPage />} />
       <Route path="/dashboard/employee/overtime" element={<OvertimeRequestPage />} />
