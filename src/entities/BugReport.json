@@ -1,0 +1,42 @@
+{
+  "name": "BugReport",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string"
+    },
+    "company_id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "description": "Titolo del bug"
+    },
+    "description": {
+      "type": "string",
+      "description": "Descrizione dettagliata"
+    },
+    "page_path": {
+      "type": "string",
+      "description": "Pagina dove si è verificato il bug"
+    },
+    "browser_info": {
+      "type": "string",
+      "description": "Browser e versione"
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["low", "medium", "high", "critical"],
+      "default": "medium"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["reported", "acknowledged", "in_progress", "resolved", "closed"],
+      "default": "reported"
+    },
+    "resolution_notes": {
+      "type": "string"
+    }
+  },
+  "required": ["user_email", "title", "description"]
+}

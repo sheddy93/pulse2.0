@@ -1,0 +1,36 @@
+{
+  "name": "FeedbackReport",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string"
+    },
+    "user_role": {
+      "type": "string",
+      "enum": ["admin", "company", "consultant", "employee"]
+    },
+    "company_id": {
+      "type": "string"
+    },
+    "rating": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 5,
+      "description": "Valutazione da 1 a 5 stelle"
+    },
+    "category": {
+      "type": "string",
+      "enum": ["usability", "performance", "feature_request", "other"]
+    },
+    "message": {
+      "type": "string",
+      "description": "Messaggio feedback"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["new", "reviewed", "addressed", "archived"],
+      "default": "new"
+    }
+  },
+  "required": ["user_email", "user_role", "rating", "message"]
+}

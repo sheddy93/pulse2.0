@@ -11,6 +11,7 @@ import Landing from './pages/Landing';
 
 // Auth
 import RoleRedirect from './pages/auth/RoleRedirect';
+import RoleSelection from './pages/auth/RoleSelection';
 import UnknownRole from './pages/auth/UnknownRole';
 
 // Dashboards
@@ -45,6 +46,7 @@ import ExpenseManagement from './pages/company/ExpenseManagement';
 import EmployeeExpenses from './pages/employee/EmployeeExpenses';
 import LeaveBalance from './pages/employee/LeaveBalance';
 import ManagerLeaveRequests from './pages/company/ManagerLeaveRequests';
+import AdminAnalytics from './pages/dashboard/AdminAnalytics';
 import TrainingPortal from './pages/employee/TrainingPortal';
 import PersonalDocuments from './pages/employee/PersonalDocuments';
 import PerformanceFeedback from './pages/employee/PerformanceFeedback';
@@ -94,10 +96,12 @@ const AuthenticatedApp = () => {
       {/* Root */}
       <Route path="/" element={<RoleRedirect />} />
       <Route path="/dashboard" element={<RoleRedirect />} />
+      <Route path="/auth/role-selection" element={<RoleSelection />} />
       <Route path="/error/unknown-role" element={<UnknownRole />} />
 
       {/* Super Admin */}
-      <Route path="/dashboard/admin" element={<AdminDashboard />} />
+      <Route path="/dashboard/admin" element={<AdminAnalytics />} />
+      <Route path="/dashboard/admin/analytics" element={<AdminAnalytics />} />
       <Route path="/dashboard/admin/companies" element={<ComingSoon title="Gestione Aziende" dashboardPath="/dashboard/admin" />} />
       <Route path="/dashboard/admin/users" element={<ComingSoon title="Gestione Utenti" dashboardPath="/dashboard/admin" />} />
       <Route path="/dashboard/admin/system" element={<ComingSoon title="Sistema" dashboardPath="/dashboard/admin" />} />
