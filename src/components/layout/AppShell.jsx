@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import {
   LayoutDashboard, Users, Building2, FileText, Clock, LogOut,
   Menu, X, ChevronRight, UserCog, Link2, Shield, Settings,
-  ClipboardList, Briefcase, CalendarDays, FileBadge, Activity, Monitor, BookOpen, Award, Heart, GraduationCap
+  ClipboardList, Briefcase, CalendarDays, FileBadge, Activity, Monitor, BookOpen, Award, Heart, GraduationCap, BarChart3, MessageCircle
 } from "lucide-react";
 import NotificationBell from "./NotificationBell";
 
@@ -42,6 +42,8 @@ const NAV = {
     { label: "Offerte di Lavoro", icon: FileText, path: "/dashboard/company/job-postings" },
     { label: "Candidati", icon: Users, path: "/dashboard/company/candidates" },
     { label: "Corsi di Formazione", icon: GraduationCap, path: "/dashboard/company/training" },
+    { label: "Valutazioni 360°", icon: BarChart3, path: "/dashboard/company/performance" },
+    { label: "Dai Feedback", icon: MessageCircle, path: "/dashboard/company/give-feedback" },
     { label: "Integrazioni API", icon: Settings, path: "/dashboard/company/integrations" },
     { label: "Impostazioni", icon: Settings, path: "/dashboard/company/settings" },
   ],
@@ -57,6 +59,7 @@ const NAV = {
     { label: "Documenti da firmare", icon: FileText, path: "/dashboard/employee/documents" },
     { label: "Le mie competenze", icon: Award, path: "/dashboard/employee/skills" },
     { label: "Formazione", icon: GraduationCap, path: "/dashboard/employee/training" },
+    { label: "Il Mio Feedback", icon: BarChart3, path: "/dashboard/employee/feedback" },
     { label: "Contratto", icon: FileBadge, path: "/dashboard/employee/contract" },
     { label: "Profilo", icon: UserCog, path: "/dashboard/employee/profile" },
   ],
