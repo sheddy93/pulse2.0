@@ -1,0 +1,51 @@
+{
+  "name": "WorkConversation",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["one_on_one", "group"],
+      "default": "one_on_one"
+    },
+    "creator_email": {
+      "type": "string"
+    },
+    "creator_name": {
+      "type": "string"
+    },
+    "participants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "email": { "type": "string" },
+          "name": { "type": "string" },
+          "employee_id": { "type": "string" }
+        }
+      },
+      "description": "Lista partecipanti alla conversazione"
+    },
+    "last_message_at": {
+      "type": "string"
+    },
+    "last_message_preview": {
+      "type": "string"
+    },
+    "is_archived": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "company_id",
+    "title",
+    "creator_email",
+    "participants"
+  ]
+}

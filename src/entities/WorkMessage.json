@@ -1,0 +1,54 @@
+{
+  "name": "WorkMessage",
+  "type": "object",
+  "properties": {
+    "conversation_id": {
+      "type": "string"
+    },
+    "company_id": {
+      "type": "string"
+    },
+    "sender_email": {
+      "type": "string"
+    },
+    "sender_name": {
+      "type": "string"
+    },
+    "sender_employee_id": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string",
+      "description": "Testo del messaggio"
+    },
+    "attachments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "file_url": { "type": "string" },
+          "file_name": { "type": "string" },
+          "file_size": { "type": "number" },
+          "file_type": { "type": "string" }
+        }
+      },
+      "description": "File allegati al messaggio"
+    },
+    "is_edited": {
+      "type": "boolean",
+      "default": false
+    },
+    "edited_at": {
+      "type": "string"
+    },
+    "sent_at": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "conversation_id",
+    "company_id",
+    "sender_email",
+    "content"
+  ]
+}
