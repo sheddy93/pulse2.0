@@ -19,6 +19,7 @@ import EmployeeDashboard from './pages/dashboard/EmployeeDashboard';
 // Company
 import EmployeeList from './pages/company/EmployeeList';
 import NewEmployee from './pages/company/NewEmployee';
+import EmployeeImport from './pages/company/EmployeeImport';
 import CompanyConsultants from './pages/company/CompanyConsultants';
 import DocumentsPage from './pages/company/DocumentsPage';
 import ExpiryCalendar from './pages/company/ExpiryCalendar';
@@ -86,6 +87,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/company" element={<CompanyDashboard />} />
       <Route path="/dashboard/company/employees" element={<EmployeeList />} />
       <Route path="/dashboard/company/employees/new" element={<NewEmployee />} />
+      <Route path="/dashboard/company/employees/import" element={<EmployeeImport />} />
       <Route path="/dashboard/company/employees/:id" element={<ComingSoon title="Scheda dipendente" dashboardPath="/dashboard/company/employees" />} />
       <Route path="/dashboard/company/consultants" element={<CompanyConsultants />} />
       <Route path="/dashboard/company/attendance" element={<ComingSoon title="Presenze aziendali" dashboardPath="/dashboard/company" />} />

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
-import { Users, UserPlus, Search } from "lucide-react";
+import { Users, UserPlus, Search, Upload } from "lucide-react";
 
 const STATUS_BADGE = {
   active: { label: "Attivo", cls: "bg-emerald-100 text-emerald-700" },
@@ -53,9 +53,14 @@ export default function EmployeeList() {
             <p className="text-sm text-slate-500">{employees.length} lavoratori</p>
           </div>
           {user?.role === "company" && (
-            <Link to="/dashboard/company/employees/new" className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700">
-              <UserPlus className="w-4 h-4" /> Aggiungi
-            </Link>
+            <div className="flex gap-2">
+              <Link to="/dashboard/company/employees/import" className="flex items-center gap-2 px-4 py-2 border border-blue-300 bg-blue-50 text-blue-700 rounded-lg text-sm font-semibold hover:bg-blue-100">
+                <Upload className="w-4 h-4" /> Importa CSV
+              </Link>
+              <Link to="/dashboard/company/employees/new" className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700">
+                <UserPlus className="w-4 h-4" /> Aggiungi
+              </Link>
+            </div>
           )}
         </div>
 
