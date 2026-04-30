@@ -1,63 +1,66 @@
 # PulseHR
 
-Sistema HR completo per la gestione di dipendenti, presenze, paghe, e molto altro.
+> Sistema HR completo per gestione dipendenti, presenze, paghe, documenti e molto altro.
 
 ## Struttura del Progetto
 
 ```
 pulse2.0/
-├── backend/                  # Django REST API
-│   ├── config/               # Configurazione Django (settings, urls, wsgi)
+├── backend/                  # Django REST API (Python)
+│   ├── config/               # Settings, URLs, WSGI
 │   ├── users/                # App principale
-│   │   ├── models.py
-│   │   ├── serializers.py
-│   │   ├── services.py
-│   │   ├── views/            # View suddivise per dominio
-│   │   │   ├── auth.py
-│   │   │   ├── dashboard.py
-│   │   │   ├── leave.py
-│   │   │   └── ...
-│   │   └── utils/            # Utility functions
-│   │       ├── email.py
-│   │       ├── cookie_auth.py
-│   │       └── ...
+│   │   ├── models.py         # Modelli dati
+│   │   ├── serializers.py    # DRF Serializers
+│   │   ├── services.py       # Business logic
+│   │   ├── views/            # View per dominio (auth, leave, payroll...)
+│   │   └── utils/            # Utility (email, cookie_auth, pricing...)
+│   ├── api/                  # Router API globale
 │   ├── requirements.txt
 │   └── manage.py
 │
-├── frontend/                 # Next.js / React Frontend
+├── frontend/                 # React Frontend (Vite)
 │   ├── app/                  # Pagine (Next.js App Router)
 │   ├── components/
-│   │   ├── layout/           # Shell, Sidebar, Topbar
-│   │   ├── ui/               # Componenti UI riutilizzabili
-│   │   └── features/         # Componenti feature-specific
-│   ├── src/                  # Entry point e configurazione
-│   ├── package.json
-│   └── vite.config.js
+│   │   ├── layout/           # App shell, Sidebar, Topbar
+│   │   ├── ui/               # Card, Badge, componenti riutilizzabili
+│   │   └── features/         # Onboarding, Auth, Language, Theme...
+│   ├── src/                  # Entry point applicazione
+│   ├── index.html
+│   ├── vite.config.js
+│   └── package.json
 │
-├── docs/                     # Documentazione
-│   ├── audit/                # Report di audit tecnico
+├── docs/                     # Documentazione completa
+│   ├── audit/                # Report audit tecnico
 │   ├── reports/              # Report per fase di sviluppo
-│   ├── deploy/               # Guide di deployment
-│   ├── qa/                   # Checklist QA e test
+│   ├── deploy/               # Guide deployment (Render, Railway, Vercel)
+│   ├── qa/                   # Checklist QA e smoke test
 │   ├── ARCHITECTURE.md
 │   └── INDEX.md
 │
+├── .github/                  # CI/CD Workflows
 ├── docker-compose.yml        # Orchestrazione container
-├── Makefile                  # Comandi comuni
+├── Makefile                  # Comandi comuni (make dev, make test...)
+├── render.yaml               # Config deploy Render
 └── README.md
 ```
 
 ## Quick Start
 
 ```bash
+# Clona il repo
+git clone https://github.com/sheddy93/pulse2.0.git
+cd pulse2.0
+
 # Backend
 cd backend
-python -m venv venv && source venv/bin/activate
+python -m venv venv && source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
+cp .env.example .env  # configura le variabili
 python manage.py migrate
+python manage.py createsuperuser
 python manage.py runserver
 
-# Frontend
+# Frontend (in un altro terminale)
 cd frontend
 npm install
 npm run dev
@@ -65,8 +68,16 @@ npm run dev
 
 ## Deploy
 
-Vedi [docs/deploy/](docs/deploy/) per le istruzioni complete.
+| Piattaforma | Guida |
+|---|---|
+| Render | [docs/deploy/DEPLOYMENT.md](docs/deploy/DEPLOYMENT.md) |
+| Railway | [docs/deploy/RAILWAY.md](docs/deploy/RAILWAY.md) |
+| Docker | `docker-compose up --build` |
 
 ## Documentazione
 
-Vedi [docs/INDEX.md](docs/INDEX.md) per l'indice completo della documentazione.
+→ [docs/INDEX.md](docs/INDEX.md) — indice completo
+
+## Licenza
+
+Vedi [LICENSE](LICENSE).
