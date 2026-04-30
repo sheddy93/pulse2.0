@@ -1,0 +1,62 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "role": {
+      "type": "string",
+      "enum": [
+        "super_admin",
+        "company_owner",
+        "company_admin",
+        "hr_manager",
+        "manager",
+        "labor_consultant",
+        "external_consultant",
+        "safety_consultant",
+        "employee"
+      ],
+      "default": "employee"
+    },
+    "company_id": {
+      "type": "string",
+      "description": "ID azienda (per company_owner, company_admin, hr_manager, manager, employee)"
+    },
+    "consultant_public_id": {
+      "type": "string",
+      "description": "ID pubblico consulente (per labor_consultant, external_consultant, safety_consultant)"
+    },
+    "consultant_type": {
+      "type": "string",
+      "enum": ["labor", "external", "safety"],
+      "description": "Tipo consulente"
+    },
+    "must_change_password": {
+      "type": "boolean",
+      "default": false,
+      "description": "Deve cambiare password al prossimo login"
+    },
+    "temporary_password_expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Scadenza password temporanea"
+    },
+    "last_password_change": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Ultimo cambio password"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Account attivo/inattivo"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "profile_completed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Profilo completato durante registrazione"
+    }
+  }
+}

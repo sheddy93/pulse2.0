@@ -70,15 +70,18 @@ export default function Landing() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
-          <button
-            onClick={handleLogin}
+          <a
+            href="/auth/register/company"
             className="px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 flex items-center justify-center gap-2 text-lg"
           >
-            Inizia Gratis <ArrowRight className="w-5 h-5" />
-          </button>
-          <button className="px-8 py-3 border-2 border-slate-300 text-slate-900 rounded-lg font-semibold hover:bg-slate-100 text-lg">
-            Scopri di Più
-          </button>
+            Registra Azienda <ArrowRight className="w-5 h-5" />
+          </a>
+          <a
+            href="/auth/register/consultant"
+            className="px-8 py-3 border-2 border-violet-300 text-violet-600 rounded-lg font-semibold hover:bg-violet-50 text-lg"
+          >
+            Registra Consulente
+          </a>
         </div>
 
         <div className="pt-10">

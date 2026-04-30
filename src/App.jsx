@@ -13,6 +13,8 @@ import Landing from './pages/Landing';
 import RoleRedirect from './pages/auth/RoleRedirect';
 import RoleSelection from './pages/auth/RoleSelection';
 import UnknownRole from './pages/auth/UnknownRole';
+import RegisterCompany from './pages/auth/RegisterCompany';
+import RegisterConsultant from './pages/auth/RegisterConsultant';
 
 // Dashboards
 import AdminDashboard from './pages/dashboard/AdminDashboard';
@@ -99,6 +101,8 @@ const AuthenticatedApp = () => {
       <Route path="/" element={<RoleRedirect />} />
       <Route path="/dashboard" element={<RoleRedirect />} />
       <Route path="/auth/role-selection" element={<RoleSelection />} />
+      <Route path="/auth/register/company" element={<RegisterCompany />} />
+      <Route path="/auth/register/consultant" element={<RegisterConsultant />} />
       <Route path="/error/unknown-role" element={<UnknownRole />} />
 
       {/* Super Admin */}
