@@ -8,6 +8,7 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import InstallPrompt from '@/components/pwa/InstallPrompt';
 import NotificationManager from '@/components/pwa/NotificationManager';
 import Landing from './pages/Landing';
+import LandingNew from './pages/LandingNew';
 
 // Auth
 import RoleRedirect from './pages/auth/RoleRedirect';
@@ -99,10 +100,10 @@ const AuthenticatedApp = () => {
       <InstallPrompt />
       <Routes>
       {/* Landing Page */}
-      <Route path="/landing" element={<Landing />} />
+      <Route path="/landing" element={<LandingNew />} />
+      <Route path="/" element={<RoleRedirect />} />
 
       {/* Root */}
-      <Route path="/" element={<RoleRedirect />} />
       <Route path="/dashboard" element={<RoleRedirect />} />
       <Route path="/auth/role-selection" element={<RoleSelection />} />
       <Route path="/auth/register/company" element={<RegisterCompany />} />
