@@ -1,4 +1,4 @@
-/// <reference lib="deno.window" />
+/* global Deno */
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 import { crypto } from 'https://deno.land/std@0.208.0/crypto/mod.ts';
 

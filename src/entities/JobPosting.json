@@ -1,0 +1,94 @@
+{
+  "name": "JobPosting",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "department": {
+      "type": "string"
+    },
+    "job_level": {
+      "type": "string",
+      "enum": [
+        "junior",
+        "mid",
+        "senior",
+        "lead",
+        "manager"
+      ]
+    },
+    "location": {
+      "type": "string"
+    },
+    "employment_type": {
+      "type": "string",
+      "enum": [
+        "full_time",
+        "part_time",
+        "contract",
+        "freelance"
+      ],
+      "default": "full_time"
+    },
+    "salary_min": {
+      "type": "number"
+    },
+    "salary_max": {
+      "type": "number"
+    },
+    "currency": {
+      "type": "string",
+      "default": "EUR"
+    },
+    "description": {
+      "type": "string",
+      "description": "HTML o testo della descrizione del lavoro"
+    },
+    "requirements": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "benefits": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "published",
+        "closed",
+        "archived"
+      ],
+      "default": "draft"
+    },
+    "published_at": {
+      "type": "string"
+    },
+    "closed_at": {
+      "type": "string"
+    },
+    "created_by": {
+      "type": "string"
+    },
+    "applications_count": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "company_id",
+    "title",
+    "department",
+    "location",
+    "description"
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "name": "JobApplication",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "job_posting_id": {
+      "type": "string"
+    },
+    "job_title": {
+      "type": "string"
+    },
+    "candidate_email": {
+      "type": "string"
+    },
+    "candidate_first_name": {
+      "type": "string"
+    },
+    "candidate_last_name": {
+      "type": "string"
+    },
+    "candidate_phone": {
+      "type": "string"
+    },
+    "resume_url": {
+      "type": "string"
+    },
+    "cover_letter": {
+      "type": "string"
+    },
+    "current_stage": {
+      "type": "string",
+      "enum": [
+        "application_received",
+        "screening",
+        "interview_scheduled",
+        "interview_completed",
+        "offer_extended",
+        "offer_accepted",
+        "onboarding",
+        "hired",
+        "rejected",
+        "withdrawn"
+      ],
+      "default": "application_received"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "completed",
+        "rejected"
+      ],
+      "default": "active"
+    },
+    "rating": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "notes": {
+      "type": "string"
+    },
+    "assigned_to": {
+      "type": "string",
+      "description": "Email del recruiter/manager assegnato"
+    },
+    "interview_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "offer_details": {
+      "type": "object",
+      "properties": {
+        "position": {
+          "type": "string"
+        },
+        "salary": {
+          "type": "number"
+        },
+        "start_date": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "rejection_reason": {
+      "type": "string"
+    },
+    "employee_id": {
+      "type": "string",
+      "description": "Riferimento a EmployeeProfile dopo l'assunzione"
+    }
+  },
+  "required": [
+    "company_id",
+    "job_posting_id",
+    "candidate_email",
+    "candidate_first_name",
+    "candidate_last_name"
+  ]
+}

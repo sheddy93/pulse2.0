@@ -1,0 +1,48 @@
+{
+  "name": "ApplicationStage",
+  "type": "object",
+  "properties": {
+    "application_id": {
+      "type": "string"
+    },
+    "company_id": {
+      "type": "string"
+    },
+    "stage": {
+      "type": "string",
+      "enum": [
+        "application_received",
+        "screening",
+        "interview_scheduled",
+        "interview_completed",
+        "offer_extended",
+        "offer_accepted",
+        "onboarding",
+        "hired",
+        "rejected",
+        "withdrawn"
+      ]
+    },
+    "moved_by": {
+      "type": "string",
+      "description": "Email dell'utente che ha spostato il candidato"
+    },
+    "moved_at": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "rating": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 5
+    }
+  },
+  "required": [
+    "application_id",
+    "company_id",
+    "stage",
+    "moved_by"
+  ]
+}

@@ -39,6 +39,8 @@ const NAV = {
     { label: "Assegnazioni", icon: Monitor, path: "/dashboard/company/asset-assignments" },
     { label: "Documenti", icon: FileText, path: "/dashboard/company/documents" },
     { label: "Audit Log", icon: BookOpen, path: "/dashboard/company/audit-log" },
+    { label: "Offerte di Lavoro", icon: FileText, path: "/dashboard/company/job-postings" },
+    { label: "Candidati", icon: Users, path: "/dashboard/company/candidates" },
     { label: "Integrazioni API", icon: Settings, path: "/dashboard/company/integrations" },
     { label: "Impostazioni", icon: Settings, path: "/dashboard/company/settings" },
   ],

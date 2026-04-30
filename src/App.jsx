@@ -34,6 +34,8 @@ import AssetAssignmentPage from './pages/company/AssetAssignmentPage';
 import AuditLogPage from './pages/company/AuditLogPage';
 import BenefitManagement from './pages/company/BenefitManagement';
 import IntegrationSettings from './pages/company/IntegrationSettings';
+import JobPostings from './pages/company/JobPostings';
+import CandidateTracking from './pages/company/CandidateTracking';
 
 // Consultant
 import LinkRequests from './pages/consultant/LinkRequests';
@@ -112,6 +114,8 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/company/documents/expiring" element={<ExpiryCalendar />} />
       <Route path="/dashboard/company/benefits" element={<BenefitManagement />} />
       <Route path="/dashboard/company/integrations" element={<IntegrationSettings />} />
+      <Route path="/dashboard/company/job-postings" element={<JobPostings />} />
+      <Route path="/dashboard/company/candidates" element={<CandidateTracking />} />
       <Route path="/dashboard/company/settings" element={<ComingSoon title="Impostazioni azienda" dashboardPath="/dashboard/company" />} />
 
       {/* Employee */}
