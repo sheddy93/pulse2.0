@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
+import GPSValidator from "@/components/attendance/GPSValidator";
 import { Clock, LogIn, LogOut, Coffee } from "lucide-react";
 import { format } from "date-fns";
 import { it } from "date-fns/locale";
@@ -19,6 +20,8 @@ export default function AttendancePage() {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [stamping, setStamping] = useState(null);
+  const [location, setLocation] = useState(null);
+  const [gpsPosition, setGpsPosition] = useState(null);
 
   const loadEntries = async (me) => {
     const all = await base44.entities.TimeEntry.filter({ user_email: me.email });
@@ -31,6 +34,15 @@ export default function AttendancePage() {
       const emps = await base44.entities.EmployeeProfile.filter({ user_email: me.email });
       setEmployee(emps[0] || null);
       await loadEntries(me);
+      
+      // Carica la sede primaria se esiste
+      if (emps[0]) {
+        const locs = await base44.entities.CompanyLocation.filter({
+          company_id: emps[0].company_id,
+          is_primary: true
+        });
+        setLocation(locs[0] || null);
+      }
     }).finally(() => setLoading(false));
   }, []);
 
@@ -42,6 +54,7 @@ export default function AttendancePage() {
   const handleStamp = async (type) => {
     if (!employee || !user) return;
     setStamping(type);
+    
     await base44.entities.TimeEntry.create({
       employee_id: employee.id,
       employee_name: `${employee.first_name} ${employee.last_name}`,
@@ -49,8 +62,13 @@ export default function AttendancePage() {
       user_email: user.email,
       timestamp: new Date().toISOString(),
       type,
+      latitude: gpsPosition?.latitude,
+      longitude: gpsPosition?.longitude,
+      location: location?.name,
     });
+    
     await loadEntries(user);
+    setGpsPosition(null);
     setStamping(null);
   };
 
@@ -68,15 +86,25 @@ export default function AttendancePage() {
       <div className="p-6 max-w-3xl mx-auto space-y-6">
         <h1 className="text-xl font-bold text-slate-800">Timbratura</h1>
 
-        <div className="bg-white rounded-xl border border-slate-200 p-6">
+        {location && (
+        <GPSValidator 
+          location={location}
+          onValidated={setGpsPosition}
+          disabled={stamping !== null}
+        />
+      )}
+
+      <div className="bg-white rounded-xl border border-slate-200 p-6">
           <p className="text-sm text-slate-400 mb-4">{format(new Date(), "EEEE d MMMM yyyy", { locale: it })}</p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {(["check_in", "check_out", "break_start", "break_end"]).map((type) => {
               const cfg = TYPES[type];
               const Icon = cfg.icon;
               const enabled = type === "check_in" ? !isClockedIn : type === "check_out" ? isClockedIn : type === "break_start" ? isClockedIn : !isClockedIn;
+              const needsGps = location && (type === "check_in" || type === "check_out");
+              const canStamp = !needsGps || gpsPosition;
               return (
-                <button key={type} onClick={() => handleStamp(type)} disabled={!enabled || stamping === type}
+                <button key={type} onClick={() => handleStamp(type)} disabled={!enabled || stamping === type || !canStamp}
                   className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 font-medium text-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed ${
                     enabled ? "border-emerald-400 bg-emerald-50 text-emerald-700 hover:bg-emerald-100" : "border-slate-200 text-slate-400"
                   }`}>

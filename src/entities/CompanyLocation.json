@@ -1,0 +1,37 @@
+{
+  "name": "CompanyLocation",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "latitude": {
+      "type": "number"
+    },
+    "longitude": {
+      "type": "number"
+    },
+    "radius_meters": {
+      "type": "number",
+      "default": 100,
+      "description": "Raggio consentito in metri per la timbratura"
+    },
+    "is_primary": {
+      "type": "boolean",
+      "default": false,
+      "description": "Sede principale per il controllo GPS"
+    }
+  },
+  "required": [
+    "company_id",
+    "name",
+    "latitude",
+    "longitude"
+  ]
+}
