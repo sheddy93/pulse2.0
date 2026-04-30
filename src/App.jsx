@@ -32,6 +32,7 @@ import SkillManagement from './pages/company/SkillManagement';
 import AssetManagement from './pages/company/AssetManagement';
 import AssetAssignmentPage from './pages/company/AssetAssignmentPage';
 import AuditLogPage from './pages/company/AuditLogPage';
+import BenefitManagement from './pages/company/BenefitManagement';
 
 // Consultant
 import LinkRequests from './pages/consultant/LinkRequests';
@@ -44,6 +45,7 @@ import EmployeeProfilePage from './pages/employee/EmployeeProfilePage';
 import DocumentSignaturePage from './pages/employee/DocumentSignaturePage';
 import OvertimeRequestPage from './pages/employee/OvertimeRequestPage';
 import SkillsPage from './pages/employee/SkillsPage';
+import BenefitsPage from './pages/employee/BenefitsPage';
 
 // Shared
 import ComingSoon from './components/layout/ComingSoon';
@@ -107,6 +109,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/company/audit-log" element={<AuditLogPage />} />
       <Route path="/dashboard/company/documents" element={<DocumentsPage />} />
       <Route path="/dashboard/company/documents/expiring" element={<ExpiryCalendar />} />
+      <Route path="/dashboard/company/benefits" element={<BenefitManagement />} />
       <Route path="/dashboard/company/settings" element={<ComingSoon title="Impostazioni azienda" dashboardPath="/dashboard/company" />} />
 
       {/* Employee */}
@@ -117,6 +120,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/employee/overtime" element={<OvertimeRequestPage />} />
       <Route path="/dashboard/employee/documents" element={<DocumentSignaturePage />} />
       <Route path="/dashboard/employee/skills" element={<SkillsPage />} />
+      <Route path="/dashboard/employee/benefits" element={<BenefitsPage />} />
       <Route path="/dashboard/employee/profile" element={<EmployeeProfilePage />} />
       <Route path="/dashboard/employee/contract" element={<ComingSoon title="Il mio contratto" dashboardPath="/dashboard/employee" />} />
 

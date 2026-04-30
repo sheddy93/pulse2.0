@@ -1,0 +1,83 @@
+{
+  "name": "BenefitEnrollment",
+  "type": "object",
+  "properties": {
+    "employee_id": {
+      "type": "string"
+    },
+    "employee_email": {
+      "type": "string"
+    },
+    "employee_name": {
+      "type": "string"
+    },
+    "company_id": {
+      "type": "string"
+    },
+    "enrollment_year": {
+      "type": "number"
+    },
+    "enrollment_period_id": {
+      "type": "string"
+    },
+    "selected_benefits": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "benefit_plan_id": {
+            "type": "string"
+          },
+          "coverage_level": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "manager_approved",
+        "manager_rejected",
+        "hr_approved",
+        "hr_rejected",
+        "completed"
+      ],
+      "default": "pending"
+    },
+    "submitted_at": {
+      "type": "string"
+    },
+    "manager_email": {
+      "type": "string"
+    },
+    "manager_approved_at": {
+      "type": "string"
+    },
+    "manager_note": {
+      "type": "string"
+    },
+    "hr_email": {
+      "type": "string"
+    },
+    "hr_approved_at": {
+      "type": "string"
+    },
+    "hr_note": {
+      "type": "string"
+    },
+    "total_monthly_cost_employee": {
+      "type": "number"
+    },
+    "total_monthly_cost_company": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "employee_id",
+    "company_id",
+    "enrollment_year",
+    "selected_benefits"
+  ]
+}

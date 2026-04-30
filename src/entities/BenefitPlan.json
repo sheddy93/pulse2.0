@@ -1,0 +1,75 @@
+{
+  "name": "BenefitPlan",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "health_insurance",
+        "dental",
+        "vision",
+        "life_insurance",
+        "retirement",
+        "flexible_spending",
+        "gym_wellness",
+        "other"
+      ]
+    },
+    "description": {
+      "type": "string"
+    },
+    "provider": {
+      "type": "string"
+    },
+    "coverage_levels": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Es. Employee, Employee+Spouse, Family"
+    },
+    "monthly_cost_employee": {
+      "type": "number",
+      "description": "Costo mensile a carico dipendente"
+    },
+    "monthly_cost_company": {
+      "type": "number",
+      "description": "Costo mensile a carico azienda"
+    },
+    "enrollment_period_start": {
+      "type": "string",
+      "format": "date"
+    },
+    "enrollment_period_end": {
+      "type": "string",
+      "format": "date"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "is_mandatory": {
+      "type": "boolean",
+      "default": false,
+      "description": "Se obbligatorio per tutti i dipendenti"
+    },
+    "eligible_employee_types": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Es. indeterminato, determinato, apprendistato"
+    }
+  },
+  "required": [
+    "company_id",
+    "name",
+    "type"
+  ]
+}

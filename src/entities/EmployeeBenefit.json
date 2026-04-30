@@ -1,0 +1,61 @@
+{
+  "name": "EmployeeBenefit",
+  "type": "object",
+  "properties": {
+    "employee_id": {
+      "type": "string"
+    },
+    "employee_email": {
+      "type": "string"
+    },
+    "company_id": {
+      "type": "string"
+    },
+    "benefit_plan_id": {
+      "type": "string"
+    },
+    "benefit_name": {
+      "type": "string"
+    },
+    "benefit_type": {
+      "type": "string"
+    },
+    "coverage_level": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "pending",
+        "inactive",
+        "terminated"
+      ],
+      "default": "active"
+    },
+    "effective_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "annual_enrollment_year": {
+      "type": "number"
+    },
+    "enrollment_id": {
+      "type": "string",
+      "description": "Riferimento alla richiesta di enrollment"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "employee_id",
+    "company_id",
+    "benefit_plan_id",
+    "benefit_name"
+  ]
+}

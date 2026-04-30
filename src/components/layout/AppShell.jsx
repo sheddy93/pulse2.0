@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import {
   LayoutDashboard, Users, Building2, FileText, Clock, LogOut,
   Menu, X, ChevronRight, UserCog, Link2, Shield, Settings,
-  ClipboardList, Briefcase, CalendarDays, FileBadge, Activity, Monitor, BookOpen, Award
+  ClipboardList, Briefcase, CalendarDays, FileBadge, Activity, Monitor, BookOpen, Award, Heart
 } from "lucide-react";
 import NotificationBell from "./NotificationBell";
 
@@ -33,6 +33,7 @@ const NAV = {
     { label: "Presenze", icon: Clock, path: "/dashboard/company/attendance" },
     { label: "Straordinari", icon: Clock, path: "/dashboard/company/overtime" },
     { label: "Competenze", icon: Award, path: "/dashboard/company/skills" },
+    { label: "Benefit", icon: Heart, path: "/dashboard/company/benefits" },
     { label: "Annunci", icon: FileText, path: "/dashboard/company/announcements" },
     { label: "Gestione asset", icon: Monitor, path: "/dashboard/company/assets" },
     { label: "Assegnazioni", icon: Monitor, path: "/dashboard/company/asset-assignments" },
@@ -46,6 +47,7 @@ const NAV = {
     { label: "Le mie presenze", icon: ClipboardList, path: "/dashboard/employee/history" },
     { label: "Ferie & Permessi", icon: CalendarDays, path: "/dashboard/employee/leave" },
     { label: "Straordinari", icon: Clock, path: "/dashboard/employee/overtime" },
+    { label: "I miei benefit", icon: Heart, path: "/dashboard/employee/benefits" },
     { label: "Documenti da firmare", icon: FileText, path: "/dashboard/employee/documents" },
     { label: "Le mie competenze", icon: Award, path: "/dashboard/employee/skills" },
     { label: "Contratto", icon: FileBadge, path: "/dashboard/employee/contract" },
