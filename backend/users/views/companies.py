@@ -12,9 +12,9 @@ from django.utils import timezone
 from django.core.mail import send_mail
 from django.conf import settings
 
-from .models import Company, EmployeeProfile, User, AuditLog, PricingPlan
-from .serializers import CompanySerializer, CompanySummarySerializer, AdminCompanySerializer, AdminCompanyListSerializer
-from .permissions import IsSuperAdmin
+from users.models import Company, EmployeeProfile, User, AuditLog, PricingPlan
+from users.serializers import CompanySerializer, CompanySummarySerializer, AdminCompanySerializer, AdminCompanyListSerializer
+from users.permissions import IsSuperAdmin
 
 
 class CompanyPagination(PageNumberPagination):

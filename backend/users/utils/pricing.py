@@ -2,7 +2,7 @@
 Utility per la gestione dei limiti e feature basate sul piano
 """
 from django.conf import settings
-from .models import PricingPlan, Company
+from users.models import PricingPlan, Company
 
 
 def get_company_plan(company):

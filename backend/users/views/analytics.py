@@ -14,8 +14,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .models import Company, EmployeeProfile, User, PricingPlan
-from .permissions import IsSuperAdmin
+from users.models import Company, EmployeeProfile, User, PricingPlan
+from users.permissions import IsSuperAdmin
 
 
 def get_default_date_range():

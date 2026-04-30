@@ -9,9 +9,9 @@ from rest_framework.permissions import IsAuthenticated
 from django.db.models import Count, Sum, Q
 from django.utils import timezone
 
-from .models import PricingPlan, Company, EmployeeProfile, AuditLog
-from .serializers import PricingPlanSerializer
-from .permissions import IsSuperAdmin
+from users.models import PricingPlan, Company, EmployeeProfile, AuditLog
+from users.serializers import PricingPlanSerializer
+from users.permissions import IsSuperAdmin
 
 
 class PricingAdminViewSet(viewsets.ModelViewSet):

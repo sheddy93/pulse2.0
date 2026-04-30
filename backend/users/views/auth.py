@@ -37,7 +37,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 # Local imports - Models
-from .models import (
+from users.models import (
     AuditLog,
     AttendancePeriod,
     Company,
@@ -55,7 +55,7 @@ from .models import (
 )
 
 # Local imports - Permissions
-from .permissions import (
+from users.permissions import (
     CanAccessEmployeeProfile,
     HasCompanyPermission,
     IsAuthenticatedAndTenantActive,
@@ -65,7 +65,7 @@ from .permissions import (
 )
 
 # Local imports - Serializers
-from .serializers import (
+from users.serializers import (
     AttendanceCorrectionWriteSerializer,
     AttendanceDayApproveSerializer,
     AttendanceDayReviewSerializer,
@@ -104,11 +104,11 @@ from .serializers import (
 )
 
 # Local imports - Utilities
-from .pricing_utils import check_employee_limit, check_module_access, can_perform_action
-from .email_utils import send_password_reset_email, send_verification_email
+from users.utils.pricing import check_employee_limit, check_module_access, can_perform_action
+from users.utils.email import send_password_reset_email, send_verification_email
 
 # Local imports - Services
-from .services import (
+from users.services import (
     create_notification,
     notify_users,
     approve_attendance_day,
@@ -1809,7 +1809,7 @@ class PermissionViewSet(TenantScopedViewSet, mixins.ListModelMixin, mixins.Retri
 # ============================================================
 
 # Import serializers for password reset
-from .serializers import PasswordResetRequestSerializer, PasswordResetConfirmSerializer, EmailVerifySerializer
+from users.serializers import PasswordResetRequestSerializer, PasswordResetConfirmSerializer, EmailVerifySerializer
 
 
 class PasswordResetRequestView(APIView):

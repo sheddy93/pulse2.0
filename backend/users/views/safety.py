@@ -11,7 +11,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import (
+from users.models import (
     Company,
     EmployeeProfile,
     User,
@@ -20,14 +20,14 @@ from .models import (
     SafetyInspection,
     SafetyAlert,
 )
-from .serializers import (
+from users.serializers import (
     SafetyCourseSerializer,
     SafetyCourseCreateSerializer,
     EmployeeTrainingSerializer,
     SafetyInspectionSerializer,
     SafetyAlertSerializer,
 )
-from .permissions import IsAuthenticatedAndTenantActive
+from users.permissions import IsAuthenticatedAndTenantActive
 
 
 # ============================================
@@ -330,7 +330,7 @@ class SafetyAlertViewSet(viewsets.ReadOnlyModelViewSet):
     @action(detail=False, methods=['post'])
     def generate(self, request):
         """Genera alert per l'azienda (da cron o manuale)"""
-        from .models import generate_safety_alerts_for_company
+        from users.models import generate_safety_alerts_for_company
 
         user = request.user
         company_id = request.data.get('company_id')

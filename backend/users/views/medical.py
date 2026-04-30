@@ -10,16 +10,16 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import (
+from users.models import (
     MedicalVisit, MedicalCertificate, OfflineTimeEntry,
     AbsenceType, EmployeeProfile, LeaveRequest, TimeEntry, User
 )
-from .serializers import (
+from users.serializers import (
     MedicalVisitSerializer, MedicalCertificateSerializer,
     OfflineTimeEntrySerializer, AbsenceTypeSerializer,
     MedicalCertificateCreateSerializer
 )
-from .permissions import IsCompanyAdmin, IsConsultant, IsOwnerOrAdmin
+from users.permissions import IsCompanyAdmin, IsConsultant, IsOwnerOrAdmin
 
 
 class MedicalVisitViewSet(viewsets.ModelViewSet):

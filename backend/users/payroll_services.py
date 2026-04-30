@@ -20,7 +20,7 @@ from .models import (
     UserCompanyAccess,
 )
 from .services import create_notification, notify_users, log_audit_event
-from .pricing_utils import check_storage_limit
+from users.utils.pricing import check_storage_limit
 
 
 MAX_DOCUMENT_SIZE_BYTES = 20 * 1024 * 1024

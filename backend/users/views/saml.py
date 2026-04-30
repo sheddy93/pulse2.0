@@ -14,9 +14,9 @@ import base64
 import zlib
 import xml.etree.ElementTree as ET
 
-from .models import SSOProvider, SSOUserLink, SSOSession
-from .models import User
-from .serializers import UserSerializer
+from users.models import SSOProvider, SSOUserLink, SSOSession
+from users.models import User
+from users.serializers import UserSerializer
 
 
 def generate_saml_request(provider):
@@ -65,7 +65,7 @@ def authenticate_saml_user(provider, email, attributes):
     Se l'utente esiste gia', lo collega al provider SSO.
     Se non esiste, crea un nuovo utente e lo collega.
     """
-    from .models import SSOUserLink
+    from users.models import SSOUserLink
 
     # Estrai attributi utente
     first_name = attributes.get(provider.first_name_mapping, '')

@@ -6,8 +6,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.utils import timezone
 
-from .models import TimeEntry, OfficeLocation
-from .geolocation_utils import (
+from users.models import TimeEntry, OfficeLocation
+from users.utils.geolocation import (
     haversine_distance,
     is_within_geofence,
     find_nearest_office,

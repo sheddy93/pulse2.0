@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.db.models import Count, Q, Avg, Sum
 from django.utils import timezone
 from datetime import timedelta
-from .models import (
+from users.models import (
     Company, EmployeeProfile, PayrollRun, TimeEntry,
     LeaveRequest, Document, ConsultantCompanyLink, UserCompanyAccess,
     SafetyCourse, EmployeeTraining,

@@ -18,10 +18,10 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Company, StripeCustomer, User
-from .permissions import IsSuperAdmin
-from .serializers import CompanySerializer
-from .stripe_services import (
+from users.models import Company, StripeCustomer, User
+from users.permissions import IsSuperAdmin
+from users.serializers import CompanySerializer
+from users.stripe_services import (
     cancel_subscription as cancel_sub,
     create_stripe_customer as create_stripe_cust,
     create_subscription as create_sub,

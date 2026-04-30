@@ -1,19 +1,19 @@
 ﻿from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from .payroll_views import (
+from .views.payroll import (
     CompanyPayrollOverviewView,
     ConsultantPayrollOverviewView,
     DocumentArchiveView,
 )
-from .consultant_advanced_views import (
+from .views.consultant import (
     ConsultantDashboardView,
     ConsultantCompanyDetailView,
     ConsultantCompaniesListView,
     ConsultantCompanyEmployeesView,
     ConsultantSafetyOverviewView,
 )
-from .payroll_views import (
+from .views.payroll import (
     DocumentDetailView,
     DocumentDownloadView,
     DocumentListCreateView,
@@ -26,7 +26,7 @@ from .payroll_views import (
     PayrollMonthlySummaryView,
     PayrollAssistantView,
 )
-from .leave_views import (
+from .views.leave import (
     LeaveTypeListView,
     LeaveBalanceListView,
     LeaveRequestListView,
@@ -35,7 +35,7 @@ from .leave_views import (
     LeaveCalendarView,
     LeaveStatsView,
 )
-from .views import (
+from .views.auth import (
     BreakEndView,
     BreakStartView,
     ChangePasswordView,
@@ -78,23 +78,23 @@ from .views import (
     TimeTodayView,
     AttendanceWorkflowAssistantView,
 )
-from .analytics_views import (
+from .views.analytics import (
     analytics_overview,
     analytics_revenue,
     analytics_conversion,
     analytics_plans,
 )
-from .pricing_views import PricingPlanViewSet, PricingConfigViewSet, company_limits
-from .pricing_admin_views import PricingAdminViewSet
-from .companies_admin_views import CompaniesAdminViewSet
-from .stripe_views import (
+from .views.pricing import PricingPlanViewSet, PricingConfigViewSet, company_limits
+from .views.pricing_admin import PricingAdminViewSet
+from .views.companies import CompaniesAdminViewSet
+from .views.stripe import (
     StripeBillingStatusView,
     StripeCustomerCreateView,
     StripeSubscriptionCancelView,
     StripeSubscriptionCreateView,
     StripeWebhookView,
 )
-from .reports_views import (
+from .views.reports import (
     AttendanceReportView,
     AttendanceSummaryReportView,
     PayrollReportView,
@@ -105,16 +105,16 @@ from .reports_views import (
     ReportsDashboardView,
     ReportsListView,
 )
-from .geolocation_views import (
+from .views.geolocation import (
     GeoLocationView,
     OfficeLocationsView,
     GPSHistoryView,
     CheckInWithLocationView,
     CheckOutWithLocationView,
 )
-from .search_views import GlobalSearchView, QuickSearchView
-from .push_views import DeviceTokenView, PushTestView
-from .safety_views import (
+from .views.search import GlobalSearchView, QuickSearchView
+from .views.push import DeviceTokenView, PushTestView
+from .views.safety import (
     SafetyCourseViewSet,
     EmployeeTrainingViewSet,
     SafetyInspectionViewSet,
@@ -129,13 +129,13 @@ from .serializers import (
     SafetyInspectionSerializer,
     SafetyAlertSerializer,
 )
-from .signature_views import (
+from .views.signature import (
     SignatureRequestView,
     SignatureSignView,
     DocumentReceiptView,
     SignatureStatusView,
 )
-from .saml_views import (
+from .views.saml import (
     SSOInitView,
     SAMLACSView,
     SAMLMetadataView,
@@ -143,16 +143,16 @@ from .saml_views import (
     OIDCCallbackView,
     SSOLogoutView,
 )
-from .views import OnboardingProgressView
+from .views.auth import OnboardingProgressView
 
-from .dashboard_views import (
+from .views.dashboard import (
     CompanyDashboardSummaryView,
     ConsultantDashboardSummaryView,
     EmployeeDashboardSummaryView,
     AdminDashboardSummaryView,
 )
 
-from .medical_views import (
+from .views.medical import (
     MedicalVisitViewSet,
     MedicalCertificateViewSet,
     OfflineTimeEntryViewSet,

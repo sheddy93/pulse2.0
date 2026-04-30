@@ -5,11 +5,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from datetime import datetime, timedelta
 
-from .models import (
+from users.models import (
     Company, EmployeeProfile, LeaveBalance, LeaveRequest, LeaveType, 
     Notification, User, AuditLog
 )
-from .permissions import IsAuthenticatedAndTenantActive
+from users.permissions import IsAuthenticatedAndTenantActive
 
 
 def user_can_view_leave_requests(user):

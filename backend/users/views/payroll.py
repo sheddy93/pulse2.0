@@ -5,9 +5,9 @@ from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import AuditLog, Company, Document, PayrollRun, User
-from .pricing_utils import check_module_access, can_perform_action
-from .serializers import (
+from users.models import AuditLog, Company, Document, PayrollRun, User
+from users.utils.pricing import check_module_access, can_perform_action
+from users.serializers import (
     DocumentQuerySerializer,
     DocumentCreateSerializer,
     DocumentSerializer,
@@ -20,7 +20,7 @@ from .serializers import (
     PayrollRunUpdateSerializer,
     PayrollStatusChangeSerializer,
 )
-from .payroll_services import (
+from users.payroll_services import (
     archive_document,
     attach_document_to_payroll,
     change_payroll_status,
@@ -39,8 +39,8 @@ from .payroll_services import (
     user_can_download_document,
     user_can_view_document,
 )
-from .permissions import IsAuthenticatedAndTenantActive, user_has_company_permission
-from .services import log_audit_event
+from users.permissions import IsAuthenticatedAndTenantActive, user_has_company_permission
+from users.services import log_audit_event
 
 
 def _resolve_company_for_request(request, *, company_id=None):

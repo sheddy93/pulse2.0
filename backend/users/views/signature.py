@@ -10,8 +10,8 @@ from django.db.models import Q
 import secrets
 import hashlib
 
-from .models import SignatureRequest, DocumentReceipt, SignatureLog, Document, EmployeeProfile
-from .permissions import IsAuthenticatedAndTenantActive
+from users.models import SignatureRequest, DocumentReceipt, SignatureLog, Document, EmployeeProfile
+from users.permissions import IsAuthenticatedAndTenantActive
 
 
 def generate_token():

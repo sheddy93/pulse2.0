@@ -12,12 +12,12 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import (
+from users.models import (
     Company, EmployeeProfile, PayrollRun, TimeEntry,
     LeaveRequest, LeaveBalance, LeaveType, User
 )
-from .permissions import IsSuperAdmin, IsCompanyOperator
-from .report_generators import (
+from users.permissions import IsSuperAdmin, IsCompanyOperator
+from users.report_generators import (
     ReportGenerator, AttendanceReportGenerator,
     PayrollReportGenerator, LeaveReportGenerator,
     CompaniesReportGenerator

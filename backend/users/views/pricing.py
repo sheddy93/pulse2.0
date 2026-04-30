@@ -6,9 +6,9 @@ from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
-from .models import PricingPlan, PricingConfig, Company
-from .serializers import PricingPlanSerializer, PricingConfigSerializer
-from .pricing_utils import get_plan_limits, get_company_usage, get_trial_info, check_employee_limit
+from users.models import PricingPlan, PricingConfig, Company
+from users.serializers import PricingPlanSerializer, PricingConfigSerializer
+from users.utils.pricing import get_plan_limits, get_company_usage, get_trial_info, check_employee_limit
 
 
 class PricingPlanViewSet(viewsets.ModelViewSet):
