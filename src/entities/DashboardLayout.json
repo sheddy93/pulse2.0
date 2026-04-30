@@ -1,0 +1,22 @@
+{
+  "name": "DashboardLayout",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string"
+    },
+    "dashboard_type": {
+      "type": "string",
+      "enum": ["employee", "company", "consultant", "admin"]
+    },
+    "layout": {
+      "type": "object",
+      "description": "JSON serialized layout configuration with widget positions and sizes"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": ["user_email", "dashboard_type", "layout"]
+}
