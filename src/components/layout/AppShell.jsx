@@ -134,7 +134,14 @@ export default function AppShell({ user, children }) {
           })}
         </nav>
 
-        <div className="p-3 border-t border-slate-100">
+        <div className="p-3 border-t border-slate-100 space-y-2">
+          <div className="px-3 py-2">
+            <label className="text-xs font-semibold text-slate-500 block mb-1.5">Lingua</label>
+            <select className="w-full px-2 py-1.5 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option value="it">Italiano</option>
+              <option value="en">English</option>
+            </select>
+          </div>
           <button
             onClick={() => base44.auth.logout("/")}
             className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-red-50 hover:text-red-600 transition-colors"
