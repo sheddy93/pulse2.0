@@ -54,6 +54,7 @@ import OnboardingTracking from './pages/company/OnboardingTracking';
 import TrainingPlanManagement from './pages/company/TrainingPlanManagement';
 import TrainingDashboard from './pages/employee/TrainingDashboard';
 import CertificationExpiry from './pages/company/CertificationExpiry';
+import SuperAdminSettings from './pages/dashboard/SuperAdminSettings';
 import TrainingPortal from './pages/employee/TrainingPortal';
 import PersonalDocuments from './pages/employee/PersonalDocuments';
 import PerformanceFeedback from './pages/employee/PerformanceFeedback';
@@ -111,6 +112,7 @@ const AuthenticatedApp = () => {
       {/* Super Admin */}
       <Route path="/dashboard/admin" element={<AdminAnalytics />} />
       <Route path="/dashboard/admin/analytics" element={<AdminAnalytics />} />
+      <Route path="/dashboard/admin/settings" element={<SuperAdminSettings />} />
       <Route path="/dashboard/admin/companies" element={<ComingSoon title="Gestione Aziende" dashboardPath="/dashboard/admin" />} />
       <Route path="/dashboard/admin/users" element={<ComingSoon title="Gestione Utenti" dashboardPath="/dashboard/admin" />} />
       <Route path="/dashboard/admin/system" element={<ComingSoon title="Sistema" dashboardPath="/dashboard/admin" />} />

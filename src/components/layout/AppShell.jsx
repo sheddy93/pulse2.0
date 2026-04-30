@@ -4,7 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard, Users, Building2, FileText, Clock, LogOut,
-  Menu, X, ChevronRight, UserCog, Link2, Shield, Settings,
+  Menu, X, ChevronRight, UserCog, Link2, Shield, Settings as SettingsIcon,
   ClipboardList, Briefcase, CalendarDays, FileBadge, Activity, Monitor, BookOpen, Award, Heart, GraduationCap, BarChart3, MessageCircle, TrendingUp, MessageSquare, Receipt, Calendar
 } from "lucide-react";
 import NotificationBell from "./NotificationBell";
@@ -12,9 +12,10 @@ import NotificationBell from "./NotificationBell";
 const NAV = {
   super_admin: [
     { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard/admin" },
+    { label: "Analytics", icon: Activity, path: "/dashboard/admin/analytics" },
     { label: "Aziende", icon: Building2, path: "/dashboard/admin/companies" },
     { label: "Utenti", icon: Users, path: "/dashboard/admin/users" },
-    { label: "Sistema", icon: Activity, path: "/dashboard/admin/system" },
+    { label: "Settings", icon: SettingsIcon, path: "/dashboard/admin/settings" },
   ],
   consultant: [
     { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard/consultant" },
@@ -22,7 +23,7 @@ const NAV = {
     { label: "Dipendenti", icon: Users, path: "/dashboard/consultant/employees" },
     { label: "Richieste collegamento", icon: Link2, path: "/dashboard/consultant/link-requests" },
     { label: "Revisione Documenti", icon: FileText, path: "/dashboard/consultant/document-review" },
-    { label: "Impostazioni", icon: Settings, path: "/dashboard/consultant/settings" },
+    { label: "Impostazioni", icon: SettingsIcon, path: "/dashboard/consultant/settings" },
   ],
   company: [
     { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard/company" },
@@ -50,8 +51,8 @@ const NAV = {
     { label: "Rimborsi Spese", icon: Receipt, path: "/dashboard/company/expenses" },
     { label: "Approvazione Ferie", icon: CalendarDays, path: "/dashboard/company/leave-requests" },
     { label: "Onboarding Dipendenti", icon: Users, path: "/dashboard/company/onboarding-tracking" },
-    { label: "Integrazioni API", icon: Settings, path: "/dashboard/company/integrations" },
-    { label: "Impostazioni", icon: Settings, path: "/dashboard/company/settings" },
+    { label: "Integrazioni API", icon: SettingsIcon, path: "/dashboard/company/integrations" },
+    { label: "Impostazioni", icon: SettingsIcon, path: "/dashboard/company/settings" },
   ],
   employee: [
     { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard/employee" },
