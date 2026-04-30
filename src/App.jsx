@@ -27,6 +27,7 @@ import ShiftManagement from './pages/company/ShiftManagement';
 import AnnouncementBoard from './pages/company/AnnouncementBoard';
 import AssetManagement from './pages/company/AssetManagement';
 import AssetAssignmentPage from './pages/company/AssetAssignmentPage';
+import AuditLogPage from './pages/company/AuditLogPage';
 
 // Consultant
 import LinkRequests from './pages/consultant/LinkRequests';
@@ -93,6 +94,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/company/announcements" element={<AnnouncementBoard />} />
       <Route path="/dashboard/company/assets" element={<AssetManagement />} />
       <Route path="/dashboard/company/asset-assignments" element={<AssetAssignmentPage />} />
+      <Route path="/dashboard/company/audit-log" element={<AuditLogPage />} />
       <Route path="/dashboard/company/documents" element={<DocumentsPage />} />
       <Route path="/dashboard/company/documents/expiring" element={<ExpiryCalendar />} />
       <Route path="/dashboard/company/settings" element={<ComingSoon title="Impostazioni azienda" dashboardPath="/dashboard/company" />} />
