@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import {
   LayoutDashboard, Users, Building2, FileText, Clock, LogOut,
   Menu, X, ChevronRight, UserCog, Link2, Shield, Settings,
-  ClipboardList, Briefcase, CalendarDays, FileBadge, Activity, Monitor, BookOpen, Award, Heart, GraduationCap, BarChart3, MessageCircle, TrendingUp, MessageSquare
+  ClipboardList, Briefcase, CalendarDays, FileBadge, Activity, Monitor, BookOpen, Award, Heart, GraduationCap, BarChart3, MessageCircle, TrendingUp, MessageSquare, Receipt
 } from "lucide-react";
 import NotificationBell from "./NotificationBell";
 
@@ -45,6 +45,7 @@ const NAV = {
     { label: "Valutazioni 360°", icon: BarChart3, path: "/dashboard/company/performance" },
     { label: "Dai Feedback", icon: MessageCircle, path: "/dashboard/company/give-feedback" },
     { label: "HR Analytics", icon: TrendingUp, path: "/dashboard/company/analytics" },
+    { label: "Rimborsi Spese", icon: Receipt, path: "/dashboard/company/expenses" },
     { label: "Integrazioni API", icon: Settings, path: "/dashboard/company/integrations" },
     { label: "Impostazioni", icon: Settings, path: "/dashboard/company/settings" },
   ],
@@ -62,6 +63,7 @@ const NAV = {
     { label: "Formazione", icon: GraduationCap, path: "/dashboard/employee/training" },
     { label: "Il Mio Feedback", icon: BarChart3, path: "/dashboard/employee/feedback" },
     { label: "Chat Interna", icon: MessageSquare, path: "/dashboard/employee/chat" },
+    { label: "Le Mie Spese", icon: Receipt, path: "/dashboard/employee/expenses" },
     { label: "Contratto", icon: FileBadge, path: "/dashboard/employee/contract" },
     { label: "Profilo", icon: UserCog, path: "/dashboard/employee/profile" },
   ],

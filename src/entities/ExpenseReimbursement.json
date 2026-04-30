@@ -1,0 +1,104 @@
+{
+  "name": "ExpenseReimbursement",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "employee_id": {
+      "type": "string"
+    },
+    "employee_name": {
+      "type": "string"
+    },
+    "employee_email": {
+      "type": "string"
+    },
+    "manager_email": {
+      "type": "string"
+    },
+    "manager_name": {
+      "type": "string"
+    },
+    "expense_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data della spesa"
+    },
+    "expense_type": {
+      "type": "string",
+      "enum": [
+        "travel",
+        "meals",
+        "accommodation",
+        "supplies",
+        "other"
+      ],
+      "description": "Categoria di spesa"
+    },
+    "description": {
+      "type": "string",
+      "description": "Descrizione della spesa"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Importo in euro"
+    },
+    "currency": {
+      "type": "string",
+      "default": "EUR",
+      "enum": ["EUR", "USD", "GBP"]
+    },
+    "receipt_url": {
+      "type": "string",
+      "description": "URL foto scontrino"
+    },
+    "receipt_notes": {
+      "type": "string",
+      "description": "Note aggiuntive sulla ricevuta"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "submitted",
+        "manager_approved",
+        "manager_rejected",
+        "approved",
+        "rejected",
+        "paid"
+      ],
+      "default": "draft"
+    },
+    "manager_approved_at": {
+      "type": "string"
+    },
+    "manager_note": {
+      "type": "string"
+    },
+    "admin_approved_at": {
+      "type": "string"
+    },
+    "admin_name": {
+      "type": "string"
+    },
+    "admin_note": {
+      "type": "string"
+    },
+    "paid_at": {
+      "type": "string"
+    },
+    "payment_method": {
+      "type": "string",
+      "enum": ["bank_transfer", "cash", "card"]
+    }
+  },
+  "required": [
+    "company_id",
+    "employee_id",
+    "expense_date",
+    "expense_type",
+    "amount",
+    "receipt_url"
+  ]
+}
