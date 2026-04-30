@@ -4,6 +4,7 @@ import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import { Mail, Phone, MapPin, Briefcase, Calendar, UserCog } from "lucide-react";
 import { format } from "date-fns";
+import PayrollSection from "@/components/employee/PayrollSection";
 
 export default function EmployeeProfilePage() {
   const [user, setUser] = useState(null);
@@ -76,6 +77,12 @@ export default function EmployeeProfilePage() {
             <div className="flex justify-between"><span className="text-slate-500">Ruolo</span><span className="font-medium capitalize">{user?.role}</span></div>
           </div>
         </div>
+
+        {employee && (
+          <div className="bg-white rounded-xl border border-slate-200 p-5">
+            <PayrollSection employeeId={employee.id} />
+          </div>
+        )}
       </div>
     </AppShell>
   );

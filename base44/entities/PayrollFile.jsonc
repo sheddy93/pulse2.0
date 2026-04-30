@@ -1,0 +1,56 @@
+{
+  "name": "PayrollFile",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "employee_id": {
+      "type": "string"
+    },
+    "employee_email": {
+      "type": "string"
+    },
+    "fiscal_code": {
+      "type": "string"
+    },
+    "year": {
+      "type": "number"
+    },
+    "month": {
+      "type": "number"
+    },
+    "file_name": {
+      "type": "string"
+    },
+    "file_url": {
+      "type": "string"
+    },
+    "file_size": {
+      "type": "number"
+    },
+    "uploaded_at": {
+      "type": "string"
+    },
+    "uploaded_by": {
+      "type": "string"
+    },
+    "notified_at": {
+      "type": "string"
+    },
+    "downloaded_at": {
+      "type": "string"
+    },
+    "download_count": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "company_id",
+    "employee_id",
+    "file_url",
+    "year",
+    "month"
+  ]
+}

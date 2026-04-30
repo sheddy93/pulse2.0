@@ -7,6 +7,7 @@ import PageLoader from "@/components/layout/PageLoader";
 import { Users, Briefcase, CalendarDays, UserPlus, Copy, Check, Building2 } from "lucide-react";
 import PayrollExport from "@/components/company/PayrollExport";
 import PayrollArchive from "@/components/company/PayrollArchive";
+import PayrollUploadPanel from "@/components/company/PayrollUploadPanel";
 
 const STATUS_BADGE = {
   active: { label: "Attivo", cls: "bg-emerald-100 text-emerald-700" },
@@ -114,6 +115,13 @@ export default function CompanyDashboard() {
                 </Link>
               ))}
             </div>
+          </div>
+        )}
+
+        {/* Payroll Upload */}
+        {company && (
+          <div className="bg-white rounded-xl border border-slate-200 p-5">
+            <PayrollUploadPanel />
           </div>
         )}
 
