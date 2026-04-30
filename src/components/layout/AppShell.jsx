@@ -7,6 +7,7 @@ import {
   Menu, X, ChevronRight, UserCog, Link2, Shield, Settings,
   ClipboardList, Briefcase, CalendarDays, FileBadge, Activity
 } from "lucide-react";
+import NotificationBell from "./NotificationBell";
 
 const NAV = {
   super_admin: [
@@ -121,6 +122,7 @@ export default function AppShell({ user, children }) {
           </button>
           <div className="flex-1" />
           <div className="flex items-center gap-2.5">
+            {user && <NotificationBell user={user} />}
             <div className={cn("w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white", ROLE_COLOR[role])}>
               {(user?.full_name || user?.email || "U")[0].toUpperCase()}
             </div>

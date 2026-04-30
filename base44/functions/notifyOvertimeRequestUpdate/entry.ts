@@ -1,0 +1,48 @@
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
+
+Deno.serve(async (req) => {
+  try {
+    const base44 = createClientFromRequest(req);
+    const { event, data, old_data } = await req.json();
+
+    if (event.type !== 'update') {
+      return Response.json({ success: true });
+    }
+
+    // Only notify if status changed
+    if (old_data?.status === data?.status) {
+      return Response.json({ success: true });
+    }
+
+    const isApproved = data.status === 'approved';
+    const isRejected = data.status === 'rejected';
+
+    if (!isApproved && !isRejected) {
+      return Response.json({ success: true });
+    }
+
+    // Create notification
+    const notificationType = isApproved ? 'overtime_approved' : 'overtime_rejected';
+    const title = isApproved 
+      ? 'Straordinario approvato' 
+      : 'Straordinario rifiutato';
+    const message = isApproved
+      ? `La tua richiesta di ${data.hours} ore di straordinario del ${data.date} è stata approvata.`
+      : `La tua richiesta di ${data.hours} ore di straordinario del ${data.date} è stata rifiutata.${data.admin_notes ? ` Motivo: ${data.admin_notes}` : ''}`;
+
+    await base44.asServiceRole.entities.Notification.create({
+      employee_id: data.employee_id,
+      employee_email: data.employee_email,
+      type: notificationType,
+      title,
+      message,
+      request_id: event.entity_id,
+      request_type: 'overtime',
+      is_read: false
+    });
+
+    return Response.json({ success: true });
+  } catch (error) {
+    return Response.json({ error: error.message }, { status: 500 });
+  }
+});

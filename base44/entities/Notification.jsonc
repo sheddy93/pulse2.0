@@ -1,0 +1,54 @@
+{
+  "name": "Notification",
+  "type": "object",
+  "properties": {
+    "employee_id": {
+      "type": "string"
+    },
+    "employee_email": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "leave_approved",
+        "leave_rejected",
+        "overtime_approved",
+        "overtime_rejected"
+      ],
+      "description": "Tipo di notifica"
+    },
+    "title": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "request_id": {
+      "type": "string"
+    },
+    "request_type": {
+      "type": "string",
+      "enum": [
+        "leave",
+        "overtime"
+      ]
+    },
+    "is_read": {
+      "type": "boolean",
+      "default": false
+    },
+    "read_at": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "employee_id",
+    "employee_email",
+    "type",
+    "title",
+    "message",
+    "request_id",
+    "request_type"
+  ]
+}
