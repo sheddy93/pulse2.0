@@ -22,6 +22,7 @@ import NewEmployee from './pages/company/NewEmployee';
 import CompanyConsultants from './pages/company/CompanyConsultants';
 import DocumentsPage from './pages/company/DocumentsPage';
 import ExpiryCalendar from './pages/company/ExpiryCalendar';
+import OvertimePage from './pages/company/OvertimePage';
 
 // Consultant
 import LinkRequests from './pages/consultant/LinkRequests';
@@ -32,6 +33,7 @@ import AttendancePage from './pages/employee/AttendancePage';
 import LeaveRequestPage from './pages/employee/LeaveRequestPage';
 import EmployeeProfilePage from './pages/employee/EmployeeProfilePage';
 import DocumentSignaturePage from './pages/employee/DocumentSignaturePage';
+import OvertimeRequestPage from './pages/employee/OvertimeRequestPage';
 
 // Shared
 import ComingSoon from './components/layout/ComingSoon';
@@ -82,6 +84,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/company/employees/:id" element={<ComingSoon title="Scheda dipendente" dashboardPath="/dashboard/company/employees" />} />
       <Route path="/dashboard/company/consultants" element={<CompanyConsultants />} />
       <Route path="/dashboard/company/attendance" element={<ComingSoon title="Presenze aziendali" dashboardPath="/dashboard/company" />} />
+      <Route path="/dashboard/company/overtime" element={<OvertimePage />} />
       <Route path="/dashboard/company/documents" element={<DocumentsPage />} />
       <Route path="/dashboard/company/documents/expiring" element={<ExpiryCalendar />} />
       <Route path="/dashboard/company/settings" element={<ComingSoon title="Impostazioni azienda" dashboardPath="/dashboard/company" />} />
@@ -91,6 +94,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/employee/attendance" element={<AttendancePage />} />
       <Route path="/dashboard/employee/history" element={<AttendancePage />} />
       <Route path="/dashboard/employee/leave" element={<LeaveRequestPage />} />
+      <Route path="/dashboard/employee/overtime" element={<OvertimeRequestPage />} />
       <Route path="/dashboard/employee/documents" element={<DocumentSignaturePage />} />
       <Route path="/dashboard/employee/profile" element={<EmployeeProfilePage />} />
       <Route path="/dashboard/employee/contract" element={<ComingSoon title="Il mio contratto" dashboardPath="/dashboard/employee" />} />
