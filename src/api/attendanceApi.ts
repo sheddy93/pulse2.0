@@ -1,64 +1,40 @@
 /**
  * src/api/attendanceApi.ts
  * ========================
- * API Attendance
- * 
- * TODO MIGRATION: Endpoint futuri
- * POST /api/attendance/check-in
- * POST /api/attendance/check-out
- * GET /api/attendance/entries
- * GET /api/attendance/today
- * GET /api/attendance/summary
- * PATCH /api/attendance/day-reviews/:id/approve
+ * Attendance API module - check-in, check-out, reviews
  */
 
 import { apiClient } from './client';
 
+const ENTITY = 'AttendanceEntry';
+
 export const attendanceApi = {
-  async checkIn(data: any) {
-    // TODO MIGRATION: POST /api/attendance/check-in
-    const result = await apiClient.post('/entities/TimeEntry', data);
-    return result.data;
-  },
+  checkIn: (data: any) =>
+    apiClient.invoke('checkIn', data),
 
-  async checkOut(data: any) {
-    // TODO MIGRATION: POST /api/attendance/check-out
-    const result = await apiClient.post('/entities/TimeEntry', data);
-    return result.data;
-  },
+  checkOut: (data: any) =>
+    apiClient.invoke('checkOut', data),
 
-  async listEntries(filters?: any) {
-    const result = await apiClient.get('/entities/TimeEntry', { params: filters });
-    return result.data || [];
-  },
+  breakStart: (data: any) =>
+    apiClient.invoke('breakStart', data),
 
-  async getTodayEntries(employeeId: string) {
-    const today = new Date().toISOString().split('T')[0];
-    return this.listEntries({
-      employee_id: employeeId,
-      entry_date: today,
-    });
-  },
+  breakEnd: (data: any) =>
+    apiClient.invoke('breakEnd', data),
 
-  async listDayReviews(filters?: any) {
-    const result = await apiClient.get('/entities/AttendanceDayReview', { params: filters });
-    return result.data || [];
-  },
+  getEntries: (query?: any) =>
+    apiClient.list(ENTITY, query),
 
-  async approveDayReview(id: string) {
-    // TODO MIGRATION: PATCH /api/attendance/day-reviews/:id/approve
-    const result = await apiClient.patch(`/entities/AttendanceDayReview/${id}`, {
-      status: 'approved',
-    });
-    return result.data;
-  },
+  getSummary: (employeeId: string, date: string) =>
+    apiClient.invoke('getAttendanceSummary', { employeeId, date }),
 
-  async rejectDayReview(id: string, reason?: string) {
-    // TODO MIGRATION: PATCH /api/attendance/day-reviews/:id/reject
-    const result = await apiClient.patch(`/entities/AttendanceDayReview/${id}`, {
-      status: 'rejected',
-      rejection_reason: reason,
-    });
-    return result.data;
-  },
+  getDayReviews: (query?: any) =>
+    apiClient.list('AttendanceDayReview', query),
+
+  approveDayReview: (id: string, notes: string) =>
+    apiClient.invoke('approveDayReview', { id, notes }),
+
+  rejectDayReview: (id: string, reason: string) =>
+    apiClient.invoke('rejectDayReview', { id, reason }),
 };
+
+export default attendanceApi;

@@ -1,40 +1,34 @@
 /**
  * src/api/companiesApi.ts
  * =======================
- * API Companies - usa adapter per Base44/REST
- * 
- * TODO MIGRATION: Endpoint futuri
- * GET /api/companies
- * POST /api/companies
- * GET /api/companies/:id
- * PATCH /api/companies/:id
- * DELETE /api/companies/:id
+ * Companies API module - CRUD operations
  */
 
 import { apiClient } from './client';
 
+const ENTITY = 'Company';
+
 export const companiesApi = {
-  async list(filters?: any) {
-    const result = await apiClient.get('/entities/Company', { params: filters });
-    return result.data || [];
-  },
+  list: (query?: any) =>
+    apiClient.list(ENTITY, query),
 
-  async get(id: string) {
-    const result = await apiClient.get(`/entities/Company/${id}`);
-    return result.data?.[0] || null;
-  },
+  get: (id: string) =>
+    apiClient.get(ENTITY, id),
 
-  async create(data: any) {
-    const result = await apiClient.post('/entities/Company', data);
-    return result.data;
-  },
+  create: (data: any) =>
+    apiClient.post(ENTITY, data),
 
-  async update(id: string, data: any) {
-    const result = await apiClient.patch(`/entities/Company/${id}`, data);
-    return result.data;
-  },
+  update: (id: string, data: any) =>
+    apiClient.patch(ENTITY, id, data),
 
-  async delete(id: string) {
-    return apiClient.delete(`/entities/Company/${id}`);
-  },
+  delete: (id: string) =>
+    apiClient.delete(ENTITY, id),
+
+  getSettings: (companyId: string) =>
+    apiClient.invoke('getCompanySettings', { companyId }),
+
+  updateSettings: (companyId: string, settings: any) =>
+    apiClient.invoke('updateCompanySettings', { companyId, settings }),
 };
+
+export default companiesApi;

@@ -1,64 +1,32 @@
 /**
  * src/api/billingApi.ts
  * =====================
- * API Billing & Stripe
- * 
- * TODO MIGRATION: Endpoint futuri
- * GET /api/billing/status
- * GET /api/billing/plans
- * POST /api/billing/create-checkout-session
- * POST /api/webhooks/stripe
- * GET /api/billing/customer-portal
+ * Billing API module - subscriptions, Stripe, pricing
  */
 
-import { base44 } from '@/api/base44Client';
+import { apiClient } from './client';
 
 export const billingApi = {
-  async getStatus(companyId: string) {
-    // TODO MIGRATION: GET /api/billing/status
-    try {
-      const result = await base44.entities.CompanySubscription.filter({
-        company_id: companyId,
-      });
-      return result[0] || null;
-    } catch (error) {
-      return null;
-    }
-  },
+  getSubscriptionStatus: (companyId: string) =>
+    apiClient.invoke('getSubscriptionStatus', { companyId }),
 
-  async listPlans() {
-    // TODO MIGRATION: GET /api/billing/plans
-    try {
-      const result = await base44.entities.SubscriptionPlan.filter({
-        is_active: true,
-      });
-      return result || [];
-    } catch (error) {
-      return [];
-    }
-  },
+  listPlans: () =>
+    apiClient.list('SubscriptionPlan', { is_active: true }),
 
-  async createCheckoutSession(data: any) {
-    // TODO MIGRATION: POST /api/billing/create-checkout-session
-    // Must be invoked server-side in NestJS backend
-    try {
-      const response = await base44.functions.invoke('stripeCheckoutSession', data);
-      return response.data;
-    } catch (error: any) {
-      throw new Error(error.message);
-    }
-  },
+  createCheckoutSession: (planId: string, addons?: any[]) =>
+    apiClient.invoke('createCheckoutSession', { planId, addons }),
 
-  async getCustomerPortalUrl(stripeCustomerId: string) {
-    // TODO MIGRATION: GET /api/billing/customer-portal
-    // Must be invoked server-side in NestJS backend
-    try {
-      const response = await base44.functions.invoke('stripeCustomerPortal', {
-        stripe_customer_id: stripeCustomerId,
-      });
-      return response.data?.url;
-    } catch (error) {
-      return null;
-    }
-  },
+  getCheckoutUrl: (sessionId: string) =>
+    apiClient.invoke('getCheckoutUrl', { sessionId }),
+
+  createCustomerPortal: (companyId: string, returnUrl: string) =>
+    apiClient.invoke('createCustomerPortal', { companyId, returnUrl }),
+
+  cancelSubscription: (companyId: string, reason?: string) =>
+    apiClient.invoke('cancelSubscription', { companyId, reason }),
+
+  getPaymentHistory: (companyId: string) =>
+    apiClient.invoke('getPaymentHistory', { companyId }),
 };
+
+export default billingApi;

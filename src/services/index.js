@@ -1,5 +1,5 @@
 /**
- * src/services/index.ts
+ * src/services/index.js
  * =====================
  * Barrel export per tutti i servizi
  */

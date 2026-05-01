@@ -1,57 +1,35 @@
 /**
  * src/api/leaveApi.ts
  * ===================
- * API Leave Requests
- * 
- * TODO MIGRATION: Endpoint futuri
- * GET /api/leave/requests
- * POST /api/leave/requests
- * PATCH /api/leave/requests/:id/approve
- * PATCH /api/leave/requests/:id/reject
- * GET /api/leave/balances
+ * Leave API module - requests, balances, approvals
  */
 
 import { apiClient } from './client';
 
 export const leaveApi = {
-  async listRequests(filters?: any) {
-    const result = await apiClient.get('/entities/LeaveRequest', { params: filters });
-    return result.data || [];
-  },
+  getRequests: (query?: any) =>
+    apiClient.list('LeaveRequest', query),
 
-  async createRequest(data: any) {
-    const result = await apiClient.post('/entities/LeaveRequest', data);
-    return result.data;
-  },
+  createRequest: (data: any) =>
+    apiClient.post('LeaveRequest', data),
 
-  async approveRequest(id: string) {
-    // TODO MIGRATION: PATCH /api/leave/requests/:id/approve
-    const result = await apiClient.patch(`/entities/LeaveRequest/${id}`, {
-      status: 'approved',
-    });
-    return result.data;
-  },
+  updateRequest: (id: string, data: any) =>
+    apiClient.patch('LeaveRequest', id, data),
 
-  async rejectRequest(id: string, reason?: string) {
-    // TODO MIGRATION: PATCH /api/leave/requests/:id/reject
-    const result = await apiClient.patch(`/entities/LeaveRequest/${id}`, {
-      status: 'rejected',
-      rejection_reason: reason,
-    });
-    return result.data;
-  },
+  deleteRequest: (id: string) =>
+    apiClient.delete('LeaveRequest', id),
 
-  async getBalance(employeeId: string) {
-    // TODO MIGRATION: GET /api/leave/balances/:employeeId
-    const result = await apiClient.get('/entities/LeaveBalance', {
-      params: { employee_id: employeeId },
-    });
-    return result.data?.[0] || null;
-  },
+  approveRequest: (id: string, notes: string) =>
+    apiClient.invoke('approveLeaveRequest', { id, notes }),
 
-  async updateBalance(id: string, data: any) {
-    // TODO MIGRATION: PATCH /api/leave/balances/:id
-    const result = await apiClient.patch(`/entities/LeaveBalance/${id}`, data);
-    return result.data;
-  },
+  rejectRequest: (id: string, reason: string) =>
+    apiClient.invoke('rejectLeaveRequest', { id, reason }),
+
+  getBalance: (employeeId: string, year?: number) =>
+    apiClient.invoke('getLeaveBalance', { employeeId, year }),
+
+  getCalendar: (companyId: string, month: string) =>
+    apiClient.invoke('getLeaveCalendar', { companyId, month }),
 };
+
+export default leaveApi;

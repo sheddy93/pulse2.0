@@ -1,5 +1,5 @@
 /**
- * src/services/attendanceService.ts
+ * src/services/attendanceService.js
  * =================================
  * Business logic per attendance tracking
  */
@@ -7,7 +7,7 @@
 import { attendanceApi } from '@/api/attendanceApi';
 
 export const attendanceService = {
-  async checkIn(latitude: number, longitude: number) {
+  async checkIn(latitude, longitude) {
     return attendanceApi.checkIn({
       latitude,
       longitude,
@@ -15,7 +15,7 @@ export const attendanceService = {
     });
   },
 
-  async checkOut(latitude: number, longitude: number) {
+  async checkOut(latitude, longitude) {
     return attendanceApi.checkOut({
       latitude,
       longitude,
@@ -35,7 +35,7 @@ export const attendanceService = {
     });
   },
 
-  async getDailyEntries(employeeId: string, date: string) {
+  async getDailyEntries(employeeId, date) {
     const result = await attendanceApi.getEntries({
       employee_id: employeeId,
       date,
@@ -43,15 +43,20 @@ export const attendanceService = {
     return result.status === 200 ? result.data : [];
   },
 
-  async getSummary(employeeId: string, date: string) {
+  async getTodayEntries(employeeId) {
+    const today = new Date().toISOString().split('T')[0];
+    return this.getDailyEntries(employeeId, today);
+  },
+
+  async getSummary(employeeId, date) {
     return attendanceApi.getSummary(employeeId, date);
   },
 
-  async approveDayReview(id: string, notes: string) {
+  async approveDayReview(id, notes) {
     return attendanceApi.approveDayReview(id, notes);
   },
 
-  async rejectDayReview(id: string, reason: string) {
+  async rejectDayReview(id, reason) {
     return attendanceApi.rejectDayReview(id, reason);
   },
 };

@@ -1,118 +1,42 @@
 /**
  * src/services/employeeService.ts
  * ===============================
- * Business logic per Employees
- * 
- * Layer tra UI e API
- * Tutta la logica business qui, non nelle pagine
- * 
- * TODO MIGRATION: migrare logica a NestJS service
+ * Business logic per employee management
  */
 
 import { employeesApi } from '@/api/employeesApi';
-import { employeeMapper } from '@/mappers/employeeMapper';
-import { permissionService } from './permissionService';
 
 export const employeeService = {
-  async listEmployees(companyId: string, filters?: any) {
-    const employees = await employeesApi.list({
+  async listEmployees(companyId: string, query?: any) {
+    const result = await employeesApi.list({
       company_id: companyId,
-      is_deleted: false,
-      ...filters,
+      ...query,
     });
-    
-    return employees.map(emp => employeeMapper.toViewModel(emp));
+    return result.status === 200 ? result.data : [];
   },
 
   async getEmployee(id: string) {
-    const employee = await employeesApi.get(id);
-    if (!employee) return null;
-    
-    return employeeMapper.toViewModel(employee);
+    const result = await employeesApi.get(id);
+    return result.status === 200 ? result.data : null;
   },
 
-  async createEmployee(companyId: string, formData: any, currentUser: any) {
-    // Validazione permessi
-    if (!permissionService.can(currentUser, 'create_employee')) {
-      throw new Error('Permission denied');
-    }
-
-    // Validazione form
-    const validation = employeeService.validateEmployeeForm(formData);
-    if (!validation.valid) {
-      throw new Error(validation.errors?.join(', '));
-    }
-
-    const payload = employeeMapper.toApiPayload({
-      company_id: companyId,
-      ...formData,
-    });
-
-    const employee = await employeesApi.create(payload);
-    return employeeMapper.toViewModel(employee);
+  async createEmployee(data: any) {
+    return employeesApi.create(data);
   },
 
-  async updateEmployee(id: string, formData: any, currentUser: any) {
-    // Validazione permessi
-    if (!permissionService.can(currentUser, 'update_employee')) {
-      throw new Error('Permission denied');
-    }
-
-    const validation = employeeService.validateEmployeeForm(formData);
-    if (!validation.valid) {
-      throw new Error(validation.errors?.join(', '));
-    }
-
-    const payload = employeeMapper.toApiPayload(formData);
-    const employee = await employeesApi.update(id, payload);
-    
-    return employeeMapper.toViewModel(employee);
+  async updateEmployee(id: string, data: any) {
+    return employeesApi.update(id, data);
   },
 
-  async deleteEmployee(id: string, currentUser: any) {
-    if (!permissionService.can(currentUser, 'delete_employee')) {
-      throw new Error('Permission denied');
-    }
-
+  async deleteEmployee(id: string) {
     return employeesApi.delete(id);
   },
 
-  async archiveEmployee(id: string, currentUser: any) {
-    if (!permissionService.can(currentUser, 'delete_employee')) {
-      throw new Error('Permission denied');
-    }
-
-    return employeesApi.update(id, { is_deleted: true });
+  async importEmployees(file: File) {
+    return employeesApi.import(file);
   },
 
-  validateEmployeeForm(data: any) {
-    const errors: string[] = [];
-
-    if (!data.full_name?.trim()) {
-      errors.push('Full name is required');
-    }
-
-    if (!data.email?.trim()) {
-      errors.push('Email is required');
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
-      errors.push('Email is invalid');
-    }
-
-    if (data.phone && !/^[+\d\s()-]{10,}$/.test(data.phone)) {
-      errors.push('Phone format is invalid');
-    }
-
-    return {
-      valid: errors.length === 0,
-      errors: errors.length > 0 ? errors : undefined,
-    };
-  },
-
-  canManageEmployee(currentUser: any, employee: any) {
-    if (currentUser.company_id !== employee.company_id) {
-      return false;
-    }
-
-    return permissionService.can(currentUser, 'manage_employees');
+  async exportEmployees(format: 'csv' | 'excel' = 'csv') {
+    return employeesApi.export(format);
   },
 };

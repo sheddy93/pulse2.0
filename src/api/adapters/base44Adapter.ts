@@ -1,120 +1,104 @@
 /**
  * src/api/adapters/base44Adapter.ts
- * =================================
- * Adapter Base44 SDK
- * 
- * Wrapper intorno a Base44 per interfaccia standardizzata
- * Quando migriamo a NestJS, switch a restAdapter
- * 
- * TODO MIGRATION: Replace with NestJS REST API calls
+ * ==================================
+ * TEMPORANEO: Wrapper per Base44 SDK
+ * Isoliamo tutte le chiamate Base44 in un unico punto
+ * Per migrazione: sostituire con REST calls
  */
 
 import { base44 } from '@/api/base44Client';
 
-export const base44Adapter = {
-  async get(url: string, options?: any) {
-    // Parse URL pattern
-    // GET /entities/User -> base44.entities.User.list()
-    // GET /entities/User/123 -> base44.entities.User.filter({id: '123'})
+const base44Adapter = {
+  // Entity CRUD
+  get: async (entity: string, id: string) => {
     try {
-      const parts = url.split('/').filter(Boolean);
-      
-      if (parts[0] === 'entities' && parts.length >= 2) {
-        const entityName = parts[1];
-        const id = parts[2];
-        
-        // Get entity class from base44
-        const entity = (base44.entities as any)[entityName];
-        if (!entity) throw new Error(`Entity ${entityName} not found`);
-        
-        if (id) {
-          return { data: await entity.filter({ id }) };
-        }
-        
-        const query = options?.params || {};
-        return { data: await entity.filter(query) };
-      }
-      
-      throw new Error(`Unsupported URL: ${url}`);
+      const result = await base44.entities[entity].get?.(id);
+      return { data: result, status: 200 };
     } catch (error: any) {
-      return { error: error.message, status: 400 };
+      return { error: error.message, status: error.status || 500 };
     }
   },
 
-  async post(url: string, data: any, options?: any) {
+  list: async (entity: string, query = {}) => {
     try {
-      const parts = url.split('/').filter(Boolean);
-      
-      if (parts[0] === 'entities' && parts.length >= 2) {
-        const entityName = parts[1];
-        const entity = (base44.entities as any)[entityName];
-        
-        if (!entity) throw new Error(`Entity ${entityName} not found`);
-        
-        if (Array.isArray(data)) {
-          return { data: await entity.bulkCreate(data) };
-        }
-        
-        return { data: await entity.create(data) };
-      }
-      
-      throw new Error(`Unsupported URL: ${url}`);
+      const result = await base44.entities[entity].filter?.(query);
+      return { data: result || [], status: 200 };
     } catch (error: any) {
-      return { error: error.message, status: 400 };
+      return { error: error.message, status: error.status || 500 };
     }
   },
 
-  async patch(url: string, data: any, options?: any) {
+  post: async (entity: string, data: any) => {
     try {
-      const parts = url.split('/').filter(Boolean);
-      
-      if (parts[0] === 'entities' && parts.length >= 3) {
-        const entityName = parts[1];
-        const id = parts[2];
-        const entity = (base44.entities as any)[entityName];
-        
-        if (!entity) throw new Error(`Entity ${entityName} not found`);
-        
-        return { data: await entity.update(id, data) };
-      }
-      
-      throw new Error(`Unsupported URL: ${url}`);
+      const result = await base44.entities[entity].create?.(data);
+      return { data: result, status: 201 };
     } catch (error: any) {
-      return { error: error.message, status: 400 };
+      return { error: error.message, status: error.status || 500 };
     }
   },
 
-  async delete(url: string, options?: any) {
+  patch: async (entity: string, id: string, data: any) => {
     try {
-      const parts = url.split('/').filter(Boolean);
-      
-      if (parts[0] === 'entities' && parts.length >= 3) {
-        const entityName = parts[1];
-        const id = parts[2];
-        const entity = (base44.entities as any)[entityName];
-        
-        if (!entity) throw new Error(`Entity ${entityName} not found`);
-        
-        return { data: await entity.delete(id) };
-      }
-      
-      throw new Error(`Unsupported URL: ${url}`);
+      const result = await base44.entities[entity].update?.(id, data);
+      return { data: result, status: 200 };
     } catch (error: any) {
-      return { error: error.message, status: 400 };
+      return { error: error.message, status: error.status || 500 };
     }
   },
 
-  async put(url: string, data: any, options?: any) {
-    // PUT = POST per Base44 (idempotent create or update)
-    return base44Adapter.patch(url, data, options);
+  delete: async (entity: string, id: string) => {
+    try {
+      await base44.entities[entity].delete?.(id);
+      return { data: { success: true }, status: 200 };
+    } catch (error: any) {
+      return { error: error.message, status: error.status || 500 };
+    }
   },
 
-  async uploadFile(file: File, path?: string) {
+  // File operations
+  uploadFile: async (file: File) => {
     try {
       const result = await base44.integrations.Core.UploadFile({ file });
-      return { data: { file_url: result.file_url } };
+      return { data: result, status: 200 };
     } catch (error: any) {
-      return { error: error.message, status: 400 };
+      return { error: error.message, status: error.status || 500 };
+    }
+  },
+
+  // Auth
+  auth: {
+    me: async () => {
+      try {
+        const user = await base44.auth.me();
+        return { data: user, status: 200 };
+      } catch (error: any) {
+        return { error: error.message, status: 401 };
+      }
+    },
+    logout: async () => {
+      try {
+        await base44.auth.logout();
+        return { data: { success: true }, status: 200 };
+      } catch (error: any) {
+        return { error: error.message, status: error.status || 500 };
+      }
+    },
+    login: async (email: string, password: string) => {
+      // Base44 non ha login programmatico via SDK
+      // Rimandare a pagina di login
+      throw new Error('Use base44.auth.redirectToLogin() for login');
+    },
+  },
+
+  // Functions
+  invoke: async (functionName: string, payload: any) => {
+    try {
+      const result = await base44.functions.invoke(functionName, payload);
+      return { data: result.data, status: 200 };
+    } catch (error: any) {
+      return { error: error.message, status: error.status || 500 };
     }
   },
 };
+
+export default base44Adapter;
