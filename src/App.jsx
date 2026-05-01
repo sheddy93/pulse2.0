@@ -42,6 +42,7 @@ import CompanyOwnerDashboard from './pages/dashboard/CompanyOwnerDashboard';
 import ManagerDashboard from './pages/dashboard/ManagerDashboard';
 import EmployeeDashboardBasic from './pages/dashboard/EmployeeDashboardBasic';
 import EmployeeDashboardOptimized from './pages/dashboard/EmployeeDashboardOptimized';
+import MyDashboard from './pages/employee/MyDashboard';
 import CompanyDashboardOptimized from './pages/dashboard/CompanyDashboardOptimized';
 import DashboardBuilder from './pages/company/DashboardBuilder';
 
@@ -263,7 +264,8 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/company/api" element={<APIManagement />} />
 
       {/* Employee */}
-      <Route path="/dashboard/employee" element={<EmployeeDashboardOptimized />} />
+      <Route path="/dashboard/employee" element={<MyDashboard />} />
+      <Route path="/dashboard/employee/dashboard" element={<EmployeeDashboardOptimized />} />
       <Route path="/dashboard/employee/attendance" element={<AttendancePage />} />
       <Route path="/dashboard/employee/calendar" element={<AttendanceCalendarPage />} />
       <Route path="/dashboard/employee/history" element={<AttendancePage />} />
