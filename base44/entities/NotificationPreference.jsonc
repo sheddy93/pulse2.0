@@ -1,0 +1,76 @@
+{
+  "name": "NotificationPreference",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string"
+    },
+    "leave_requests_inapp": {
+      "type": "boolean",
+      "default": true
+    },
+    "leave_requests_email": {
+      "type": "boolean",
+      "default": true
+    },
+    "overtime_requests_inapp": {
+      "type": "boolean",
+      "default": true
+    },
+    "overtime_requests_email": {
+      "type": "boolean",
+      "default": false
+    },
+    "attendance_inapp": {
+      "type": "boolean",
+      "default": false
+    },
+    "attendance_email": {
+      "type": "boolean",
+      "default": false
+    },
+    "document_expiry_inapp": {
+      "type": "boolean",
+      "default": true
+    },
+    "document_expiry_email": {
+      "type": "boolean",
+      "default": true
+    },
+    "contract_expiry_inapp": {
+      "type": "boolean",
+      "default": true
+    },
+    "contract_expiry_email": {
+      "type": "boolean",
+      "default": true
+    },
+    "certification_expiry_inapp": {
+      "type": "boolean",
+      "default": true
+    },
+    "certification_expiry_email": {
+      "type": "boolean",
+      "default": false
+    },
+    "payroll_inapp": {
+      "type": "boolean",
+      "default": true
+    },
+    "payroll_email": {
+      "type": "boolean",
+      "default": true
+    },
+    "announcements_inapp": {
+      "type": "boolean",
+      "default": true
+    },
+    "announcements_email": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "user_email"
+  ]
+}

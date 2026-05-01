@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import {
   LayoutDashboard, Users, Building2, FileText, Clock, LogOut,
   Menu, X, ChevronRight, UserCog, Link2, Shield, Settings as SettingsIcon,
-  ClipboardList, Briefcase, CalendarDays, FileBadge, Activity, Monitor, BookOpen, Award, Heart, GraduationCap, BarChart3, MessageCircle, TrendingUp, MessageSquare, Receipt, Calendar
+  ClipboardList, Briefcase, CalendarDays, FileBadge, Activity, Monitor, BookOpen, Award, Heart, GraduationCap, BarChart3, MessageCircle, TrendingUp, MessageSquare, Receipt, Calendar, Bell
 } from "lucide-react";
 import NotificationBell from "./NotificationBell";
 
@@ -75,6 +75,7 @@ const NAV = {
     { label: "Le Mie Spese", icon: Receipt, path: "/dashboard/employee/expenses" },
     { label: "Contratto", icon: FileBadge, path: "/dashboard/employee/contract" },
     { label: "Profilo", icon: UserCog, path: "/dashboard/employee/profile" },
+    { label: "Preferenze Notifiche", icon: Bell, path: "/dashboard/employee/notification-settings" },
   ],
 };
 

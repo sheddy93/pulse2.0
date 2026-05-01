@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Bell, Check, X } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Bell, Check, X, Settings } from "lucide-react";
 
 export default function NotificationBell({ user }) {
   const [notifications, setNotifications] = useState([]);
@@ -63,8 +64,16 @@ export default function NotificationBell({ user }) {
         <>
           <div className="fixed inset-0 z-30 lg:hidden" onClick={() => setOpen(false)} />
           <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg border border-slate-200 z-40 max-h-96 overflow-y-auto">
-            <div className="sticky top-0 px-4 py-3 border-b border-slate-100 bg-white">
+            <div className="sticky top-0 px-4 py-3 border-b border-slate-100 bg-white flex items-center justify-between">
               <h3 className="font-semibold text-slate-800">Notifiche</h3>
+              <Link
+                to="/dashboard/employee/notification-settings"
+                onClick={() => setOpen(false)}
+                className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors"
+                title="Preferenze notifiche"
+              >
+                <Settings className="w-4 h-4 text-slate-400" />
+              </Link>
             </div>
 
             {loading ? (

@@ -75,6 +75,7 @@ import DocumentSignaturePage from './pages/employee/DocumentSignaturePage';
 import OvertimeRequestPage from './pages/employee/OvertimeRequestPage';
 import SkillsPage from './pages/employee/SkillsPage';
 import BenefitsPage from './pages/employee/BenefitsPage';
+import NotificationSettings from './pages/employee/NotificationSettings';
 
 // Shared
 import ComingSoon from './components/layout/ComingSoon';
@@ -182,6 +183,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/employee/expenses" element={<EmployeeExpenses />} />
       <Route path="/dashboard/employee/onboarding" element={<OnboardingWizard />} />
       <Route path="/dashboard/employee/profile" element={<EmployeeProfilePage />} />
+      <Route path="/dashboard/employee/notification-settings" element={<NotificationSettings />} />
       <Route path="/dashboard/employee/contract" element={<ComingSoon title="Il mio contratto" dashboardPath="/dashboard/employee" />} />
 
       <Route path="*" element={<PageNotFound />} />
