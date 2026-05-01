@@ -22,7 +22,7 @@ export default function CreateCompanyAdmin() {
     base44.auth.me().then(async (me) => {
       setUser(me);
       if (me.company_id) {
-        const companies = await // TODO: Replace with service.Company.filter({ id: me.company_id });
+        const companies = // TODO: Replace with service.Company.filter({ id: me.company_id });
         setCompany(companies[0]);
       }
     }).finally(() => setLoading(false));
@@ -39,7 +39,7 @@ export default function CreateCompanyAdmin() {
     await base44.users.inviteUser(form.email, form.role);
 
     // Create employee profile for admin
-    await // TODO: Replace with service.EmployeeProfile.create({
+    // TODO: Replace with service.EmployeeProfile.create({
       first_name: form.first_name,
       last_name: form.last_name,
       email: form.email,

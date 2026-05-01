@@ -82,7 +82,7 @@ export default function DocumentArchive() {
       });
 
       // Create document record
-      await // TODO: Replace with service.Document.create({
+      // TODO: Replace with service.Document.create({
         company_id: user.company_id,
         title: formData.title,
         doc_type: formData.doc_type,
@@ -109,7 +109,7 @@ export default function DocumentArchive() {
         file: null
       });
 
-      const docs = await // TODO: Replace with service.Document.filter({
+      const docs = // TODO: Replace with service.Document.filter({
         company_id: user.company_id
       });
       setDocuments(docs);
@@ -124,9 +124,9 @@ export default function DocumentArchive() {
     if (!window.confirm("Sei sicuro di voler eliminare questo documento?")) return;
     
     try {
-      await // TODO: Replace with service.Document.delete(docId);
+      // TODO: Replace with service.Document.delete(docId);
       toast.success("Documento eliminato");
-      const docs = await // TODO: Replace with service.Document.filter({
+      const docs = // TODO: Replace with service.Document.filter({
         company_id: user.company_id
       });
       setDocuments(docs);
@@ -148,14 +148,14 @@ export default function DocumentArchive() {
     if (!selectedDoc) return;
 
     try {
-      await // TODO: Replace with service.Document.update(selectedDoc.id, {
+      // TODO: Replace with service.Document.update(selectedDoc.id, {
         allowed_employees: permissionsData.employees,
         visibility: permissionsData.visibility
       });
       toast.success("Permessi aggiornati");
       setShowPermissionsModal(false);
       
-      const docs = await // TODO: Replace with service.Document.filter({
+      const docs = // TODO: Replace with service.Document.filter({
         company_id: user.company_id
       });
       setDocuments(docs);

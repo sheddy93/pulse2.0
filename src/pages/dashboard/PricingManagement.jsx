@@ -200,9 +200,9 @@ function PlanEditor({ plan, onClose }) {
 
   const handleSave = async () => {
     if (plan.id) {
-      await // TODO: Replace with service.SubscriptionPlan.update(plan.id, formData);
+      // TODO: Replace with service.SubscriptionPlan.update(plan.id, formData);
     } else {
-      await // TODO: Replace with service.SubscriptionPlan.create(formData);
+      // TODO: Replace with service.SubscriptionPlan.create(formData);
     }
     onClose();
   };
@@ -261,9 +261,9 @@ function AddonEditor({ addon, onClose }) {
 
   const handleSave = async () => {
     if (addon.id) {
-      await // TODO: Replace with service.SubscriptionAddon.update(addon.id, formData);
+      // TODO: Replace with service.SubscriptionAddon.update(addon.id, formData);
     } else {
-      await // TODO: Replace with service.SubscriptionAddon.create(formData);
+      // TODO: Replace with service.SubscriptionAddon.create(formData);
     }
     onClose();
   };
@@ -328,7 +328,7 @@ function DiscountEditor({ subscription, onClose }) {
   const total = subtotal - discountAmount;
 
   const handleSave = async () => {
-    await // TODO: Replace with service.CompanySubscription.update(subscription.id, {
+    // TODO: Replace with service.CompanySubscription.update(subscription.id, {
       discount_percentage: discountPercentage,
       discount_reason: discountReason,
       total_monthly: total,

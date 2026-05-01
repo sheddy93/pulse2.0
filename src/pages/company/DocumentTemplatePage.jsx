@@ -33,7 +33,7 @@ export default function DocumentTemplatePage() {
   const loadTemplates = async () => {
     try {
       if (!user?.company_id) return;
-      const tmpl = await // TODO: Replace with service.DocumentTemplate.filter({
+      const tmpl = // TODO: Replace with service.DocumentTemplate.filter({
         company_id: user.company_id
       });
       setTemplates(tmpl);
@@ -48,10 +48,10 @@ export default function DocumentTemplatePage() {
     e.preventDefault();
     try {
       if (editingId) {
-        await // TODO: Replace with service.DocumentTemplate.update(editingId, formData);
+        // TODO: Replace with service.DocumentTemplate.update(editingId, formData);
         toast.success('Template aggiornato');
       } else {
-        await // TODO: Replace with service.DocumentTemplate.create({
+        // TODO: Replace with service.DocumentTemplate.create({
           ...formData,
           company_id: user.company_id,
           created_by: user.email
@@ -76,7 +76,7 @@ export default function DocumentTemplatePage() {
   const handleDelete = async (id) => {
     if (confirm('Elimina questo template?')) {
       try {
-        await // TODO: Replace with service.DocumentTemplate.delete(id);
+        // TODO: Replace with service.DocumentTemplate.delete(id);
         toast.success('Template eliminato');
         loadTemplates();
       } catch (error) {

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { authService } from "@/services/authService";
 import { Lock, Eye, EyeOff, CheckCircle2, AlertCircle } from "lucide-react";
 
 function checkStrength(pw) {

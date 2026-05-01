@@ -58,11 +58,11 @@ export default function IntegrationSettings() {
 
   const handleAddWebhook = async (e) => {
     e.preventDefault();
-    await // TODO: Replace with service.WebhookIntegration.create({
+    // TODO: Replace with service.WebhookIntegration.create({
       company_id: company.id,
       ...webhookForm
     });
-    const updated = await // TODO: Replace with service.WebhookIntegration.filter({ company_id: company.id });
+    const updated = // TODO: Replace with service.WebhookIntegration.filter({ company_id: company.id });
     setWebhooks(updated);
     setShowWebhookForm(false);
     setWebhookForm({ name: "", integration_type: "custom", webhook_url: "", events: [] });
@@ -70,7 +70,7 @@ export default function IntegrationSettings() {
 
   const handleDeleteWebhook = async (id) => {
     if (confirm("Elimina questo webhook?")) {
-      await // TODO: Replace with service.WebhookIntegration.delete(id);
+      // TODO: Replace with service.WebhookIntegration.delete(id);
       setWebhooks(webhooks.filter(w => w.id !== id));
     }
   };
@@ -81,20 +81,20 @@ export default function IntegrationSettings() {
     const key = `pk_live_${Math.random().toString(36).substring(2, 15)}`;
     setGeneratedKey(key);
     
-    await // TODO: Replace with service.APIKey.create({
+    // TODO: Replace with service.APIKey.create({
       company_id: company.id,
       ...apiKeyForm,
       key_hash: key.substring(8), // Simulated hash
       prefix: `pk_live_${key.substring(8, 15)}`
     });
-    const updated = await // TODO: Replace with service.APIKey.filter({ company_id: company.id });
+    const updated = // TODO: Replace with service.APIKey.filter({ company_id: company.id });
     setApiKeys(updated);
     setApiKeyForm({ name: "", permissions: [] });
   };
 
   const handleDeleteApiKey = async (id) => {
     if (confirm("Elimina questa chiave API?")) {
-      await // TODO: Replace with service.APIKey.delete(id);
+      // TODO: Replace with service.APIKey.delete(id);
       setApiKeys(apiKeys.filter(k => k.id !== id));
     }
   };

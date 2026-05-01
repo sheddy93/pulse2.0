@@ -45,7 +45,7 @@ export default function EmployeeCard() {
   useEffect(() => {
     base44.auth.me().then(async (me) => {
       setUser(me);
-      const emps = await // TODO: Replace with service.EmployeeProfile.filter({ id });
+      const emps = // TODO: Replace with service.EmployeeProfile.filter({ id });
       const emp = emps[0];
       setEmployee(emp);
       if (emp) {
@@ -67,7 +67,7 @@ export default function EmployeeCard() {
   const saveNote = async () => {
     if (!employee) return;
     setSavingNote(true);
-    await // TODO: Replace with service.EmployeeProfile.update(employee.id, { internal_notes: note });
+    // TODO: Replace with service.EmployeeProfile.update(employee.id, { internal_notes: note });
     setSavingNote(false);
   };
 

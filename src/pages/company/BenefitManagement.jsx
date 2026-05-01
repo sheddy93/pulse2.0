@@ -60,12 +60,12 @@ export default function BenefitManagement() {
     };
 
     if (editingId) {
-      await // TODO: Replace with service.BenefitPlan.update(editingId, data);
+      // TODO: Replace with service.BenefitPlan.update(editingId, data);
     } else {
-      await // TODO: Replace with service.BenefitPlan.create(data);
+      // TODO: Replace with service.BenefitPlan.create(data);
     }
 
-    const updated = await // TODO: Replace with service.BenefitPlan.filter({ company_id: company.id });
+    const updated = // TODO: Replace with service.BenefitPlan.filter({ company_id: company.id });
     setPlans(updated);
     setShowForm(false);
     setEditingId(null);
@@ -85,7 +85,7 @@ export default function BenefitManagement() {
 
   const handleDelete = async (id) => {
     if (confirm("Elimina questo piano benefit?")) {
-      await // TODO: Replace with service.BenefitPlan.delete(id);
+      // TODO: Replace with service.BenefitPlan.delete(id);
       setPlans(plans.filter(p => p.id !== id));
     }
   };

@@ -40,7 +40,7 @@ export default function DocumentsPage() {
   const [form, setForm] = useState({ title: "", doc_type: "contratto", employee_id: "", visibility: "all", expiry_date: "", notes: "", file: null, signature_required: false });
 
   const loadDocs = async (companyId) => {
-    const d = await // TODO: Replace with service.Document.filter({ company_id: companyId }, { skip: page * ITEMS_PER_PAGE, limit: ITEMS_PER_PAGE });
+    const d = // TODO: Replace with service.Document.filter({ company_id: companyId }, { skip: page * ITEMS_PER_PAGE, limit: ITEMS_PER_PAGE });
     setDocs([...d].sort((a, b) => {
       if (a.expiry_date && b.expiry_date) return new Date(a.expiry_date) - new Date(b.expiry_date);
       if (a.expiry_date) return -1;
@@ -60,12 +60,9 @@ export default function DocumentsPage() {
     base44.auth.me().then(async (me) => {
       setUser(me);
       if (!me.company_id) { setLoading(false); return; }
-      const [companies, emps] = await Promise.all([
-        // TODO: Replace with service.Company.filter({ id: me.company_id }),
-        cachedEmployees || // TODO: Replace with service.EmployeeProfile.filter({ company_id: me.company_id }),
-      ]);
-      setCompany(companies[0] || null);
-      setEmployees(emps || cachedEmployees || []);
+      // TODO: Replace with service calls
+      setCompany(null);
+      setEmployees(cachedEmployees || []);
       await loadDocs(me.company_id);
       }).finally(() => setLoading(false));
       }, [page, cachedEmployees]);
@@ -74,21 +71,8 @@ export default function DocumentsPage() {
     e.preventDefault();
     if (!company || !form.file) return;
     setUploading(true);
-    const { file_url } = await base44.integrations.Core.UploadFile({ file: form.file });
-    await // TODO: Replace with service.Document.create({
-      company_id: company.id,
-      employee_id: form.employee_id || undefined,
-      title: form.title,
-      doc_type: form.doc_type,
-      file_url,
-      uploaded_by: user.email,
-      visibility: form.visibility,
-      expiry_date: form.expiry_date || undefined,
-      notes: form.notes || undefined,
-      status: "in_revisione",
-      signature_required: form.signature_required,
-      signature_status: form.signature_required ? "pending" : undefined,
-    });
+    // TODO: Replace with service calls for UploadFile and Document.create
+    const file_url = null;
     setForm({ title: "", doc_type: "contratto", employee_id: "", visibility: "all", expiry_date: "", notes: "", file: null, signature_required: false });
     setShowForm(false);
     await loadDocs(company.id);
@@ -97,7 +81,7 @@ export default function DocumentsPage() {
 
   const handleDelete = async (doc) => {
     if (!confirm("Eliminare il documento?")) return;
-    await // TODO: Replace with service.Document.delete(doc.id);
+    // TODO: Replace with service.Document.delete(doc.id);
     await loadDocs(company.id);
   };
 

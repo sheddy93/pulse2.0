@@ -51,12 +51,12 @@ export default function TrainingManagement() {
     };
 
     if (editingId) {
-      await // TODO: Replace with service.TrainingCourse.update(editingId, data);
+      // TODO: Replace with service.TrainingCourse.update(editingId, data);
     } else {
-      await // TODO: Replace with service.TrainingCourse.create(data);
+      // TODO: Replace with service.TrainingCourse.create(data);
     }
 
-    const updated = await // TODO: Replace with service.TrainingCourse.filter({ company_id: company.id });
+    const updated = // TODO: Replace with service.TrainingCourse.filter({ company_id: company.id });
     setCourses(updated);
     setShowForm(false);
     setEditingId(null);
@@ -65,7 +65,7 @@ export default function TrainingManagement() {
 
   const handleDelete = async (id) => {
     if (confirm("Elimina questo corso?")) {
-      await // TODO: Replace with service.TrainingCourse.delete(id);
+      // TODO: Replace with service.TrainingCourse.delete(id);
       setCourses(courses.filter(c => c.id !== id));
     }
   };

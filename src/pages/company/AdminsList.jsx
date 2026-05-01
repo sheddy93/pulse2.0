@@ -25,7 +25,7 @@ export default function AdminsList() {
       setUser(me);
       if (me.company_id) {
         // Get all users of this company with admin roles
-        const allUsers = await // TODO: Replace with service.User.list();
+        const allUsers = [];  // TODO: Replace with service.User.list()
         const companyAdmins = allUsers.filter(u =>
           u.company_id === me.company_id &&
           ["company_owner", "company_admin", "hr_manager", "manager"].includes(u.role)

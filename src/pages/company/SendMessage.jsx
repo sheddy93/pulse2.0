@@ -132,7 +132,7 @@ export default function SendMessage() {
       }
 
       // Create message
-      await // TODO: Replace with service.CompanyMessage.create({
+      // TODO: Replace with service.CompanyMessage.create({
         company_id: user.company_id,
         sender_email: user.email,
         sender_name: user.full_name,

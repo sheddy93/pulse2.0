@@ -65,7 +65,7 @@ export default function SkillManagement() {
     if (!selectedEmployee || !company) return;
 
     const emp = employees.find(e => e.id === selectedEmployee);
-    await // TODO: Replace with service.EmployeeSkill.create({
+    // TODO: Replace with service.EmployeeSkill.create({
       company_id: company.id,
       employee_id: selectedEmployee,
       employee_name: `${emp.first_name} ${emp.last_name}`,
@@ -94,14 +94,14 @@ export default function SkillManagement() {
     });
     setShowForm(false);
 
-    const updatedSkills = await // TODO: Replace with service.EmployeeSkill.filter({ company_id: company.id });
+    const updatedSkills = // TODO: Replace with service.EmployeeSkill.filter({ company_id: company.id });
     setSkills(updatedSkills);
   };
 
   const handleDeleteSkill = async (skillId) => {
     if (!confirm("Eliminare questa competenza?")) return;
-    await // TODO: Replace with service.EmployeeSkill.delete(skillId);
-    const updatedSkills = await // TODO: Replace with service.EmployeeSkill.filter({ company_id: company.id });
+    // TODO: Replace with service.EmployeeSkill.delete(skillId);
+    const updatedSkills = // TODO: Replace with service.EmployeeSkill.filter({ company_id: company.id });
     setSkills(updatedSkills);
   };
 

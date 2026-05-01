@@ -44,10 +44,8 @@ export default function AnnouncementBoard() {
     base44.auth.me().then(async (me) => {
       setUser(me);
       if (!me.company_id) { setLoading(false); return; }
-      const [companies, announces] = await Promise.all([
-        cachedCompany || // TODO: Replace with service.Company.filter({ id: me.company_id }),
-        // TODO: Replace with service.Announcement.filter({ company_id: me.company_id }, { skip: page * ITEMS_PER_PAGE, limit: ITEMS_PER_PAGE }, '-created_date')
-      ]);
+      const companies = cachedCompany ? [cachedCompany] : [];
+      const announces = [];  // TODO: Replace with service calls
       setCompany(companies[0]);
       setAnnouncements(announces);
     }).finally(() => setLoading(false));
@@ -57,7 +55,8 @@ export default function AnnouncementBoard() {
     e.preventDefault();
     if (!company || !form.title || !form.content) return;
 
-    await // TODO: Replace with service.Announcement.create({
+    // TODO: Replace with service call
+    const newAnnounce = {
       company_id: company.id,
       title: form.title,
       content: form.content,
@@ -66,22 +65,23 @@ export default function AnnouncementBoard() {
       visibility: form.visibility,
       expires_at: form.expires_at || undefined,
       is_pinned: form.is_pinned
-    });
+    };
+    // newAnnounce will be created via service
 
     setForm({ title: "", content: "", priority: "normal", visibility: "all", expires_at: "", is_pinned: false });
     setShowForm(false);
-    const announces = await // TODO: Replace with service.Announcement.filter({ company_id: company.id }, '-created_date');
-    setAnnouncements(announces);
+    // TODO: Fetch updated announcements via service
+    setAnnouncements([]);
   };
 
   const handleDelete = async (id) => {
     if (!confirm("Eliminare l'annuncio?")) return;
-    await // TODO: Replace with service.Announcement.delete(id);
+    // TODO: Replace with service.Announcement.delete(id)
     setAnnouncements(a => a.filter(ann => ann.id !== id));
   };
 
   const handleTogglePin = async (id, currentPin) => {
-    await // TODO: Replace with service.Announcement.update(id, { is_pinned: !currentPin });
+    // TODO: Replace with service.Announcement.update(id, { is_pinned: !currentPin })
     setAnnouncements(a => a.map(ann => ann.id === id ? { ...ann, is_pinned: !currentPin } : ann));
   };
 

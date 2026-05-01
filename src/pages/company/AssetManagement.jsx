@@ -65,13 +65,13 @@ export default function AssetManagement() {
       await // TODO: Replace with service.Asset.update(editId, data);
       setEditId(null);
     } else {
-      await // TODO: Replace with service.Asset.create(data);
+      // TODO: Replace with service.Asset.create(data)
     }
 
     setForm({ asset_type: "computer", asset_name: "", model: "", serial_number: "", purchase_date: "", cost: "", status: "disponibile", notes: "" });
     setShowForm(false);
-    const assetsList = await // TODO: Replace with service.Asset.filter({ company_id: company.id }, '-created_date');
-    setAssets(assetsList);
+    // TODO: Replace with service.Asset.filter call
+    setAssets([]);
   };
 
   const handleEdit = (asset) => {
@@ -91,7 +91,7 @@ export default function AssetManagement() {
 
   const handleDelete = async (id) => {
     if (!confirm("Eliminare l'asset?")) return;
-    await // TODO: Replace with service.Asset.delete(id);
+    // TODO: Replace with service.Asset.delete(id)
     setAssets(a => a.filter(asset => asset.id !== id));
   };
 
