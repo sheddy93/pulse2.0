@@ -1,0 +1,17 @@
+{
+  "name": "AuditLog",
+  "type": "object",
+  "properties": {
+    "company_id": { "type": "string" },
+    "user_id": { "type": "string" },
+    "action": { "type": "string" },
+    "entity_type": { "type": "string" },
+    "entity_id": { "type": "string" },
+    "description": { "type": "string" },
+    "metadata": { "type": "object" },
+    "ip_address": { "type": "string" },
+    "user_agent": { "type": "string" },
+    "created_at": { "type": "string", "format": "date-time" }
+  },
+  "required": ["company_id", "user_id", "action"]
+}

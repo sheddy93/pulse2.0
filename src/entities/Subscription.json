@@ -1,0 +1,18 @@
+{
+  "name": "Subscription",
+  "type": "object",
+  "properties": {
+    "company_id": { "type": "string" },
+    "plan_name": { "type": "string", "enum": ["free", "startup", "professional", "enterprise"] },
+    "stripe_customer_id": { "type": "string" },
+    "stripe_subscription_id": { "type": "string" },
+    "status": { "type": "string", "enum": ["trial", "active", "past_due", "cancelled", "paused"] },
+    "current_period_start": { "type": "string", "format": "date-time" },
+    "current_period_end": { "type": "string", "format": "date-time" },
+    "employee_limit": { "type": "number" },
+    "storage_limit_mb": { "type": "number" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  },
+  "required": ["company_id", "plan_name"]
+}

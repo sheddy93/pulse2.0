@@ -1,0 +1,16 @@
+{
+  "name": "ConsultantCompanyLink",
+  "type": "object",
+  "properties": {
+    "consultant_user_id": { "type": "string" },
+    "company_id": { "type": "string" },
+    "status": { "type": "string", "enum": ["pending", "active", "rejected", "removed"], "default": "pending" },
+    "requested_by": { "type": "string" },
+    "approved_by": { "type": "string" },
+    "approved_at": { "type": "string", "format": "date-time" },
+    "permissions": { "type": "object", "description": "Object con permessi specifici del consulente" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  },
+  "required": ["consultant_user_id", "company_id"]
+}

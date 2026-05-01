@@ -1,0 +1,16 @@
+{
+  "name": "PayrollDocument",
+  "type": "object",
+  "properties": {
+    "company_id": { "type": "string" },
+    "payroll_run_id": { "type": "string" },
+    "employee_id": { "type": "string" },
+    "document_id": { "type": "string" },
+    "gross_salary": { "type": "number" },
+    "net_salary": { "type": "number" },
+    "status": { "type": "string", "enum": ["draft", "completed"], "default": "draft" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  },
+  "required": ["company_id", "payroll_run_id", "employee_id"]
+}

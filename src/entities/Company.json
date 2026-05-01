@@ -1,0 +1,25 @@
+{
+  "name": "Company",
+  "type": "object",
+  "properties": {
+    "name": { "type": "string", "description": "Nome azienda" },
+    "vat_number": { "type": "string", "description": "Partita IVA" },
+    "fiscal_code": { "type": "string", "description": "Codice fiscale" },
+    "industry": { "type": "string", "enum": ["tech", "manufacturing", "services", "healthcare", "finance", "retail", "other"] },
+    "size": { "type": "string", "enum": ["1-10", "11-50", "51-200", "201-500", "500+"] },
+    "address": { "type": "string" },
+    "city": { "type": "string" },
+    "province": { "type": "string" },
+    "postal_code": { "type": "string" },
+    "country": { "type": "string", "default": "IT" },
+    "contact_email": { "type": "string" },
+    "contact_phone": { "type": "string" },
+    "status": { "type": "string", "enum": ["active", "suspended", "trial", "cancelled"], "default": "active" },
+    "subscription_plan": { "type": "string", "enum": ["free", "startup", "professional", "enterprise"], "default": "startup" },
+    "subscription_status": { "type": "string", "enum": ["trial", "active", "past_due", "cancelled"] },
+    "trial_ends_at": { "type": "string", "format": "date-time" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  },
+  "required": ["name", "contact_email"]
+}

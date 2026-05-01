@@ -1,0 +1,13 @@
+{
+  "name": "Department",
+  "type": "object",
+  "properties": {
+    "company_id": { "type": "string" },
+    "name": { "type": "string" },
+    "description": { "type": "string" },
+    "manager_id": { "type": "string" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  },
+  "required": ["company_id", "name"]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "Notification",
+  "type": "object",
+  "properties": {
+    "company_id": { "type": "string" },
+    "user_id": { "type": "string" },
+    "type": { "type": "string", "enum": ["info", "warning", "error", "success", "action_required"] },
+    "title": { "type": "string" },
+    "message": { "type": "string" },
+    "priority": { "type": "string", "enum": ["low", "normal", "high", "urgent"], "default": "normal" },
+    "is_read": { "type": "boolean", "default": false },
+    "read_at": { "type": "string", "format": "date-time" },
+    "action_url": { "type": "string" },
+    "created_at": { "type": "string", "format": "date-time" }
+  },
+  "required": ["company_id", "user_id", "title", "message"]
+}

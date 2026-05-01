@@ -1,0 +1,28 @@
+{
+  "name": "Employee",
+  "type": "object",
+  "properties": {
+    "company_id": { "type": "string" },
+    "user_id": { "type": "string" },
+    "employee_code": { "type": "string" },
+    "first_name": { "type": "string" },
+    "last_name": { "type": "string" },
+    "email": { "type": "string" },
+    "phone": { "type": "string" },
+    "birth_date": { "type": "string", "format": "date" },
+    "fiscal_code": { "type": "string" },
+    "job_title": { "type": "string" },
+    "department_id": { "type": "string" },
+    "manager_id": { "type": "string" },
+    "hire_date": { "type": "string", "format": "date" },
+    "contract_type": { "type": "string", "enum": ["full_time", "part_time", "contractor", "internship"] },
+    "employment_status": { "type": "string", "enum": ["active", "inactive", "terminated", "suspended"], "default": "active" },
+    "work_location": { "type": "string" },
+    "weekly_hours": { "type": "number", "default": 40 },
+    "salary_type": { "type": "string", "enum": ["monthly", "hourly", "daily"] },
+    "notes": { "type": "string" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  },
+  "required": ["company_id", "first_name", "last_name", "email"]
+}

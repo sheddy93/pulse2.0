@@ -1,102 +1,79 @@
 /**
- * roles.js
- * --------
- * Definizione centralizzata di tutti i ruoli utente della piattaforma.
- * Usato da: AppShell (navigazione), RoleRedirect (routing), UI (label/colori).
- *
- * Funzioni esportate:
- *  - getDashboardPath(role)   → path dashboard per il ruolo (es. "/dashboard/company")
- *  - getRoleLabel(role)       → label UI leggibile (es. "Consulente del Lavoro")
- *  - getRoleColor(role)       → classe Tailwind colore (es. "bg-blue-600")
- *  - isCompanyRole(role)      → true se appartiene al gruppo aziendale
- *  - isConsultantRole(role)   → true se è un tipo di consulente
- *  - generatePublicId(prefix) → ID pubblico univoco (es. "CONS-XXXXXXXX")
- *  - generateTempPassword()   → password temporanea sicura per nuovi utenti
+ * lib/roles.js
+ * Centralizzata fonte di verità per ruoli e loro proprietà
+ * Pronto per futura migrazione: roles da DB PostgreSQL
  */
+
 export const ROLES = {
-  SUPER_ADMIN: "super_admin",
-  CONSULTANT: "consultant",
-  COMPANY: "company",
-  EMPLOYEE: "employee",
+  SUPER_ADMIN: 'super_admin',
+  COMPANY_OWNER: 'company_owner',
+  COMPANY_ADMIN: 'company_admin',
+  HR_MANAGER: 'hr_manager',
+  MANAGER: 'manager',
+  EMPLOYEE: 'employee',
+  EXTERNAL_CONSULTANT: 'external_consultant',
 };
 
-export const COMPANY_SUB_ROLES = [
-  { value: "company_admin", label: "Admin Aziendale", desc: "Accesso completo alla gestione aziendale" },
-  { value: "hr_manager", label: "HR Manager", desc: "Gestione dipendenti, presenze, documenti e formazione" },
-  { value: "manager", label: "Manager", desc: "Approvazione ferie, straordinari e gestione team" },
-];
+export const ROLE_LABELS = {
+  [ROLES.SUPER_ADMIN]: 'Super Admin',
+  [ROLES.COMPANY_OWNER]: 'Titolare',
+  [ROLES.COMPANY_ADMIN]: 'Admin Azienda',
+  [ROLES.HR_MANAGER]: 'HR Manager',
+  [ROLES.MANAGER]: 'Manager',
+  [ROLES.EMPLOYEE]: 'Dipendente',
+  [ROLES.EXTERNAL_CONSULTANT]: 'Consulente Esterno',
+};
 
-export function getDashboardPath(role) {
-  switch (role) {
-    case "super_admin": return "/dashboard/admin";
-    case "consultant":
-    case "labor_consultant":
-    case "external_consultant":
-    case "safety_consultant":
-      return "/dashboard/consultant";
-    case "company":
-    case "company_owner":
-    case "company_admin":
-    case "hr_manager":
-    case "manager":
-      return "/dashboard/company";
-    case "employee": return "/dashboard/employee";
-    default: return null;
-  }
-}
+export const ROLE_COLORS = {
+  [ROLES.SUPER_ADMIN]: 'bg-red-100 text-red-800',
+  [ROLES.COMPANY_OWNER]: 'bg-purple-100 text-purple-800',
+  [ROLES.COMPANY_ADMIN]: 'bg-blue-100 text-blue-800',
+  [ROLES.HR_MANAGER]: 'bg-indigo-100 text-indigo-800',
+  [ROLES.MANAGER]: 'bg-cyan-100 text-cyan-800',
+  [ROLES.EMPLOYEE]: 'bg-green-100 text-green-800',
+  [ROLES.EXTERNAL_CONSULTANT]: 'bg-orange-100 text-orange-800',
+};
 
-export function isCompanyRole(role) {
-  return ["company", "company_owner", "company_admin", "hr_manager", "manager"].includes(role);
-}
+// Gerarchia ruoli per controlli di accesso
+export const ROLE_HIERARCHY = {
+  [ROLES.SUPER_ADMIN]: 7,
+  [ROLES.COMPANY_OWNER]: 6,
+  [ROLES.COMPANY_ADMIN]: 5,
+  [ROLES.HR_MANAGER]: 4,
+  [ROLES.MANAGER]: 3,
+  [ROLES.EMPLOYEE]: 2,
+  [ROLES.EXTERNAL_CONSULTANT]: 1,
+};
 
-export function isConsultantRole(role) {
-  return ["consultant", "labor_consultant", "external_consultant", "safety_consultant"].includes(role);
-}
+export const isRoleHigherThan = (userRole, targetRole) => {
+  return (ROLE_HIERARCHY[userRole] || 0) > (ROLE_HIERARCHY[targetRole] || 0);
+};
 
-export function getRoleLabel(role) {
-  const labels = {
-    super_admin: "Super Admin",
-    company: "Azienda",
-    company_owner: "Titolare",
-    company_admin: "Admin Aziendale",
-    hr_manager: "HR Manager",
-    manager: "Manager",
-    consultant: "Consulente",
-    labor_consultant: "Consulente del Lavoro",
-    external_consultant: "Consulente Esterno",
-    safety_consultant: "Consulente Sicurezza",
-    employee: "Dipendente",
+export const isCompanyRole = (role) => {
+  return [ROLES.COMPANY_OWNER, ROLES.COMPANY_ADMIN, ROLES.HR_MANAGER, ROLES.MANAGER, ROLES.EMPLOYEE].includes(role);
+};
+
+export const isConsultantRole = (role) => {
+  return role === ROLES.EXTERNAL_CONSULTANT;
+};
+
+export const isSuperAdmin = (role) => {
+  return role === ROLES.SUPER_ADMIN;
+};
+
+/**
+ * Mappa ruolo → dashboard path
+ * TODO MIGRATION: Logica di routing deve restare nel frontend anche dopo migrazione
+ */
+export const getDashboardPath = (role) => {
+  const paths = {
+    [ROLES.SUPER_ADMIN]: '/dashboard/admin',
+    [ROLES.COMPANY_OWNER]: '/dashboard/company',
+    [ROLES.COMPANY_ADMIN]: '/dashboard/company',
+    [ROLES.HR_MANAGER]: '/dashboard/company',
+    [ROLES.MANAGER]: '/dashboard/company',
+    [ROLES.EMPLOYEE]: '/dashboard/employee',
+    [ROLES.EXTERNAL_CONSULTANT]: '/dashboard/consultant',
   };
-  return labels[role] || role;
-}
-
-export function getRoleColor(role) {
-  const colors = {
-    super_admin: "bg-red-600",
-    company: "bg-blue-600",
-    company_owner: "bg-blue-700",
-    company_admin: "bg-blue-500",
-    hr_manager: "bg-indigo-600",
-    manager: "bg-violet-600",
-    consultant: "bg-emerald-600",
-    labor_consultant: "bg-emerald-600",
-    external_consultant: "bg-teal-600",
-    safety_consultant: "bg-cyan-600",
-    employee: "bg-slate-500",
-  };
-  return colors[role] || "bg-slate-500";
-}
-
-export function generatePublicId(prefix) {
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  let id = "";
-  for (let i = 0; i < 8; i++) id += chars[Math.floor(Math.random() * chars.length)];
-  return `${prefix}-${id}`;
-}
-
-export function generateTempPassword() {
-  const chars = "abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNP23456789";
-  let pw = "";
-  for (let i = 0; i < 10; i++) pw += chars[Math.floor(Math.random() * chars.length)];
-  return pw;
-}
+  return paths[role] || null;
+};

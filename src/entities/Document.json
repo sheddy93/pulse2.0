@@ -1,0 +1,25 @@
+{
+  "name": "Document",
+  "type": "object",
+  "properties": {
+    "company_id": { "type": "string" },
+    "employee_id": { "type": "string" },
+    "title": { "type": "string" },
+    "description": { "type": "string" },
+    "category": { "type": "string", "enum": ["contract", "payslip", "policy", "certificate", "medical", "safety", "other"] },
+    "file_url": { "type": "string" },
+    "file_name": { "type": "string" },
+    "file_size": { "type": "number" },
+    "mime_type": { "type": "string" },
+    "visibility": { "type": "string", "enum": ["company", "employee", "hr_only", "consultant"], "default": "company" },
+    "requires_confirmation": { "type": "boolean", "default": false },
+    "confirmed_by": { "type": "string" },
+    "confirmed_at": { "type": "string", "format": "date-time" },
+    "uploaded_by": { "type": "string" },
+    "expires_at": { "type": "string", "format": "date" },
+    "status": { "type": "string", "enum": ["active", "archived", "expired"], "default": "active" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  },
+  "required": ["company_id", "title", "category"]
+}

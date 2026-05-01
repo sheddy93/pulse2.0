@@ -1,0 +1,18 @@
+{
+  "name": "LeaveBalance",
+  "type": "object",
+  "properties": {
+    "company_id": { "type": "string" },
+    "employee_id": { "type": "string" },
+    "year": { "type": "number" },
+    "vacation_days_total": { "type": "number", "default": 20 },
+    "vacation_days_used": { "type": "number", "default": 0 },
+    "vacation_days_remaining": { "type": "number" },
+    "sick_days_used": { "type": "number", "default": 0 },
+    "permit_hours_total": { "type": "number", "default": 0 },
+    "permit_hours_used": { "type": "number", "default": 0 },
+    "permit_hours_remaining": { "type": "number" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  },
+  "required": ["company_id", "employee_id", "year"]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "AttendanceEntry",
+  "type": "object",
+  "properties": {
+    "company_id": { "type": "string" },
+    "employee_id": { "type": "string" },
+    "user_id": { "type": "string" },
+    "type": { "type": "string", "enum": ["check_in", "check_out", "break_start", "break_end"] },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "date": { "type": "string", "format": "date" },
+    "location_lat": { "type": "number" },
+    "location_lng": { "type": "number" },
+    "location_label": { "type": "string" },
+    "source": { "type": "string", "enum": ["web", "mobile", "manual", "gps"] },
+    "is_manual": { "type": "boolean", "default": false },
+    "approved_by": { "type": "string" },
+    "approved_at": { "type": "string", "format": "date-time" },
+    "status": { "type": "string", "enum": ["pending", "approved", "rejected", "corrected"], "default": "pending" },
+    "notes": { "type": "string" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  },
+  "required": ["company_id", "employee_id", "type", "timestamp"]
+}
