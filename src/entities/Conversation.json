@@ -1,0 +1,84 @@
+{
+  "name": "Conversation",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "participant_1_email": {
+      "type": "string"
+    },
+    "participant_1_name": {
+      "type": "string"
+    },
+    "participant_1_role": {
+      "type": "string"
+    },
+    "participant_2_email": {
+      "type": "string"
+    },
+    "participant_2_name": {
+      "type": "string"
+    },
+    "participant_2_role": {
+      "type": "string"
+    },
+    "subject": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "ferie",
+        "busta_paga",
+        "documenti",
+        "straordinario",
+        "permessi",
+        "performance",
+        "benefit",
+        "altro"
+      ],
+      "default": "altro"
+    },
+    "last_message": {
+      "type": "string"
+    },
+    "last_message_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_message_category": {
+      "type": "string"
+    },
+    "unread_count_p1": {
+      "type": "number",
+      "default": 0
+    },
+    "unread_count_p2": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "archived",
+        "closed"
+      ],
+      "default": "active"
+    },
+    "pinned": {
+      "type": "boolean",
+      "default": false
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "company_id",
+    "participant_1_email",
+    "participant_2_email"
+  ]
+}

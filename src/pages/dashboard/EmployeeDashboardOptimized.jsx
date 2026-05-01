@@ -126,6 +126,7 @@ export default function EmployeeDashboardOptimized() {
   { label: t('attendance'), desc: t('attendanceDesc'), icon: Clock, path: '/dashboard/employee/attendance', color: 'from-emerald-500 to-teal-600' },
   { label: t('shifts'), desc: t('shiftsDesc'), icon: Calendar, path: '/dashboard/employee/shifts', color: 'from-orange-500 to-red-600' },
   { label: t('leave'), desc: t('leaveDesc'), icon: Calendar, path: '/dashboard/employee/leave', color: 'from-blue-500 to-indigo-600' },
+  { label: 'Messaggi', desc: 'Chat con HR', icon: MessageSquare, path: '/dashboard/employee/messaging', color: 'from-pink-500 to-rose-600' },
   { label: t('training'), desc: t('trainingDesc'), icon: GraduationCap, path: '/dashboard/employee/training', color: 'from-purple-500 to-pink-600' },
   { label: t('documents'), desc: t('documentsDesc'), icon: FileText, path: '/dashboard/employee/documents', color: 'from-slate-500 to-slate-700' },
   { label: t('feedback'), desc: t('feedbackDesc'), icon: BarChart3, path: '/dashboard/employee/feedback', color: 'from-yellow-500 to-orange-600' }
