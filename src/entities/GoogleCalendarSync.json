@@ -1,0 +1,93 @@
+{
+  "name": "GoogleCalendarSync",
+  "type": "object",
+  "properties": {
+    "employee_id": {
+      "type": "string",
+      "description": "ID dipendente"
+    },
+    "employee_email": {
+      "type": "string",
+      "description": "Email dipendente"
+    },
+    "company_id": {
+      "type": "string",
+      "description": "ID azienda"
+    },
+    "google_calendar_id": {
+      "type": "string",
+      "description": "ID Google Calendar (es. primary)"
+    },
+    "sync_token": {
+      "type": "string",
+      "description": "Token per sync incrementale Google Calendar API"
+    },
+    "calendar_ready": {
+      "type": "boolean",
+      "default": false,
+      "description": "Se calendario è stato inizializzato"
+    },
+    "synced_events": {
+      "type": "object",
+      "properties": {
+        "leave_requests": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "leave_id": { "type": "string" },
+              "google_event_id": { "type": "string" }
+            }
+          },
+          "default": []
+        },
+        "shifts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "shift_id": { "type": "string" },
+              "google_event_id": { "type": "string" }
+            }
+          },
+          "default": []
+        },
+        "documents": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "document_id": { "type": "string" },
+              "google_event_id": { "type": "string" }
+            }
+          },
+          "default": []
+        }
+      },
+      "default": {}
+    },
+    "last_sync": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Ultimo sincronizzazione riuscita"
+    },
+    "sync_errors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "timestamp": { "type": "string", "format": "date-time" },
+          "error": { "type": "string" },
+          "retry_count": { "type": "number", "default": 0 }
+        }
+      },
+      "default": []
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Se sincronizzazione è attiva"
+    }
+  },
+  "required": ["employee_id", "employee_email", "company_id"]
+}

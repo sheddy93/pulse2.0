@@ -1,0 +1,34 @@
+{
+  "name": "CalendarSyncState",
+  "type": "object",
+  "properties": {
+    "employee_id": {
+      "type": "string",
+      "description": "ID dipendente"
+    },
+    "sync_token": {
+      "type": "string",
+      "description": "Token sincronizzazione Google Calendar per recupero incrementale"
+    },
+    "last_page_token": {
+      "type": "string",
+      "description": "Token pagina ultima per continuare sync multi-page"
+    },
+    "last_full_sync": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data ultima sincronizzazione completa"
+    },
+    "sync_range_start": {
+      "type": "string",
+      "format": "date",
+      "description": "Data inizio range sincronizzazione"
+    },
+    "events_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Numero totale eventi sincronizzati"
+    }
+  },
+  "required": ["employee_id"]
+}
