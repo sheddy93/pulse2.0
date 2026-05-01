@@ -1,62 +1,47 @@
 /**
  * src/services/attendanceService.js
- * =================================
- * Business logic per attendance tracking
+ * ==================================
+ * Attendance tracking service
  */
 
-import { attendanceApi } from '@/api/attendanceApi';
+import { apiClient } from '@/api/client';
 
 export const attendanceService = {
-  async checkIn(latitude, longitude) {
-    return attendanceApi.checkIn({
-      latitude,
-      longitude,
-      timestamp: new Date().toISOString(),
-    });
+  async checkIn(employeeId, data) {
+    return apiClient.checkIn(employeeId, data);
   },
 
-  async checkOut(latitude, longitude) {
-    return attendanceApi.checkOut({
-      latitude,
-      longitude,
-      timestamp: new Date().toISOString(),
-    });
-  },
-
-  async breakStart() {
-    return attendanceApi.breakStart({
-      timestamp: new Date().toISOString(),
-    });
-  },
-
-  async breakEnd() {
-    return attendanceApi.breakEnd({
-      timestamp: new Date().toISOString(),
-    });
-  },
-
-  async getDailyEntries(employeeId, date) {
-    const result = await attendanceApi.getEntries({
-      employee_id: employeeId,
-      date,
-    });
-    return result.status === 200 ? result.data : [];
+  async checkOut(employeeId, data) {
+    return apiClient.checkOut(employeeId, data);
   },
 
   async getTodayEntries(employeeId) {
     const today = new Date().toISOString().split('T')[0];
-    return this.getDailyEntries(employeeId, today);
+    const result = await apiClient.getAttendanceEntries(employeeId, today);
+    return result.data || result || [];
+  },
+
+  async getEntriesForDate(employeeId, date) {
+    const result = await apiClient.getAttendanceEntries(employeeId, date);
+    return result.data || result || [];
   },
 
   async getSummary(employeeId, date) {
-    return attendanceApi.getSummary(employeeId, date);
+    const result = await apiClient.getAttendanceSummary(employeeId, date);
+    return result.data || result || {};
   },
 
-  async approveDayReview(id, notes) {
-    return attendanceApi.approveDayReview(id, notes);
-  },
-
-  async rejectDayReview(id, reason) {
-    return attendanceApi.rejectDayReview(id, reason);
+  async getMonthEntries(employeeId) {
+    const now = new Date();
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1)
+      .toISOString()
+      .split('T')[0];
+    const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0)
+      .toISOString()
+      .split('T')[0];
+    
+    return apiClient.getPath(
+      `/attendance/entries?employee_id=${employeeId}&start=${monthStart}&end=${monthEnd}`
+    );
   },
 };

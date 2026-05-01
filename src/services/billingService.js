@@ -1,39 +1,38 @@
 /**
  * src/services/billingService.js
- * ==============================
- * Business logic per billing e subscriptions
+ * ===============================
+ * Billing & subscription management
  */
 
-import { billingApi } from '@/api/billingApi';
+import { apiClient } from '@/api/client';
 
 export const billingService = {
-  async getSubscriptionStatus(companyId) {
-    return billingApi.getSubscriptionStatus(companyId);
+  async getStatus(companyId) {
+    return apiClient.get(`/billing/status?company_id=${companyId}`);
   },
 
-  async listPlans() {
-    const result = await billingApi.listPlans();
-    return result.status === 200 ? result.data : [];
+  async listPlans(companyId) {
+    const result = await apiClient.get('/billing/plans');
+    return result.data || result || [];
   },
 
-  async createCheckoutSession(planId, addons) {
-    return billingApi.createCheckoutSession(planId, addons);
+  async createCheckoutSession(companyId, planId, billingInterval, addons = []) {
+    return apiClient.post('/billing/checkout', {
+      company_id: companyId,
+      plan_id: planId,
+      billing_interval: billingInterval,
+      addons,
+    });
   },
 
-  async getCheckoutUrl(sessionId) {
-    return billingApi.getCheckoutUrl(sessionId);
-  },
-
-  async createCustomerPortal(companyId, returnUrl) {
-    return billingApi.createCustomerPortal(companyId, returnUrl);
-  },
-
-  async cancelSubscription(companyId, reason) {
-    return billingApi.cancelSubscription(companyId, reason);
+  async cancelSubscription(companyId, reason = '') {
+    return apiClient.post('/billing/cancel', {
+      company_id: companyId,
+      reason,
+    });
   },
 
   async getPaymentHistory(companyId) {
-    const result = await billingApi.getPaymentHistory(companyId);
-    return result.status === 200 ? result.data : [];
+    return apiClient.get(`/billing/history?company_id=${companyId}`);
   },
 };

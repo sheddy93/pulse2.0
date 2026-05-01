@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/lib/AuthContextDecoupled";
 import { billingService } from "@/services/billingService";
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import StripeCheckoutModal from "@/components/checkout/StripeCheckoutModal";
 import { Check, CreditCard, Zap, Star, AlertCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 import { format } from "date-fns";
 import { it } from "date-fns/locale";
 

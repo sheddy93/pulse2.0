@@ -1,47 +1,36 @@
 /**
  * src/services/leaveService.js
- * ============================
- * Business logic per leave management
+ * =============================
+ * Leave request management
  */
 
-import { leaveApi } from '@/api/leaveApi';
+import { apiClient } from '@/api/client';
 
 export const leaveService = {
-  async getRequests(query) {
-    const result = await leaveApi.getRequests(query);
-    return result.status === 200 ? result.data : [];
+  async listRequests(companyId, query = {}) {
+    const result = await apiClient.getLeaveRequests(companyId, query);
+    return result.data || result || [];
   },
 
   async createRequest(data) {
-    return leaveApi.createRequest(data);
-  },
-
-  async updateRequest(id, data) {
-    return leaveApi.updateRequest(id, data);
-  },
-
-  async deleteRequest(id) {
-    return leaveApi.deleteRequest(id);
+    return apiClient.createLeaveRequest(data);
   },
 
   async approveRequest(id, notes = '') {
-    return leaveApi.approveRequest(id, notes);
+    return apiClient.approveLeaveRequest(id, notes);
   },
 
-  async rejectRequest(id, reason) {
-    return leaveApi.rejectRequest(id, reason);
+  async rejectRequest(id, reason = '') {
+    return apiClient.rejectLeaveRequest(id, reason);
   },
 
-  async getBalance(employeeId, year) {
-    return leaveApi.getBalance(employeeId, year);
-  },
-
-  async getLeaveBalance(employeeId, year) {
-    const result = await leaveApi.getBalance(employeeId, year);
-    return result.status === 200 ? result.data : null;
+  async getBalance(employeeId, year = null) {
+    const y = year || new Date().getFullYear();
+    const result = await apiClient.getLeaveBalance(employeeId);
+    return result.data || result || {};
   },
 
   async getCalendar(companyId, month) {
-    return leaveApi.getCalendar(companyId, month);
+    return apiClient.getPath(`/leave/calendar?company_id=${companyId}&month=${month}`);
   },
 };

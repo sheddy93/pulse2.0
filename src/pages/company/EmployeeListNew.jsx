@@ -6,7 +6,7 @@
 
 import { useState, useEffect } from 'react';
 import { employeeService } from '@/services/employeeService';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/lib/AuthContextDecoupled';
 import AppShell from '@/components/layout/AppShell';
 import PageLoader from '@/components/layout/PageLoader';
 import LazyImage from '@/components/LazyImage';
