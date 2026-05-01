@@ -2,7 +2,7 @@
  * Quick Attendance Button - Mobile Optimized
  * Grande tasto touch per timbratura veloce
  */
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { LogIn, LogOut, Coffee, Loader } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -13,7 +13,7 @@ const TYPES = {
   break_end: { label: 'Torna', icon: Coffee, color: 'bg-blue-600 hover:bg-blue-700', textColor: 'text-white' },
 };
 
-export default function QuickAttendanceButton({ type, onClick, disabled, loading }) {
+const QuickAttendanceButton = React.memo(function QuickAttendanceButton({ type, onClick, disabled, loading }) {
   const cfg = TYPES[type];
   const Icon = cfg.icon;
 
@@ -35,4 +35,6 @@ export default function QuickAttendanceButton({ type, onClick, disabled, loading
       <span>{cfg.label}</span>
     </button>
   );
-}
+});
+
+export default QuickAttendanceButton;

@@ -7,6 +7,7 @@ import { FileText, Upload, AlertTriangle, CalendarDays, Trash2, ExternalLink, X,
 import { format, differenceInDays } from "date-fns";
 import { it } from "date-fns/locale";
 
+const ITEMS_PER_PAGE = 20;
 const DOC_TYPES = { contratto: "Contratto", busta_paga: "Busta paga", certificato: "Certificato", corso: "Corso", altro: "Altro" };
 const VISIBILITY = { employee: "Solo dipendente", company: "Solo azienda", consultant: "Solo consulente", all: "Tutti" };
 const STATUS_BADGE = {
@@ -30,13 +31,14 @@ export default function DocumentsPage() {
   const [employees, setEmployees] = useState([]);
   const [docs, setDocs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(0);
   const [showForm, setShowForm] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [filterType, setFilterType] = useState("all");
   const [form, setForm] = useState({ title: "", doc_type: "contratto", employee_id: "", visibility: "all", expiry_date: "", notes: "", file: null, signature_required: false });
 
   const loadDocs = async (companyId) => {
-    const d = await base44.entities.Document.filter({ company_id: companyId });
+    const d = await base44.entities.Document.filter({ company_id: companyId }, { skip: page * ITEMS_PER_PAGE, limit: ITEMS_PER_PAGE });
     setDocs([...d].sort((a, b) => {
       if (a.expiry_date && b.expiry_date) return new Date(a.expiry_date) - new Date(b.expiry_date);
       if (a.expiry_date) return -1;
@@ -56,8 +58,8 @@ export default function DocumentsPage() {
       setCompany(companies[0] || null);
       setEmployees(emps);
       await loadDocs(me.company_id);
-    }).finally(() => setLoading(false));
-  }, []);
+      }).finally(() => setLoading(false));
+      }, [page]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -254,6 +256,24 @@ export default function DocumentsPage() {
                   })}
                 </tbody>
               </table>
+            </div>
+          )}
+          {filtered.length >= ITEMS_PER_PAGE && (
+            <div className="flex items-center justify-center gap-2 mt-6 py-4">
+              <button
+                onClick={() => setPage(Math.max(0, page - 1))}
+                disabled={page === 0}
+                className="px-3 py-1 border border-slate-200 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50"
+              >
+                ← Prev
+              </button>
+              <span className="text-sm text-slate-600">Pagina {page + 1}</span>
+              <button
+                onClick={() => setPage(page + 1)}
+                className="px-3 py-1 border border-slate-200 rounded-lg hover:bg-slate-50"
+              >
+                Next →
+              </button>
             </div>
           )}
         </div>

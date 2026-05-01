@@ -16,7 +16,7 @@ const CATEGORY_COLORS = {
   altro: 'bg-slate-100 dark:bg-slate-900/30 text-slate-800 dark:text-slate-300 border-slate-300 dark:border-slate-700'
 };
 
-export default function MessageBubble({ message, isOwn, onDelete, currentUserEmail }) {
+const MessageBubble = React.memo(function MessageBubble({ message, isOwn, onDelete, currentUserEmail }) {
   const canDelete = isOwn && currentUserEmail === message.sender_email;
 
   return (
@@ -108,4 +108,6 @@ export default function MessageBubble({ message, isOwn, onDelete, currentUserEma
       </div>
     </motion.div>
   );
-}
+}, (prev, next) => prev.message.id === next.message.id);
+
+export default MessageBubble;

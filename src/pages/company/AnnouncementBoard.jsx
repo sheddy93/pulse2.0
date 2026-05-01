@@ -13,11 +13,14 @@ const PRIORITY_BADGE = {
   urgent: { label: "Urgente", cls: "bg-red-100 text-red-700" }
 };
 
+const ITEMS_PER_PAGE = 15;
+
 export default function AnnouncementBoard() {
   const [user, setUser] = useState(null);
   const [company, setCompany] = useState(null);
   const [announcements, setAnnouncements] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(0);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({
     title: "",
@@ -34,12 +37,12 @@ export default function AnnouncementBoard() {
       if (!me.company_id) { setLoading(false); return; }
       const [companies, announces] = await Promise.all([
         base44.entities.Company.filter({ id: me.company_id }),
-        base44.entities.Announcement.filter({ company_id: me.company_id }, '-created_date')
+        base44.entities.Announcement.filter({ company_id: me.company_id }, { skip: page * ITEMS_PER_PAGE, limit: ITEMS_PER_PAGE }, '-created_date')
       ]);
       setCompany(companies[0]);
       setAnnouncements(announces);
     }).finally(() => setLoading(false));
-  }, []);
+  }, [page]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -212,6 +215,25 @@ export default function AnnouncementBoard() {
         {announcements.length === 0 && !showForm && (
           <div className="text-center py-12">
             <p className="text-slate-500">Nessun annuncio pubblicato</p>
+          </div>
+        )}
+
+        {announcements.length >= ITEMS_PER_PAGE && (
+          <div className="flex items-center justify-center gap-2 mt-6 py-4">
+            <button
+              onClick={() => setPage(Math.max(0, page - 1))}
+              disabled={page === 0}
+              className="px-3 py-1 border border-slate-200 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50"
+            >
+              ← Prev
+            </button>
+            <span className="text-sm text-slate-600">Pagina {page + 1}</span>
+            <button
+              onClick={() => setPage(page + 1)}
+              className="px-3 py-1 border border-slate-200 rounded-lg hover:bg-slate-50"
+            >
+              Next →
+            </button>
           </div>
         )}
       </div>
