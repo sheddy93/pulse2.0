@@ -1,0 +1,79 @@
+{
+  "name": "LandingPageContent",
+  "type": "object",
+  "properties": {
+    "section": {
+      "type": "string",
+      "enum": [
+        "hero",
+        "features",
+        "benefits",
+        "pricing",
+        "footer"
+      ],
+      "description": "Sezione della landing page"
+    },
+    "hero_title": {
+      "type": "string"
+    },
+    "hero_subtitle": {
+      "type": "string"
+    },
+    "hero_cta_text": {
+      "type": "string"
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "icon": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "pricing_plans": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "price": {
+            "type": "string"
+          },
+          "period": {
+            "type": "string"
+          },
+          "users": {
+            "type": "string"
+          },
+          "popular": {
+            "type": "boolean"
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "section"
+  ]
+}

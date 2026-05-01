@@ -1,0 +1,36 @@
+{
+  "name": "SocialLinks",
+  "type": "object",
+  "properties": {
+    "platform": {
+      "type": "string",
+      "enum": [
+        "linkedin",
+        "twitter",
+        "facebook",
+        "instagram",
+        "github",
+        "youtube"
+      ]
+    },
+    "url": {
+      "type": "string"
+    },
+    "icon_name": {
+      "type": "string"
+    },
+    "display_order": {
+      "type": "number",
+      "default": 0
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "platform",
+    "url",
+    "icon_name"
+  ]
+}
