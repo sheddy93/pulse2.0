@@ -26,6 +26,8 @@ import InstallPrompt from '@/components/pwa/InstallPrompt';
 import NotificationManager from '@/components/pwa/NotificationManager';
 import Landing from './pages/Landing';
 import LandingNew from './pages/LandingNew';
+import LandingInnovative from './pages/LandingInnovative';
+import DashboardHome from './pages/dashboard/DashboardHome';
 
 // Auth
 import RoleRedirect from './pages/auth/RoleRedirect';
@@ -40,6 +42,8 @@ import ConsultantDashboardBasic from './pages/dashboard/ConsultantDashboardBasic
 import CompanyOwnerDashboard from './pages/dashboard/CompanyOwnerDashboard';
 import ManagerDashboard from './pages/dashboard/ManagerDashboard';
 import EmployeeDashboardBasic from './pages/dashboard/EmployeeDashboardBasic';
+import EmployeeDashboardOptimized from './pages/dashboard/EmployeeDashboardOptimized';
+import CompanyDashboardOptimized from './pages/dashboard/CompanyDashboardOptimized';
 import DashboardBuilder from './pages/company/DashboardBuilder';
 
 // Company
@@ -165,10 +169,11 @@ const AuthenticatedApp = () => {
       <Routes>
       {/* Landing Page */}
       <Route path="/landing" element={<LandingNew />} />
-      <Route path="/" element={<RoleRedirect />} />
+      <Route path="/landing-new" element={<LandingInnovative />} />
+      <Route path="/" element={<LandingInnovative />} />
+      <Route path="/dashboard" element={<DashboardHome />} />
 
-      {/* Root */}
-      <Route path="/dashboard" element={<RoleRedirect />} />
+      {/* Auth Routes */}
       <Route path="/auth/role-selection" element={<RoleSelection />} />
       <Route path="/auth/register/company" element={<RegisterCompany />} />
       <Route path="/auth/register/consultant" element={<RegisterConsultant />} />
@@ -199,7 +204,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/consultant/employees/:id" element={<EmployeeCard />} />
 
       {/* Company */}
-      <Route path="/dashboard/company" element={<CompanyOwnerDashboard />} />
+      <Route path="/dashboard/company" element={<CompanyDashboardOptimized />} />
       <Route path="/dashboard/company/employees" element={<EmployeeListNew />} />
       <Route path="/dashboard/company/employees/new" element={<EmployeeCreateNew />} />
       <Route path="/dashboard/company/employees/:id" element={<EmployeeDetailNew />} />
@@ -250,7 +255,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/company/api" element={<APIManagement />} />
 
       {/* Employee */}
-      <Route path="/dashboard/employee" element={<EmployeeDashboardBasic />} />
+      <Route path="/dashboard/employee" element={<EmployeeDashboardOptimized />} />
       <Route path="/dashboard/employee/attendance" element={<AttendancePage />} />
       <Route path="/dashboard/employee/calendar" element={<AttendanceCalendarPage />} />
       <Route path="/dashboard/employee/history" element={<AttendancePage />} />
