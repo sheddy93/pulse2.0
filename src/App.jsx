@@ -19,58 +19,58 @@ import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import PageNotFound from './lib/PageNotFound';
+import PageNotFound from '@/lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import InstallPrompt from '@/components/pwa/InstallPrompt';
 import NotificationManager from '@/components/pwa/NotificationManager';
-import Landing from './pages/Landing';
-import LandingNew from './pages/LandingNew';
-import LandingInnovative from './pages/LandingInnovative';
-import DashboardHome from './pages/dashboard/DashboardHome';
+import Landing from '@/pages/Landing';
+import LandingNew from '@/pages/LandingNew';
+import LandingInnovative from '@/pages/LandingInnovative';
+import DashboardHome from '@/pages/dashboard/DashboardHome';
 
 // Auth
-import RoleRedirect from './pages/auth/RoleRedirect';
-import RoleSelection from './pages/auth/RoleSelection';
-import RegisterCompany from './pages/auth/RegisterCompany';
-import RegisterConsultant from './pages/auth/RegisterConsultant';
+import RoleRedirect from '@/pages/auth/RoleRedirect';
+import RoleSelection from '@/pages/auth/RoleSelection';
+import RegisterCompany from '@/pages/auth/RegisterCompany';
+import RegisterConsultant from '@/pages/auth/RegisterConsultant';
 
 // Dashboards
-import SuperAdminDashboard from './pages/dashboard/SuperAdminDashboard';
-import ConsultantDashboardBasic from './pages/dashboard/ConsultantDashboardBasic';
-import CompanyOwnerDashboard from './pages/dashboard/CompanyOwnerDashboard';
-import ManagerDashboard from './pages/dashboard/ManagerDashboard';
-import EmployeeDashboardBasic from './pages/dashboard/EmployeeDashboardBasic';
-import EmployeeDashboardOptimized from './pages/dashboard/EmployeeDashboardOptimized';
-import MyDashboard from './pages/employee/MyDashboard';
-import CompanyDashboardOptimized from './pages/dashboard/CompanyDashboardOptimized';
-import DashboardBuilder from './pages/company/DashboardBuilder';
+import SuperAdminDashboard from '@/pages/dashboard/SuperAdminDashboard';
+import ConsultantDashboardBasic from '@/pages/dashboard/ConsultantDashboardBasic';
+import CompanyOwnerDashboard from '@/pages/dashboard/CompanyOwnerDashboard';
+import ManagerDashboard from '@/pages/dashboard/ManagerDashboard';
+import EmployeeDashboardBasic from '@/pages/dashboard/EmployeeDashboardBasic';
+import EmployeeDashboardOptimized from '@/pages/dashboard/EmployeeDashboardOptimized';
+import MyDashboard from '@/pages/employee/MyDashboard';
+import CompanyDashboardOptimized from '@/pages/dashboard/CompanyDashboardOptimized';
+import DashboardBuilder from '@/pages/company/DashboardBuilder';
 
 // Company
-import EmployeeListNew from './pages/company/EmployeeListNew';
-import EmployeeCreateNew from './pages/company/EmployeeCreateNew';
-import EmployeeDetailNew from './pages/company/EmployeeDetailNew';
-import EmployeeImport from './pages/company/EmployeeImport';
-import CompanyConsultants from './pages/company/CompanyConsultants';
-import DocumentsPage from './pages/company/DocumentsPage';
-import ExpiryCalendar from './pages/company/ExpiryCalendar';
-import OvertimePage from './pages/company/OvertimePage';
-import ShiftManagement from './pages/company/ShiftManagementEnhanced';
-import AnnouncementBoard from './pages/company/AnnouncementBoard';
-import SkillManagement from './pages/company/SkillManagement';
-import AssetManagement from './pages/company/AssetManagement';
-import AssetAssignmentPage from './pages/company/AssetAssignmentPage';
-import AuditLogPage from './pages/company/AuditLogPage';
-import BenefitManagement from './pages/company/BenefitManagement';
-import IntegrationSettings from './pages/company/IntegrationSettings';
-import JobPostings from './pages/company/JobPostings';
-import CandidateTracking from './pages/company/CandidateTracking';
-import TrainingManagement from './pages/company/TrainingManagement';
-import GivePerformanceReview from './pages/company/GivePerformanceReview';
+import EmployeeListNew from '@/pages/company/EmployeeListNew';
+import EmployeeCreateNew from '@/pages/company/EmployeeCreateNew';
+import EmployeeDetailNew from '@/pages/company/EmployeeDetailNew';
+import EmployeeImport from '@/pages/company/EmployeeImport';
+import CompanyConsultants from '@/pages/company/CompanyConsultants';
+import DocumentsPage from '@/pages/company/DocumentsPage';
+import ExpiryCalendar from '@/pages/company/ExpiryCalendar';
+import OvertimePage from '@/pages/company/OvertimePage';
+import ShiftManagement from '@/pages/company/ShiftManagementEnhanced';
+import AnnouncementBoard from '@/pages/company/AnnouncementBoard';
+import SkillManagement from '@/pages/company/SkillManagement';
+import AssetManagement from '@/pages/company/AssetManagement';
+import AssetAssignmentPage from '@/pages/company/AssetAssignmentPage';
+import AuditLogPage from '@/pages/company/AuditLogPage';
+import BenefitManagement from '@/pages/company/BenefitManagement';
+import IntegrationSettings from '@/pages/company/IntegrationSettings';
+import JobPostings from '@/pages/company/JobPostings';
+import CandidateTracking from '@/pages/company/CandidateTracking';
+import TrainingManagement from '@/pages/company/TrainingManagement';
+import GivePerformanceReview from '@/pages/company/GivePerformanceReview';
 import { Suspense } from 'react';
 import { LazyLoadingFallback } from '@/lib/lazyLoadConfig.jsx';
-import HRCalendarPage from './pages/company/HRCalendarPage';
-import ExpenseManagement from './pages/company/ExpenseManagement';
+import HRCalendarPage from '@/pages/company/HRCalendarPage';
+import ExpenseManagement from '@/pages/company/ExpenseManagement';
 
 // Lazy load heavy pages
 import {
@@ -81,74 +81,74 @@ import {
   AdminAnalyticsDashboard,
   PerformanceManagement
 } from '@/lib/lazyLoadConfig.jsx';
-import EmployeeExpenses from './pages/employee/EmployeeExpenses';
-import LeaveBalance from './pages/employee/LeaveBalance';
-import ManagerLeaveRequests from './pages/company/ManagerLeaveRequests';
-import AdminAnalytics from './pages/dashboard/AdminAnalytics';
-import OnboardingWizard from './pages/employee/OnboardingWizard';
-import OnboardingTracking from './pages/company/OnboardingTracking';
-import TrainingPlanManagement from './pages/company/TrainingPlanManagement';
-import TimeOffCalendarPage from './pages/company/TimeOffCalendarPage';
-import DocumentTemplatePage from './pages/company/DocumentTemplatePage';
-import APIManagement from './pages/company/APIManagement';
-import IntegrationsPage from './pages/company/IntegrationsPage';
-import TrainingDashboard from './pages/employee/TrainingDashboard';
-import CertificationExpiry from './pages/company/CertificationExpiry';
-import SuperAdminSettings from './pages/dashboard/SuperAdminSettings';
-import SuperAdminPlatformSettings from './pages/dashboard/SuperAdminPlatformSettings';
-import Tier2Dashboard from './pages/dashboard/Tier2Dashboard';
-import FeatureManagement from './pages/dashboard/FeatureManagement';
-import TemporaryLogins from './pages/dashboard/TemporaryLogins';
-import PricingManagement from './pages/dashboard/PricingManagement';
-import PricingPageNew from './pages/company/PricingPageNew';
-import TrainingPortal from './pages/employee/TrainingPortal';
-import PersonalDocuments from './pages/employee/PersonalDocuments';
-import PerformanceFeedback from './pages/employee/PerformanceFeedback';
-import Chat from './pages/employee/Chat';
-import Messaging from './pages/employee/Messaging';
-import TwoFactorAuthPage from './pages/employee/TwoFactorAuthPage';
+import EmployeeExpenses from '@/pages/employee/EmployeeExpenses';
+import LeaveBalance from '@/pages/employee/LeaveBalance';
+import ManagerLeaveRequests from '@/pages/company/ManagerLeaveRequests';
+import AdminAnalytics from '@/pages/dashboard/AdminAnalytics';
+import OnboardingWizard from '@/pages/employee/OnboardingWizard';
+import OnboardingTracking from '@/pages/company/OnboardingTracking';
+import TrainingPlanManagement from '@/pages/company/TrainingPlanManagement';
+import TimeOffCalendarPage from '@/pages/company/TimeOffCalendarPage';
+import DocumentTemplatePage from '@/pages/company/DocumentTemplatePage';
+import APIManagement from '@/pages/company/APIManagement';
+import IntegrationsPage from '@/pages/company/IntegrationsPage';
+import TrainingDashboard from '@/pages/employee/TrainingDashboard';
+import CertificationExpiry from '@/pages/company/CertificationExpiry';
+import SuperAdminSettings from '@/pages/dashboard/SuperAdminSettings';
+import SuperAdminPlatformSettings from '@/pages/dashboard/SuperAdminPlatformSettings';
+import Tier2Dashboard from '@/pages/dashboard/Tier2Dashboard';
+import FeatureManagement from '@/pages/dashboard/FeatureManagement';
+import TemporaryLogins from '@/pages/dashboard/TemporaryLogins';
+import PricingManagement from '@/pages/dashboard/PricingManagement';
+import PricingPageNew from '@/pages/company/PricingPageNew';
+import TrainingPortal from '@/pages/employee/TrainingPortal';
+import PersonalDocuments from '@/pages/employee/PersonalDocuments';
+import PerformanceFeedback from '@/pages/employee/PerformanceFeedback';
+import Chat from '@/pages/employee/Chat';
+import Messaging from '@/pages/employee/Messaging';
+import TwoFactorAuthPage from '@/pages/employee/TwoFactorAuthPage';
 
 // Consultant
-import LinkRequests from './pages/consultant/LinkRequests';
-import DocumentReviewPage from './pages/consultant/DocumentReviewPage';
+import LinkRequests from '@/pages/consultant/LinkRequests';
+import DocumentReviewPage from '@/pages/consultant/DocumentReviewPage';
 
 // Employee
-import AttendancePage from './pages/employee/AttendancePage';
-import AttendanceCalendarPage from './pages/employee/AttendanceCalendar';
-import LeaveRequestPage from './pages/employee/LeaveRequestPage';
-import EmployeeProfilePage from './pages/employee/EmployeeProfilePage';
-import MyProfile from './pages/employee/MyProfile';
-import DocumentSignaturePage from './pages/employee/DocumentSignaturePage';
-import EmployeeShiftCalendarPage from './pages/employee/EmployeeShiftCalendarPage';
-import OvertimeRequestPage from './pages/employee/OvertimeRequestPage';
-import SkillsPage from './pages/employee/SkillsPage';
-import BenefitsPage from './pages/employee/BenefitsPage';
-import NotificationPreferencesPage from './pages/employee/NotificationPreferencesPage';
-import SubscriptionPage from './pages/company/SubscriptionPage';
-import CheckoutPage from './pages/company/CheckoutPage';
-import MyAccountSubscription from './pages/company/MyAccountSubscription';
-import PayrollExport from './pages/company/PayrollExport';
-import WorkflowConfiguration from './pages/company/WorkflowConfiguration';
-import GeofenceManagement from './pages/company/GeofenceManagement';
-import CompanyAttendancePage from './pages/company/CompanyAttendancePage';
-import CompanySettings from './pages/company/CompanySettings';
-import ConsultantSettings from './pages/consultant/ConsultantSettings';
-import AdminCompanies from './pages/dashboard/AdminCompanies';
-import AdminUsers from './pages/dashboard/AdminUsers';
-import AdminSystem from './pages/dashboard/AdminSystem';
-import EmployeeContract from './pages/employee/EmployeeContract';
-import CreateCompanyAdmin from './pages/company/CreateCompanyAdmin';
-import AdminsList from './pages/company/AdminsList';
-import EmployeeCard from './pages/company/EmployeeCard';
-import DocumentArchive from './pages/company/DocumentArchive';
-import DocumentManagement from './pages/employee/DocumentManagement';
-import SendMessage from './pages/company/SendMessage';
-import InboxMessages from './pages/employee/InboxMessages';
-import ForcePasswordChange from './pages/auth/ForcePasswordChange';
-import ErrorBoundary from './components/layout/ErrorBoundary';
+import AttendancePage from '@/pages/employee/AttendancePage';
+import AttendanceCalendarPage from '@/pages/employee/AttendanceCalendar';
+import LeaveRequestPage from '@/pages/employee/LeaveRequestPage';
+import EmployeeProfilePage from '@/pages/employee/EmployeeProfilePage';
+import MyProfile from '@/pages/employee/MyProfile';
+import DocumentSignaturePage from '@/pages/employee/DocumentSignaturePage';
+import EmployeeShiftCalendarPage from '@/pages/employee/EmployeeShiftCalendarPage';
+import OvertimeRequestPage from '@/pages/employee/OvertimeRequestPage';
+import SkillsPage from '@/pages/employee/SkillsPage';
+import BenefitsPage from '@/pages/employee/BenefitsPage';
+import NotificationPreferencesPage from '@/pages/employee/NotificationPreferencesPage';
+import SubscriptionPage from '@/pages/company/SubscriptionPage';
+import CheckoutPage from '@/pages/company/CheckoutPage';
+import MyAccountSubscription from '@/pages/company/MyAccountSubscription';
+import PayrollExport from '@/pages/company/PayrollExport';
+import WorkflowConfiguration from '@/pages/company/WorkflowConfiguration';
+import GeofenceManagement from '@/pages/company/GeofenceManagement';
+import CompanyAttendancePage from '@/pages/company/CompanyAttendancePage';
+import CompanySettings from '@/pages/company/CompanySettings';
+import ConsultantSettings from '@/pages/consultant/ConsultantSettings';
+import AdminCompanies from '@/pages/dashboard/AdminCompanies';
+import AdminUsers from '@/pages/dashboard/AdminUsers';
+import AdminSystem from '@/pages/dashboard/AdminSystem';
+import EmployeeContract from '@/pages/employee/EmployeeContract';
+import CreateCompanyAdmin from '@/pages/company/CreateCompanyAdmin';
+import AdminsList from '@/pages/company/AdminsList';
+import EmployeeCard from '@/pages/company/EmployeeCard';
+import DocumentArchive from '@/pages/company/DocumentArchive';
+import DocumentManagement from '@/pages/employee/DocumentManagement';
+import SendMessage from '@/pages/company/SendMessage';
+import InboxMessages from '@/pages/employee/InboxMessages';
+import ForcePasswordChange from '@/pages/auth/ForcePasswordChange';
+import ErrorBoundary from '@/components/layout/ErrorBoundary';
 
 // Shared
-import ComingSoon from './components/layout/ComingSoon';
+import ComingSoon from '@/components/layout/ComingSoon';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin, user } = useAuth();
