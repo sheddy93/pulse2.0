@@ -1,0 +1,36 @@
+{
+  "name": "SlackIntegration",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "webhook_url": {
+      "type": "string",
+      "description": "Slack incoming webhook URL"
+    },
+    "channel": {
+      "type": "string",
+      "description": "Default Slack channel for notifications"
+    },
+    "enabled": {
+      "type": "boolean",
+      "default": true
+    },
+    "events": {
+      "type": "object",
+      "properties": {
+        "leave_request": { "type": "boolean", "default": true },
+        "approval_pending": { "type": "boolean", "default": true },
+        "document_signature": { "type": "boolean", "default": true },
+        "overtime_request": { "type": "boolean", "default": true },
+        "expense_request": { "type": "boolean", "default": true }
+      }
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": ["company_id", "webhook_url"]
+}

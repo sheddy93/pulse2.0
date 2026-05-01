@@ -1,0 +1,44 @@
+{
+  "name": "GoogleCalendarIntegration",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "calendar_id": {
+      "type": "string",
+      "description": "Google Calendar ID"
+    },
+    "access_token": {
+      "type": "string",
+      "description": "OAuth access token (encrypted)"
+    },
+    "refresh_token": {
+      "type": "string",
+      "description": "OAuth refresh token (encrypted)"
+    },
+    "enabled": {
+      "type": "boolean",
+      "default": true
+    },
+    "sync_leave": {
+      "type": "boolean",
+      "default": true,
+      "description": "Sync leave requests to calendar"
+    },
+    "sync_shifts": {
+      "type": "boolean",
+      "default": false,
+      "description": "Sync shifts to calendar"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_sync_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": ["company_id", "calendar_id"]
+}
