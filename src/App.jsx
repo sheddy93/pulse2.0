@@ -24,8 +24,6 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import InstallPrompt from '@/components/pwa/InstallPrompt';
 import NotificationManager from '@/components/pwa/NotificationManager';
-import Landing from '@/pages/Landing';
-import LandingNew from '@/pages/LandingNew';
 import LandingInnovative from '@/pages/LandingInnovative';
 import DashboardHome from '@/pages/dashboard/DashboardHome';
 
@@ -37,10 +35,8 @@ import RegisterConsultant from '@/pages/auth/RegisterConsultant';
 
 // Dashboards
 import SuperAdminDashboard from '@/pages/dashboard/SuperAdminDashboard';
-import ConsultantDashboardBasic from '@/pages/dashboard/ConsultantDashboardBasic';
 import CompanyOwnerDashboard from '@/pages/dashboard/CompanyOwnerDashboard';
 import ManagerDashboard from '@/pages/dashboard/ManagerDashboard';
-import EmployeeDashboardBasic from '@/pages/dashboard/EmployeeDashboardBasic';
 import EmployeeDashboardOptimized from '@/pages/dashboard/EmployeeDashboardOptimized';
 import MyDashboard from '@/pages/employee/MyDashboard';
 import CompanyDashboardOptimized from '@/pages/dashboard/CompanyDashboardOptimized';
@@ -177,8 +173,6 @@ const AuthenticatedApp = () => {
       <InstallPrompt />
       <Routes>
       {/* Landing Page */}
-      <Route path="/landing" element={<LandingNew />} />
-      <Route path="/landing-new" element={<LandingInnovative />} />
       <Route path="/" element={<LandingInnovative />} />
       <Route path="/dashboard" element={<DashboardHome />} />
 
@@ -202,7 +196,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/admin/system" element={<AdminSystem />} />
 
       {/* Consultant */}
-      <Route path="/dashboard/consultant" element={<ConsultantDashboardBasic />} />
+      <Route path="/dashboard/consultant" element={<CompanyOwnerDashboard />} />
       <Route path="/dashboard/consultant/companies" element={<EmployeeListNew />} />
       <Route path="/dashboard/consultant/employees" element={<EmployeeListNew />} />
       <Route path="/dashboard/consultant/link-requests" element={<LinkRequests />} />
@@ -265,7 +259,6 @@ const AuthenticatedApp = () => {
 
       {/* Employee */}
       <Route path="/dashboard/employee" element={<MyDashboard />} />
-      <Route path="/dashboard/employee/dashboard" element={<EmployeeDashboardOptimized />} />
       <Route path="/dashboard/employee/attendance" element={<AttendancePage />} />
       <Route path="/dashboard/employee/calendar" element={<AttendanceCalendarPage />} />
       <Route path="/dashboard/employee/history" element={<AttendancePage />} />
