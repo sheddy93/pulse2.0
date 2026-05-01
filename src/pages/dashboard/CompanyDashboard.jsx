@@ -17,18 +17,17 @@ export default function CompanyDashboard() {
     base44.auth.me().then(async (me) => {
       setUser(me);
       if (me.company_id) {
-        const [employees, leaves, overtime, docs, links, companies, allUsers] = await Promise.all([
-          base44.entities.EmployeeProfile.filter({ company_id: me.company_id, status: "active" }),
-          base44.entities.LeaveRequest.filter({ company_id: me.company_id, status: "pending" }),
-          base44.entities.OvertimeRequest.filter({ company_id: me.company_id, status: "pending" }),
-          base44.entities.Document.filter({ company_id: me.company_id }),
-          base44.entities.ConsultantCompanyLink.filter({ company_id: me.company_id, status: "approved" }),
-          base44.entities.Company.filter({ id: me.company_id }),
-          base44.entities.User.list(),
-        ]);
-        const comp = companies[0];
-        setCompany(comp);
-        const adminUsers = allUsers.filter(u => u.company_id === me.company_id && ["company_admin", "hr_manager", "manager"].includes(u.role));
+        const [employees, leaves, overtime, docs, links, companies, adminUsers] = await Promise.all([
+            base44.entities.EmployeeProfile.filter({ company_id: me.company_id, status: "active" }),
+            base44.entities.LeaveRequest.filter({ company_id: me.company_id, status: "pending" }),
+            base44.entities.OvertimeRequest.filter({ company_id: me.company_id, status: "pending" }),
+            base44.entities.Document.filter({ company_id: me.company_id }),
+            base44.entities.ConsultantCompanyLink.filter({ company_id: me.company_id, status: "approved" }),
+            base44.entities.Company.filter({ id: me.company_id }),
+            base44.entities.User.filter({ company_id: me.company_id, role: { $in: ["company_admin", "hr_manager", "manager"] } }),
+          ]);
+          const comp = companies[0];
+          setCompany(comp);
         const settingsComplete = !!(comp?.vat_number && comp?.email && comp?.phone && comp?.address);
         setStats({
           employees: employees.length,

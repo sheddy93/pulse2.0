@@ -128,12 +128,18 @@ export default function AttendancePage() {
          setPendingCount(prev => prev + 1);
        }
 
-       // Ricarica le timbrature
-       const all = await base44.entities.TimeEntry.filter({ user_email: user.email });
-       setEntries([...all].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)));
+       // Aggiungi entry alla lista locale per UI istantanea
+       setEntries(prev => [entry, ...prev]);
+       
+       // Ricarica le timbrature dal server (solo se online)
+       if (isOnline) {
+         const all = await base44.entities.TimeEntry.filter({ user_email: user.email });
+         setEntries([...all].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)));
+       }
        setGpsPosition(null);
      } catch (err) {
        console.error('Errore salvataggio timbratura:', err);
+       alert('Errore: Timbratura non salvata. Riprova.');
      } finally {
        setStamping(null);
      }

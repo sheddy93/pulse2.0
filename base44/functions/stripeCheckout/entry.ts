@@ -30,11 +30,9 @@ Deno.serve(async (req) => {
     // Costruisci line items con piano base + add-ons
     const lineItems = [{ price: price_id, quantity: 1 }];
     
-    // Se ci sono add-ons, crea prodotti one-time per ogni add-on
+    // Se ci sono add-ons, crea prodotti ricorrenti per ogni add-on
     if (selected_addons && selected_addons.length > 0) {
       for (const addon of selected_addons) {
-        // In un caso reale, avresti prodotti e prezzi Stripe per ogni add-on
-        // Per ora, aggiungiamo come line items custom
         lineItems.push({
           price_data: {
             currency: 'eur',

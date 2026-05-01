@@ -62,7 +62,7 @@ export const subscribeToPushNotifications = async () => {
  * Offline Time Entry Storage (IndexedDB)
  */
 const DB_NAME = 'PulseHR';
-const STORE_NAME = 'pending_time_entries';
+const STORE_NAME = 'pendingEntries';
 
 const openDB = () => {
   return new Promise((resolve, reject) => {
@@ -229,24 +229,9 @@ export const isPWAInstalled = () => {
          navigator.standalone === true;
 };
 
-// IndexedDB helpers for offline support
+// IndexedDB helpers for offline support - DEPRECATED: use openDB() instead
 export const openIndexedDB = () => {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open('PulseHR', 1);
-    
-    request.onerror = () => reject(request.error);
-    request.onsuccess = () => resolve(request.result);
-    
-    request.onupgradeneeded = (event) => {
-      const db = event.target.result;
-      if (!db.objectStoreNames.contains('pendingEntries')) {
-        db.createObjectStore('pendingEntries', { keyPath: 'id' });
-      }
-      if (!db.objectStoreNames.contains('pendingNotifications')) {
-        db.createObjectStore('pendingNotifications', { keyPath: 'id' });
-      }
-    };
-  });
+  return openDB();
 };
 
 export const savePendingEntry = async (entry) => {
