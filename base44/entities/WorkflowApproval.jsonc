@@ -1,0 +1,95 @@
+{
+  "name": "WorkflowApproval",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "workflow_definition_id": {
+      "type": "string"
+    },
+    "request_type": {
+      "type": "string"
+    },
+    "request_id": {
+      "type": "string",
+      "description": "ID della richiesta (LeaveRequest, ExpenseReimbursement, etc)"
+    },
+    "requester_email": {
+      "type": "string"
+    },
+    "requester_name": {
+      "type": "string"
+    },
+    "current_step": {
+      "type": "number",
+      "default": 1,
+      "description": "Step attuale del workflow"
+    },
+    "total_steps": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected",
+        "cancelled"
+      ],
+      "default": "pending"
+    },
+    "approval_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "step_number": {
+            "type": "number"
+          },
+          "approver_email": {
+            "type": "string"
+          },
+          "approver_name": {
+            "type": "string"
+          },
+          "decision": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "approved",
+              "rejected"
+            ]
+          },
+          "comment": {
+            "type": "string"
+          },
+          "decided_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "default": []
+    },
+    "request_data": {
+      "type": "object",
+      "description": "Snapshot dei dati della richiesta"
+    },
+    "initiated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "company_id",
+    "workflow_definition_id",
+    "request_type",
+    "request_id",
+    "requester_email"
+  ]
+}

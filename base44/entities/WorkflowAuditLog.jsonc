@@ -1,0 +1,58 @@
+{
+  "name": "WorkflowAuditLog",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "workflow_approval_id": {
+      "type": "string"
+    },
+    "request_type": {
+      "type": "string"
+    },
+    "request_id": {
+      "type": "string"
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "workflow_initiated",
+        "approval_requested",
+        "approved",
+        "rejected",
+        "commented",
+        "reassigned",
+        "auto_approved",
+        "workflow_completed"
+      ]
+    },
+    "actor_email": {
+      "type": "string",
+      "description": "Chi ha compiuto l'azione"
+    },
+    "actor_name": {
+      "type": "string"
+    },
+    "step_number": {
+      "type": "number"
+    },
+    "details": {
+      "type": "object",
+      "description": "Dettagli aggiuntivi dell'azione"
+    },
+    "ip_address": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "company_id",
+    "workflow_approval_id",
+    "action",
+    "actor_email"
+  ]
+}

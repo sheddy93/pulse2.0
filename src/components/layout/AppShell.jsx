@@ -52,6 +52,7 @@ const COMPANY_NAV = [
     { label: "Valutazioni 360°", icon: BarChart3, path: "/dashboard/company/performance" },
     { label: "HR Analytics", icon: TrendingUp, path: "/dashboard/company/analytics" },
     { label: "Generatore Report", icon: BarChart3, path: "/dashboard/company/report-generator" },
+    { label: "Gestione Workflow", icon: SettingsIcon, path: "/dashboard/company/workflow-configuration" },
     { label: "Analytics IA", icon: Sparkles, path: "/dashboard/company/ai-analytics" },
     { label: "Rimborsi Spese", icon: Receipt, path: "/dashboard/company/expenses" },
     { label: "Esportazione Payroll", icon: FileText, path: "/dashboard/company/payroll-export" },

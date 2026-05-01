@@ -100,6 +100,7 @@ import CheckoutPage from './pages/company/CheckoutPage';
 import MyAccountSubscription from './pages/company/MyAccountSubscription';
 import PayrollExport from './pages/company/PayrollExport';
 import ReportGenerator from './pages/company/ReportGenerator';
+import WorkflowConfiguration from './pages/company/WorkflowConfiguration';
 import CompanyAttendancePage from './pages/company/CompanyAttendancePage';
 import CompanySettings from './pages/company/CompanySettings';
 import ConsultantSettings from './pages/consultant/ConsultantSettings';
@@ -211,6 +212,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/company/my-account" element={<MyAccountSubscription />} />
       <Route path="/dashboard/company/payroll-export" element={<PayrollExport />} />
       <Route path="/dashboard/company/report-generator" element={<ReportGenerator />} />
+      <Route path="/dashboard/company/workflow-configuration" element={<WorkflowConfiguration />} />
       <Route path="/dashboard/company/settings" element={<CompanySettings />} />
 
       {/* Employee */}

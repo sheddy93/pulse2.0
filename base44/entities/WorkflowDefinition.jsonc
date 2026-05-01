@@ -1,0 +1,82 @@
+{
+  "name": "WorkflowDefinition",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string",
+      "description": "Nome workflow (es. 'Approvazione Ferie')"
+    },
+    "request_type": {
+      "type": "string",
+      "enum": [
+        "leave_request",
+        "expense_reimbursement",
+        "salary_variation",
+        "document_approval",
+        "overtime",
+        "custom"
+      ],
+      "description": "Tipo di richiesta che il workflow gestisce"
+    },
+    "description": {
+      "type": "string"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "approval_steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "step_number": {
+            "type": "number"
+          },
+          "approver_role": {
+            "type": "string",
+            "description": "Ruolo che pu\u00f2 approvare (es. 'manager', 'hr_admin', 'company_owner')"
+          },
+          "approver_email": {
+            "type": "string",
+            "description": "Email specifica approvatore (se non usa ruolo)"
+          },
+          "allow_rejection": {
+            "type": "boolean",
+            "default": true
+          },
+          "allow_comments": {
+            "type": "boolean",
+            "default": true
+          },
+          "require_all_approvers": {
+            "type": "boolean",
+            "default": false,
+            "description": "Se true, richiede approvazione di TUTTI gli approvatori del step"
+          }
+        }
+      },
+      "default": []
+    },
+    "auto_approve_after_days": {
+      "type": "number",
+      "description": "Auto-approva dopo N giorni se nessuno ha agito"
+    },
+    "notification_template": {
+      "type": "string",
+      "description": "Template email per le notifiche"
+    },
+    "sort_order": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "company_id",
+    "name",
+    "request_type"
+  ]
+}
