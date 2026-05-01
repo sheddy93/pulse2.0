@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
-import { Briefcase, Send, Check, X } from "lucide-react";
+import { Briefcase, Send, Check, X, Settings } from "lucide-react";
+import PermissionsEditor from "@/components/admin/PermissionsEditor";
 
 const STATUS_MAP = {
   approved: { label: "Collegato", cls: "bg-emerald-100 text-emerald-700" },
@@ -20,6 +21,7 @@ export default function CompanyConsultants() {
   const [idInput, setIdInput] = useState("");
   const [sending, setSending] = useState(false);
   const [msg, setMsg] = useState("");
+  const [editingPermissions, setEditingPermissions] = useState(null);
 
   const loadLinks = async (comp) => {
     const l = await base44.entities.ConsultantCompanyLink.filter({ company_id: comp.id });
@@ -143,7 +145,18 @@ export default function CompanyConsultants() {
                       <p className="font-medium text-slate-800">{link.consultant_email}</p>
                       <p className="text-xs text-slate-400">ID: {link.consultant_public_id || "—"}</p>
                     </div>
-                    <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${badge.cls}`}>{badge.label}</span>
+                    <div className="flex items-center gap-2">
+                      <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${badge.cls}`}>{badge.label}</span>
+                      {link.status === "approved" && (
+                        <button
+                          onClick={() => setEditingPermissions({ email: link.consultant_email, full_name: link.consultant_email })}
+                          className="flex items-center gap-1.5 px-3 py-1.5 border border-slate-200 text-slate-600 rounded-lg text-xs font-medium hover:bg-slate-50"
+                        >
+                          <Settings className="w-3.5 h-3.5" />
+                          Permessi
+                        </button>
+                      )}
+                    </div>
                   </div>
                 );
               })}
@@ -151,6 +164,15 @@ export default function CompanyConsultants() {
           )}
         </div>
       </div>
+
+      {editingPermissions && (
+        <PermissionsEditor
+          targetUser={editingPermissions}
+          companyId={company?.id}
+          grantedBy={user?.email}
+          onClose={() => setEditingPermissions(null)}
+        />
+      )}
     </AppShell>
   );
 }

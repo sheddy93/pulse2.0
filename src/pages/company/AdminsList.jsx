@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
-import { UserCog, UserPlus, Shield, Users, Briefcase } from "lucide-react";
+import { UserCog, UserPlus, Shield, Users, Briefcase, Settings } from "lucide-react";
 import { COMPANY_SUB_ROLES, getRoleLabel } from "@/lib/roles";
+import PermissionsEditor from "@/components/admin/PermissionsEditor";
 
 const ROLE_ICONS = {
   company_admin: Shield,
@@ -17,6 +18,7 @@ export default function AdminsList() {
   const [user, setUser] = useState(null);
   const [admins, setAdmins] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [editingPermissions, setEditingPermissions] = useState(null);
 
   useEffect(() => {
     base44.auth.me().then(async (me) => {
@@ -80,6 +82,15 @@ export default function AdminsList() {
                     <span className="px-2.5 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-semibold">
                       {getRoleLabel(admin.role)}
                     </span>
+                    {["company", "company_owner"].includes(user?.role) && (
+                      <button
+                        onClick={() => setEditingPermissions(admin)}
+                        className="flex items-center gap-1.5 px-3 py-1.5 border border-slate-200 text-slate-600 rounded-lg text-xs font-medium hover:bg-slate-50 hover:border-slate-300"
+                      >
+                        <Settings className="w-3.5 h-3.5" />
+                        Permessi
+                      </button>
+                    )}
                   </div>
                 );
               })}
@@ -87,6 +98,15 @@ export default function AdminsList() {
           )}
         </div>
       </div>
+
+      {editingPermissions && (
+        <PermissionsEditor
+          targetUser={editingPermissions}
+          companyId={user?.company_id}
+          grantedBy={user?.email}
+          onClose={() => setEditingPermissions(null)}
+        />
+      )}
     </AppShell>
   );
 }

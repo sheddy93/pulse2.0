@@ -1,0 +1,116 @@
+{
+  "name": "UserPermissions",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string"
+    },
+    "company_id": {
+      "type": "string"
+    },
+    "granted_by": {
+      "type": "string"
+    },
+    "permissions": {
+      "type": "object",
+      "properties": {
+        "view_employees": {
+          "type": "boolean",
+          "default": true
+        },
+        "edit_employees": {
+          "type": "boolean",
+          "default": false
+        },
+        "view_attendance": {
+          "type": "boolean",
+          "default": true
+        },
+        "edit_attendance": {
+          "type": "boolean",
+          "default": false
+        },
+        "view_documents": {
+          "type": "boolean",
+          "default": true
+        },
+        "edit_documents": {
+          "type": "boolean",
+          "default": false
+        },
+        "view_leave_requests": {
+          "type": "boolean",
+          "default": true
+        },
+        "approve_leave_requests": {
+          "type": "boolean",
+          "default": false
+        },
+        "view_overtime": {
+          "type": "boolean",
+          "default": true
+        },
+        "approve_overtime": {
+          "type": "boolean",
+          "default": false
+        },
+        "view_payroll": {
+          "type": "boolean",
+          "default": false
+        },
+        "edit_payroll": {
+          "type": "boolean",
+          "default": false
+        },
+        "view_contracts": {
+          "type": "boolean",
+          "default": false
+        },
+        "edit_contracts": {
+          "type": "boolean",
+          "default": false
+        },
+        "view_analytics": {
+          "type": "boolean",
+          "default": false
+        },
+        "view_announcements": {
+          "type": "boolean",
+          "default": true
+        },
+        "edit_announcements": {
+          "type": "boolean",
+          "default": false
+        },
+        "view_shifts": {
+          "type": "boolean",
+          "default": true
+        },
+        "edit_shifts": {
+          "type": "boolean",
+          "default": false
+        },
+        "view_assets": {
+          "type": "boolean",
+          "default": false
+        },
+        "edit_assets": {
+          "type": "boolean",
+          "default": false
+        },
+        "invite_employees": {
+          "type": "boolean",
+          "default": false
+        },
+        "delete_employees": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    }
+  },
+  "required": [
+    "user_email",
+    "company_id"
+  ]
+}
