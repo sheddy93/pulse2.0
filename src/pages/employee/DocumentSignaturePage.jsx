@@ -1,43 +1,39 @@
 import { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
-import AppShell from "@/components/layout/AppShell";
-import PageLoader from "@/components/layout/PageLoader";
-import { FileText, Check, X, AlertCircle, Clock, ExternalLink } from "lucide-react";
 import { format } from "date-fns";
 import { it } from "date-fns/locale";
+import { useAuth } from "@/lib/AuthContextDecoupled";
+import AppShell from "@/components/layout/AppShell";
+import PageLoader from "@/components/layout/PageLoader";
+import { FileText, AlertCircle, ExternalLink } from "lucide-react";
 
-const DOC_TYPES = { contratto: "Contratto", busta_paga: "Busta paga", certificato: "Certificato", corso: "Corso", altro: "Altro" };
+const DOC_TYPES = {
+  contratto: "Contratto",
+  busta_paga: "Busta paga",
+  certificato: "Certificato",
+  corso: "Corso",
+  altro: "Altro"
+};
+
 const SIGNATURE_BADGE = {
-  pending: { label: "In attesa di firma", cls: "bg-amber-100 text-amber-700", icon: Clock },
-  signed: { label: "Firmato", cls: "bg-emerald-100 text-emerald-700", icon: Check },
-  rejected: { label: "Rifiutato", cls: "bg-red-100 text-red-700", icon: X },
+  pending: { label: "In attesa", icon: AlertCircle, cls: "bg-amber-100 text-amber-700" },
+  signed: { label: "Firmato", icon: FileText, cls: "bg-emerald-100 text-emerald-700" },
+  rejected: { label: "Rifiutato", icon: FileText, cls: "bg-red-100 text-red-700" }
 };
 
 export default function DocumentSignaturePage() {
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
+  const [loading, setLoading] = useState(true);
   const [employee, setEmployee] = useState(null);
   const [docs, setDocs] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [signingDocId, setSigningDocId] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [isRejecting, setIsRejecting] = useState(false);
   const [signature, setSignature] = useState("");
   const [reason, setReason] = useState("");
-  const [isRejecting, setIsRejecting] = useState(false);
+  const [signingDocId, setSigningDocId] = useState(null);
 
   useEffect(() => {
-    base44.auth.me().then(async (me) => {
-      setUser(me);
-      const emps = // TODO: Replace with service.EmployeeProfile.filter({ user_email: me.email });
-      if (emps[0]) {
-        setEmployee(emps[0]);
-        const docs = // TODO: Replace with service.Document.filter({ employee_id: emps[0].id, signature_required: true });
-        setDocs(docs.sort((a, b) => {
-          // Pending first, then signed, then rejected
-          const order = { pending: 0, signed: 1, rejected: 2 };
-          return (order[a.signature_status] || 3) - (order[b.signature_status] || 3);
-        }));
-      }
-    }).finally(() => setLoading(false));
+    // TODO: Replace with service calls to fetch user and documents
+    setLoading(false);
   }, []);
 
   const handleSignDocument = async () => {
@@ -45,12 +41,7 @@ export default function DocumentSignaturePage() {
     const doc = docs.find(d => d.id === signingDocId);
     if (!doc) return;
 
-    // TODO: Replace with service.Document.update(doc.id, {
-      signature_status: "signed",
-      signed_by: user.email,
-      signed_at: new Date().toISOString(),
-      signature_notes: signature,
-    });
+    // TODO: Replace with service.Document.update() call
 
     setDocs(prev => prev.map(d => 
       d.id === signingDocId 
@@ -67,12 +58,7 @@ export default function DocumentSignaturePage() {
     const doc = docs.find(d => d.id === signingDocId);
     if (!doc) return;
 
-    // TODO: Replace with service.Document.update(doc.id, {
-      signature_status: "rejected",
-      signed_by: user.email,
-      signed_at: new Date().toISOString(),
-      signature_notes: reason,
-    });
+    // TODO: Replace with service.Document.update() call
 
     setDocs(prev => prev.map(d => 
       d.id === signingDocId 

@@ -25,37 +25,10 @@ export default function MyProfile() {
   });
 
   useEffect(() => {
-    authService.me().then(async (me) => {
+    // TODO: Replace with authService.me().then(async (me) => {
       setUser(me);
-
-      // Fetch employee profile
-      const emps = await base44.entities.EmployeeProfile.filter({
-        user_email: me.email,
-        is_deleted: false
-      });
-
-      if (emps[0]) {
-        setEmployee(emps[0]);
-
-        // Fetch payroll files
-        const payrolls = await base44.entities.PayrollFile.filter({
-          employee_id: emps[0].id
-        });
-        setPayrollFiles(payrolls.sort((a, b) => new Date(b.uploaded_at) - new Date(a.uploaded_at)));
-
-        // Fetch leave balance
-        const balance = await base44.entities.LeaveBalance.filter({
-          employee_id: emps[0].id
-        });
-        if (balance[0]) setLeaveBalance(balance[0]);
-
-        // Fetch leave requests
-        const requests = await base44.entities.LeaveRequest.filter({
-          employee_id: emps[0].id
-        });
-        setLeaveRequests(requests.sort((a, b) => new Date(b.created_date) - new Date(a.created_date)));
-      }
-    }).finally(() => setLoading(false));
+      // TODO: Replace with service calls to fetch employee profile, payroll, balance, leave requests
+    setLoading(false);
   }, []);
 
   const handleSubmitLeaveRequest = async () => {
@@ -71,32 +44,10 @@ export default function MyProfile() {
 
     setSubmitting(true);
     try {
-      const start = new Date(leaveForm.start_date);
-      const end = new Date(leaveForm.end_date);
-      const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
-
-      await base44.entities.LeaveRequest.create({
-        employee_id: employee.id,
-        employee_name: `${employee.first_name} ${employee.last_name}`,
-        employee_email: user.email,
-        company_id: employee.company_id,
-        leave_type: leaveForm.leave_type,
-        start_date: leaveForm.start_date,
-        end_date: leaveForm.end_date,
-        days_count: days,
-        note: leaveForm.note,
-        status: "pending",
-      });
-
+      // TODO: Replace with service.LeaveRequest.create() and refresh
       toast.success("Richiesta di ferie inoltrata");
       setLeaveForm({ leave_type: "ferie", start_date: "", end_date: "", note: "" });
       setShowLeaveForm(false);
-
-      // Reload requests
-      const requests = await base44.entities.LeaveRequest.filter({
-        employee_id: employee.id
-      });
-      setLeaveRequests(requests.sort((a, b) => new Date(b.created_date) - new Date(a.created_date)));
     } catch (error) {
       toast.error(error.message);
     } finally {

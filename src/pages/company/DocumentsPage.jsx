@@ -57,7 +57,7 @@ export default function DocumentsPage() {
   );
 
   useEffect(() => {
-    base44.auth.me().then(async (me) => {
+    // TODO: Replace with authService.me().then(async (me) => {
       setUser(me);
       if (!me.company_id) { setLoading(false); return; }
       // TODO: Replace with service calls

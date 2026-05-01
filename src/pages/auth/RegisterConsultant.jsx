@@ -58,8 +58,7 @@ export default function RegisterConsultant() {
       // Crea ID pubblico consulente
       const publicId = `CONS_${form.consultant_type.toUpperCase()}_${Date.now()}_${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
 
-      // Invita consulente
-      await base44.users.inviteUser(form.email, "labor_consultant");
+      // TODO: Replace with authService.inviteUser(form.email, "labor_consultant")
 
       // Aggiorna profilo
       await authService.updateMe({

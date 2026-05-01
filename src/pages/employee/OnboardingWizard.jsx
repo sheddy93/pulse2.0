@@ -23,7 +23,7 @@ export default function OnboardingWizard() {
   const [currentStep, setCurrentStep] = useState(1);
 
   useEffect(() => {
-    authService.me().then(async (me) => {
+    // TODO: Replace with authService.me() call.then(async (me) => {
       setUser(me);
       const emps = await base44.entities.EmployeeProfile.filter({ user_email: me.email });
       const emp = emps[0];
