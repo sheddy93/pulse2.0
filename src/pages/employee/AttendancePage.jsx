@@ -5,6 +5,8 @@ import PageLoader from "@/components/layout/PageLoader";
 import OfflineStatus from "@/components/attendance/OfflineStatus";
 import QuickAttendanceButton from "@/components/attendance/QuickAttendanceButton";
 import AttendanceSummaryMobile from "@/components/attendance/AttendanceSummaryMobile";
+import BiometricButton from "@/components/attendance/BiometricButton";
+import { toast } from 'sonner';
 import { Clock, LogIn, LogOut, Coffee } from "lucide-react";
 import { format } from "date-fns";
 import { it } from "date-fns/locale";
@@ -175,6 +177,26 @@ export default function AttendancePage() {
           todayEntries={todayEntries} 
           lastEntry={lastEntry} 
           pendingCount={pendingCount} 
+        />
+
+        {/* Biometric Button - Top Priority */}
+        <BiometricButton
+          onSuccess={async (biometricData) => {
+            try {
+              await base44.functions.invoke('verifyBiometric', {
+                ...biometricData,
+                attendanceType: 'check_in'
+              });
+              await handleStamp('check_in');
+              toast.success('Timbrato con successo! ✅');
+            } catch (error) {
+              toast.error('Errore timbratura: ' + error.message);
+            }
+          }}
+          onError={(error) => {
+            toast.error('Biometric error: ' + error);
+          }}
+          disabled={stamping !== null}
         />
 
         {/* Quick Action Buttons - Mobile Optimized */}
