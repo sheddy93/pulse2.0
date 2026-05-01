@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import { Settings, Globe, Megaphone, DollarSign, Share2, Save, CreditCard, Plus, Trash2, ExternalLink, Package, Mail } from "lucide-react";
-import StripePlansManager from "@/components/admin/StripePlansManager";
+// TODO: Reimplement StripePlansManager
 import AddonManagement from "@/components/admin/AddonManagement";
 import EmailTemplateEditor from "@/components/admin/EmailTemplateEditor";
 import { toast } from "sonner";

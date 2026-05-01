@@ -30,7 +30,7 @@ import {
   ClipboardList, Briefcase, CalendarDays, FileBadge, Activity, Monitor, BookOpen, Award, Heart, GraduationCap, BarChart3, MessageCircle, TrendingUp, MessageSquare, Receipt, Calendar, Bell, CreditCard, Sparkles, Code, Zap, Moon, Sun
 } from "lucide-react";
 import { getRoleLabel, getRoleColor, isCompanyRole, isConsultantRole } from "@/lib/roles";
-import NotificationBell from "./NotificationBell";
+// TODO: Reimplement NotificationBell component
 import HRAssistantWidget from "@/components/assistant/HRAssistantWidget";
 import AppInstallBanner from "./AppInstallBanner";
 
@@ -234,7 +234,7 @@ export default function AppShell({ user, children }) {
           </button>
           <div className="flex-1" />
           <div className="flex items-center gap-2.5">
-            {user && <NotificationBell user={user} />}
+            {/* TODO: Add NotificationBell */}
             <button
               onClick={() => setIsDark(!isDark)}
               className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"

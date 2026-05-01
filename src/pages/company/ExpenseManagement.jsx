@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { authService } from '@/services/authService';
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
-import ExpenseApprovalPanel from "@/components/company/ExpenseApprovalPanel";
+// TODO: Reimplement ExpenseApprovalPanel
 import { Download, FileText } from "lucide-react";
 import { format } from "date-fns";
 import { it } from "date-fns/locale";

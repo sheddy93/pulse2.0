@@ -4,7 +4,7 @@ import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import { Mail, Phone, MapPin, Briefcase, Calendar, UserCog } from "lucide-react";
 import { format } from "date-fns";
-import PayrollSection from "@/components/employee/PayrollSection";
+// TODO: Reimplement PayrollSection
 
 export default function EmployeeProfilePage() {
   const [user, setUser] = useState(null);

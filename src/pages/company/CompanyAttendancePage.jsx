@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { authService } from '@/services/authService';
+import { employeeService } from '@/services/employees.service';
 import { employeesService } from '@/services/employees.service';
 import { attendanceService } from '@/services/attendance.service';
 import AppShell from "@/components/layout/AppShell";

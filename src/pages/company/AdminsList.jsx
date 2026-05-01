@@ -5,7 +5,7 @@ import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import { UserCog, UserPlus, Shield, Users, Briefcase, Settings } from "lucide-react";
 import { COMPANY_SUB_ROLES, getRoleLabel } from "@/lib/roles";
-import PermissionsEditor from "@/components/admin/PermissionsEditor";
+// TODO: Reimplement PermissionsEditor
 
 const ROLE_ICONS = {
   company_admin: Shield,

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { authService } from '@/services/authService';
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
-import DocumentReview from "@/components/company/DocumentReview";
+// TODO: Reimplement DocumentReview component
 import { FileText, AlertCircle } from "lucide-react";
 
 export default function DocumentReviewPage() {

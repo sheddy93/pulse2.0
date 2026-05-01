@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { authService } from '@/services/authService';
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
-import ManagerLeaveApprovalPanel from "@/components/company/ManagerLeaveApprovalPanel";
+// TODO: Reimplement ManagerLeaveApprovalPanel
 
 export default function ManagerLeaveRequests() {
   const [user, setUser] = useState(null);

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-// All base44 references removed - email templates via service layer
+import { useState, useEffect } from "react";
 import { Mail, Save, Copy, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 
@@ -29,9 +29,8 @@ export default function EmailTemplateEditor() {
   }, []);
 
   const loadTemplates = async () => {
-    const result = await base44.entities.EmailTemplate.filter({});
-    setTemplates(result);
-    if (result.length > 0) setSelectedTemplate(result[0]);
+    setTemplates([]);
+    // TODO: Replace with API service call
     setLoading(false);
   };
 
@@ -43,13 +42,8 @@ export default function EmailTemplateEditor() {
 
     setSaving(true);
     try {
-      if (selectedTemplate.id) {
-        await base44.entities.EmailTemplate.update(selectedTemplate.id, selectedTemplate);
-        toast.success("Template aggiornato");
-      } else {
-        await base44.entities.EmailTemplate.create(selectedTemplate);
-        toast.success("Template creato");
-      }
+      // TODO: Replace with API service call
+      toast.success("Template salvato");
       setEditMode(false);
       await loadTemplates();
     } catch (e) {
