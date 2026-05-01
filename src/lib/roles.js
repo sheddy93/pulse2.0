@@ -14,6 +14,60 @@ export const ROLES = {
   EXTERNAL_CONSULTANT: 'external_consultant',
 };
 
+/**
+ * Ruoli che hanno accesso agli strumenti di amministrazione dell'azienda
+ * TODO MIGRATION: Questi ruoli avranno permessi specifici nel backend
+ */
+export const COMPANY_SUB_ROLES = [
+  {
+    value: ROLES.COMPANY_OWNER,
+    label: 'Titolare',
+    desc: 'Accesso completo a tutte le funzionalità aziendali',
+  },
+  {
+    value: ROLES.COMPANY_ADMIN,
+    label: 'Admin Azienda',
+    desc: 'Gestisce dipendenti, documenti, presenze e ferie',
+  },
+  {
+    value: ROLES.HR_MANAGER,
+    label: 'HR Manager',
+    desc: 'Gestisce dipendenti, presenze, ferie e payroll',
+  },
+  {
+    value: ROLES.MANAGER,
+    label: 'Manager',
+    desc: 'Visualizza e approva ferie e presenze del team',
+  },
+];
+
+/**
+ * Genera una password temporanea sicura (10 caratteri)
+ * Formato: 2 maiuscole + 2 minuscole + 2 numeri + 4 caratteri speciali
+ * TODO MIGRATION: Questa logica si sposterà nel backend per maggiore sicurezza
+ */
+export const generateTempPassword = () => {
+  const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const lower = 'abcdefghijklmnopqrstuvwxyz';
+  const numbers = '0123456789';
+  const special = '!@#$%^&*';
+  
+  const pw = [
+    upper[Math.floor(Math.random() * upper.length)],
+    upper[Math.floor(Math.random() * upper.length)],
+    lower[Math.floor(Math.random() * lower.length)],
+    lower[Math.floor(Math.random() * lower.length)],
+    numbers[Math.floor(Math.random() * numbers.length)],
+    numbers[Math.floor(Math.random() * numbers.length)],
+    special[Math.floor(Math.random() * special.length)],
+    special[Math.floor(Math.random() * special.length)],
+    lower[Math.floor(Math.random() * lower.length)],
+    numbers[Math.floor(Math.random() * numbers.length)],
+  ];
+  
+  return pw.sort(() => Math.random() - 0.5).join('');
+};
+
 export const ROLE_LABELS = {
   [ROLES.SUPER_ADMIN]: 'Super Admin',
   [ROLES.COMPANY_OWNER]: 'Titolare',
