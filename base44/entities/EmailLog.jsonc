@@ -1,0 +1,65 @@
+{
+  "name": "EmailLog",
+  "type": "object",
+  "properties": {
+    "trial_id": {
+      "type": "string"
+    },
+    "template_type": {
+      "type": "string"
+    },
+    "recipient_email": {
+      "type": "string"
+    },
+    "recipient_name": {
+      "type": "string"
+    },
+    "company_name": {
+      "type": "string"
+    },
+    "subject": {
+      "type": "string"
+    },
+    "body_preview": {
+      "type": "string",
+      "description": "Primi 200 caratteri del body inviato"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "sent",
+        "failed",
+        "bounced",
+        "opened",
+        "clicked"
+      ],
+      "default": "sent"
+    },
+    "error_message": {
+      "type": "string"
+    },
+    "opened_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "clicked_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Dati aggiuntivi come plan, price, addons"
+    },
+    "sent_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "trial_id",
+    "template_type",
+    "recipient_email",
+    "subject",
+    "status"
+  ]
+}

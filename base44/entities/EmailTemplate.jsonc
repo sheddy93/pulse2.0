@@ -1,0 +1,71 @@
+{
+  "name": "EmailTemplate",
+  "type": "object",
+  "properties": {
+    "template_type": {
+      "type": "string",
+      "enum": [
+        "trial_welcome",
+        "trial_reminder_3days",
+        "trial_reminder_1day",
+        "trial_expired",
+        "payment_invoice",
+        "payment_receipt",
+        "plan_change",
+        "addon_change",
+        "subscription_cancelled",
+        "payment_failed"
+      ]
+    },
+    "label": {
+      "type": "string",
+      "description": "Nome leggibile del template (es. 'Reminder scadenza trial - 3 giorni')"
+    },
+    "subject": {
+      "type": "string",
+      "description": "Oggetto email"
+    },
+    "preview_text": {
+      "type": "string",
+      "description": "Testo di anteprima (snippet)"
+    },
+    "body": {
+      "type": "string",
+      "description": "Contenuto HTML dell'email con variabili tipo {{company_name}}, {{trial_end}}"
+    },
+    "variables": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Variabili disponibili: {{company_name}}, {{contact_name}}, {{trial_end}}, {{plan_name}}, {{price}}, {{addon_name}}, etc"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "is_enabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "Se false, l'email non viene inviata anche se la condizione \u00e8 soddisfatta"
+    },
+    "send_to": {
+      "type": "string",
+      "enum": [
+        "contact_email",
+        "company_email",
+        "both"
+      ],
+      "default": "contact_email"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "template_type",
+    "label",
+    "subject",
+    "body"
+  ]
+}

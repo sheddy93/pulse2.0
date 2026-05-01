@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
-import { Settings, Globe, Megaphone, DollarSign, Share2, Save, CreditCard, Plus, Trash2, ExternalLink } from "lucide-react";
+import { Settings, Globe, Megaphone, DollarSign, Share2, Save, CreditCard, Plus, Trash2, ExternalLink, Package, Mail } from "lucide-react";
 import StripePlansManager from "@/components/admin/StripePlansManager";
+import AddonManagement from "@/components/admin/AddonManagement";
+import EmailTemplateEditor from "@/components/admin/EmailTemplateEditor";
 import { toast } from "sonner";
 
 const PLATFORMS = ["linkedin", "twitter", "facebook", "instagram", "github", "youtube"];
@@ -147,6 +149,8 @@ export default function SuperAdminSettings() {
           {[
             { id: "hero", label: "Hero", icon: Globe },
             { id: "pricing", label: "Pricing", icon: DollarSign },
+            { id: "addons", label: "Add-ons", icon: Package },
+            { id: "emails", label: "Email", icon: Mail },
             { id: "announcements", label: "Annunci", icon: Megaphone },
             { id: "social", label: "Social Links", icon: Share2 },
             { id: "stripe", label: "Stripe & Piani", icon: CreditCard }
@@ -306,6 +310,24 @@ export default function SuperAdminSettings() {
             <button className="px-4 py-2 border border-blue-600 text-blue-600 rounded-lg font-semibold hover:bg-blue-50 text-sm">
               + Nuovo Annuncio
             </button>
+          </div>
+        )}
+
+        {/* Add-ons */}
+        {activeTab === "addons" && (
+          <div className="bg-white rounded-xl border border-slate-200 p-6">
+            <AddonManagement />
+          </div>
+        )}
+
+        {/* Email Templates */}
+        {activeTab === "emails" && (
+          <div className="bg-white rounded-xl border border-slate-200 p-6">
+            <div className="mb-6">
+              <h2 className="text-lg font-bold text-slate-900 mb-2">Template Email Automatici</h2>
+              <p className="text-slate-600">Personalizza le email inviate ai clienti in trial e abbonati</p>
+            </div>
+            <EmailTemplateEditor />
           </div>
         )}
 
