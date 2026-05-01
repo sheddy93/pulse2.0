@@ -31,6 +31,7 @@ import {
 import { getRoleLabel, getRoleColor, isCompanyRole, isConsultantRole } from "@/lib/roles";
 import NotificationBell from "./NotificationBell";
 import HRAssistantWidget from "@/components/assistant/HRAssistantWidget";
+import AppInstallBanner from "./AppInstallBanner";
 
 // Shared company nav (used by all company roles)
 const COMPANY_NAV = [
@@ -139,7 +140,9 @@ export default function AppShell({ user, children }) {
   const navItems = NAV[role] || NAV["employee"] || [];
 
   return (
-    <div className="flex h-screen bg-slate-50 overflow-hidden">
+    <div className="flex h-screen bg-slate-50 overflow-hidden flex-col">
+      <AppInstallBanner />
+      <div className="flex h-screen overflow-hidden">
       {open && <div className="fixed inset-0 bg-black/40 z-20 lg:hidden" onClick={() => setOpen(false)} />}
 
       <aside className={cn(
@@ -216,6 +219,7 @@ export default function AppShell({ user, children }) {
         <main className="flex-1 overflow-y-auto">{children}</main>
       </div>
       <HRAssistantWidget user={user} />
+      </div>
     </div>
   );
 }
