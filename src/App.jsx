@@ -96,6 +96,7 @@ import BenefitsPage from './pages/employee/BenefitsPage';
 import NotificationSettings from './pages/employee/NotificationSettings';
 import SubscriptionPage from './pages/company/SubscriptionPage';
 import CheckoutPage from './pages/company/CheckoutPage';
+import MyAccountSubscription from './pages/company/MyAccountSubscription';
 import CompanyAttendancePage from './pages/company/CompanyAttendancePage';
 import CompanySettings from './pages/company/CompanySettings';
 import ConsultantSettings from './pages/consultant/ConsultantSettings';
@@ -204,6 +205,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/company/certification-expiry" element={<CertificationExpiry />} />
       <Route path="/dashboard/company/subscription" element={<SubscriptionPage />} />
       <Route path="/dashboard/company/checkout" element={<CheckoutPage />} />
+      <Route path="/dashboard/company/my-account" element={<MyAccountSubscription />} />
       <Route path="/dashboard/company/settings" element={<CompanySettings />} />
 
       {/* Employee */}
