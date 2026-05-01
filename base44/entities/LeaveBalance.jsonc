@@ -1,0 +1,42 @@
+{
+  "name": "LeaveBalance",
+  "type": "object",
+  "properties": {
+    "employee_id": {
+      "type": "string"
+    },
+    "company_id": {
+      "type": "string"
+    },
+    "available_leave": {
+      "type": "number",
+      "default": 20,
+      "description": "Giorni di ferie disponibili"
+    },
+    "used_leave": {
+      "type": "number",
+      "default": 0,
+      "description": "Giorni di ferie utilizzati"
+    },
+    "available_permissions": {
+      "type": "number",
+      "default": 8,
+      "description": "Giorni di permessi disponibili"
+    },
+    "used_permissions": {
+      "type": "number",
+      "default": 0,
+      "description": "Giorni di permessi utilizzati"
+    },
+    "year": {
+      "type": "number"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "employee_id",
+    "company_id"
+  ]
+}

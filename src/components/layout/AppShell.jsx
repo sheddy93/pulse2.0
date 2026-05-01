@@ -115,6 +115,7 @@ const NAV = {
     { label: "Chat Interna", icon: MessageSquare, path: "/dashboard/employee/chat" },
     { label: "Le Mie Spese", icon: Receipt, path: "/dashboard/employee/expenses" },
     { label: "Contratto", icon: FileBadge, path: "/dashboard/employee/contract" },
+    { label: "Il Mio Profilo", icon: UserCog, path: "/dashboard/employee/my-profile" },
     { label: "Profilo", icon: UserCog, path: "/dashboard/employee/profile" },
     { label: "Preferenze Notifiche", icon: Bell, path: "/dashboard/employee/notification-settings" },
   ],

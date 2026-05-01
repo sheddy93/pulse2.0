@@ -89,6 +89,7 @@ import AttendancePage from './pages/employee/AttendancePage';
 import AttendanceCalendarPage from './pages/employee/AttendanceCalendar';
 import LeaveRequestPage from './pages/employee/LeaveRequestPage';
 import EmployeeProfilePage from './pages/employee/EmployeeProfilePage';
+import MyProfile from './pages/employee/MyProfile';
 import DocumentSignaturePage from './pages/employee/DocumentSignaturePage';
 import OvertimeRequestPage from './pages/employee/OvertimeRequestPage';
 import SkillsPage from './pages/employee/SkillsPage';
@@ -231,6 +232,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/employee/profile" element={<EmployeeProfilePage />} />
       <Route path="/dashboard/employee/notification-settings" element={<NotificationSettings />} />
       <Route path="/dashboard/employee/contract" element={<EmployeeContract />} />
+      <Route path="/dashboard/employee/my-profile" element={<MyProfile />} />
 
       <Route path="*" element={<PageNotFound />} />
     </Routes>
