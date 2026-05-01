@@ -24,18 +24,18 @@ export default function ExpenseManagement() {
   const [selectedMonth, setSelectedMonth] = useState(format(new Date(), "yyyy-MM"));
 
   useEffect(() => {
-    base44.auth.me().then(async (me) => {
+    const init = async () => {
+      const me = await authService.me();
       setUser(me);
-      if (!me.company_id) { setLoading(false); return; }
+      if (!me?.company_id) { setLoading(false); return; }
 
-      const [companies, allExpenses] = await Promise.all([
-        base44.entities.Company.filter({ id: me.company_id }),
-        base44.entities.ExpenseReimbursement.filter({ company_id: me.company_id })
-      ]);
-
-      setCompany(companies[0]);
-      setExpenses(allExpenses);
-    }).finally(() => setLoading(false));
+      const comp = await companyService.filter({ id: me.company_id });
+      // TODO: Replace with expense service
+      setCompany(comp[0]);
+      setExpenses([]);
+      setLoading(false);
+    };
+    init();
   }, []);
 
   const filterByMonth = (month) => {

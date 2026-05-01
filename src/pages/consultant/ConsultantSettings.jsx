@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-// Migration: removed base44 dependency
+import { authService } from '@/services/authService';
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import { Settings, User, Bell, Shield, Save, Copy, Check } from "lucide-react";
@@ -14,16 +14,17 @@ export default function ConsultantSettings() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    base44.auth.me().then((me) => {
+    const init = async () => {
+      const me = await authService.me();
       setUser(me);
-      setForm({ full_name: me.full_name || "", phone: me.phone || "" });
-    }).finally(() => setLoading(false));
+      setForm({ full_name: me?.full_name || "", phone: me?.phone || "" });
+      setLoading(false);
+    };
+    init();
   }, []);
 
   const handleSave = async () => {
-    setSaving(true);
-    await base44.auth.updateMe(form);
-    toast.success("Profilo aggiornato");
+    // TODO: Replace with authService.updateMe
     setSaving(false);
   };
 

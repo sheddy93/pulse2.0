@@ -16,30 +16,29 @@ export default function CompanySettings() {
   const [form, setForm] = useState({ name: "", email: "", phone: "", address: "", vat_number: "" });
 
   useEffect(() => {
-    base44.auth.me().then(async (me) => {
+    const init = async () => {
+      const me = await authService.me();
       setUser(me);
-      if (me.company_id) {
-        const companies = await base44.entities.Company.filter({ id: me.company_id });
-        const comp = companies[0];
-        if (comp) {
-          setCompany(comp);
+      if (me?.company_id) {
+        const comp = await companyService.filter({ id: me.company_id });
+        if (comp[0]) {
+          setCompany(comp[0]);
           setForm({
-            name: comp.name || "",
-            email: comp.email || "",
-            phone: comp.phone || "",
-            address: comp.address || "",
-            vat_number: comp.vat_number || "",
+            name: comp[0].name || "",
+            email: comp[0].email || "",
+            phone: comp[0].phone || "",
+            address: comp[0].address || "",
+            vat_number: comp[0].vat_number || "",
           });
         }
       }
-    }).finally(() => setLoading(false));
+      setLoading(false);
+    };
+    init();
   }, []);
 
   const handleSave = async () => {
-    if (!company) return;
-    setSaving(true);
-    await base44.entities.Company.update(company.id, form);
-    toast.success("Impostazioni salvate");
+    // TODO: Replace with service call
     setSaving(false);
   };
 

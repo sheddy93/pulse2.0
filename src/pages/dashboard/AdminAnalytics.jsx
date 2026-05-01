@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-// Migration: removed base44 dependency
+import { authService } from '@/services/authService';
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import { BarChart, Bar, PieChart, Pie, LineChart, Line, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
@@ -15,41 +15,22 @@ export default function AdminAnalytics() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    base44.auth.me().then(async (me) => {
+    const init = async () => {
+      const me = await authService.me();
       setUser(me);
 
-      if (me.role !== "super_admin" && me.role !== "admin") {
+      if (me?.role !== "super_admin" && me?.role !== "admin") {
         setLoading(false);
         return;
       }
 
-      const [companies, allUsers, bugs, feedbacks] = await Promise.all([
-        base44.entities.Company.list(),
-        base44.entities.User.list(),
-        base44.entities.BugReport.list(),
-        base44.entities.FeedbackReport.list()
-      ]);
-
-      const employeeCount = allUsers.filter(u => u.role === "employee").length;
-      const companyCount = companies.length;
-      const consultantCount = allUsers.filter(u => u.role === "consultant").length;
-      const avgRating = feedbacks.length > 0 
-        ? (feedbacks.reduce((sum, f) => sum + (f.rating || 0), 0) / feedbacks.length).toFixed(1)
-        : "N/A";
-
-      setStats({
-        totalCompanies: companyCount,
-        totalEmployees: employeeCount,
-        totalConsultants: consultantCount,
-        totalUsers: allUsers.length,
-        avgRating,
-        openBugs: bugs.filter(b => ["reported", "acknowledged", "in_progress"].includes(b.status)).length,
-        newFeedback: feedbacks.filter(f => f.status === "new").length
-      });
-
-      setBugReports(bugs.sort((a, b) => new Date(b.created_date) - new Date(a.created_date)));
-      setFeedback(feedbacks.sort((a, b) => new Date(b.created_date) - new Date(a.created_date)));
-    }).finally(() => setLoading(false));
+      // TODO: Replace with service calls for companies, users, bugs, feedbacks
+      setStats({ totalCompanies: 0, totalEmployees: 0, totalConsultants: 0, totalUsers: 0, avgRating: "N/A", openBugs: 0, newFeedback: 0 });
+      setBugReports([]);
+      setFeedback([]);
+      setLoading(false);
+    };
+    init();
   }, []);
 
   if (loading) return <PageLoader color="red" />;

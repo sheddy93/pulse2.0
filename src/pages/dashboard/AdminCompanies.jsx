@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-// Migration: removed base44 dependency
+import { authService } from '@/services/authService';
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import { Building2, Search, Users, CheckCircle, XCircle } from "lucide-react";
@@ -15,22 +15,21 @@ export default function AdminCompanies() {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    base44.auth.me().then(async (me) => {
+    const init = async () => {
+      const me = await authService.me();
       if (me?.role !== "super_admin") { window.location.href = "/"; return; }
       setUser(me);
-      const [comps, emps, subs] = await Promise.all([
-        // TODO: Replace with service.Company.list(),
-        // TODO: Replace with service.EmployeeProfile.list(),
-        // TODO: Replace with service.CompanySubscription.list(),
-      ]);
-      setCompanies(comps);
-      setEmployees(emps);
-      setSubscriptions(subs);
-    }).finally(() => setLoading(false));
+      // TODO: Replace with service calls for companies, employees, subscriptions
+      setCompanies([]);
+      setEmployees([]);
+      setSubscriptions([]);
+      setLoading(false);
+    };
+    init();
   }, []);
 
   const toggleActive = async (company) => {
-    const updated = await // TODO: Replace with service.Company.update(company.id, { is_active: !company.is_active });
+    // TODO: Replace with service.Company.update(company.id, { is_active: !company.is_active });
     setCompanies(prev => prev.map(c => c.id === company.id ? { ...c, is_active: !c.is_active } : c));
   };
 
