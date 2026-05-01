@@ -1,0 +1,86 @@
+{
+  "name": "OutOfGeofenceAlert",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "employee_id": {
+      "type": "string"
+    },
+    "employee_email": {
+      "type": "string"
+    },
+    "employee_name": {
+      "type": "string"
+    },
+    "location_id": {
+      "type": "string"
+    },
+    "location_name": {
+      "type": "string"
+    },
+    "clock_type": {
+      "type": "string",
+      "enum": ["check_in", "check_out"],
+      "description": "Tipo di timbratura (entrata/uscita)"
+    },
+    "employee_latitude": {
+      "type": "number"
+    },
+    "employee_longitude": {
+      "type": "number"
+    },
+    "distance_from_geofence_meters": {
+      "type": "number",
+      "description": "Distanza dal perimetro geofence"
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["low", "medium", "high"],
+      "default": "medium",
+      "description": "Severità basata sulla distanza"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "reviewed", "approved", "rejected"],
+      "default": "pending",
+      "description": "Stato revisione HR"
+    },
+    "reviewed_by": {
+      "type": "string",
+      "description": "Email HR che ha revisionato"
+    },
+    "reviewed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Note HR sulla revisione"
+    },
+    "workflow_approval_id": {
+      "type": "string",
+      "description": "ID del workflow di approvazione"
+    },
+    "alert_sent_to": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Email HR notificate",
+      "default": []
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "company_id",
+    "employee_id",
+    "employee_email",
+    "clock_type",
+    "timestamp"
+  ]
+}

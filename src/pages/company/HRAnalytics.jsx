@@ -5,6 +5,7 @@ import PageLoader from "@/components/layout/PageLoader";
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { TrendingUp, Users, Award, BarChart3, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
+import GeofenceAlertPanel from "@/components/attendance/GeofenceAlertPanel";
 
 export default function HRAnalytics() {
   const [user, setUser] = useState(null);
@@ -96,6 +97,11 @@ export default function HRAnalytics() {
             Analytics Avanzati con IA
           </Link>
         </div>
+
+        {/* Geofence Alert Panel */}
+        {company && (
+          <GeofenceAlertPanel companyId={company.id} onAlertReviewed={() => window.location.reload()} />
+        )}
 
         {/* KPI Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

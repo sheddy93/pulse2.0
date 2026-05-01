@@ -4,6 +4,7 @@ import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import { Settings, Building2, Save, Bell, Shield } from "lucide-react";
 import { toast } from "sonner";
+import GeofenceAlertSettings from "@/components/company/GeofenceAlertSettings";
 
 export default function CompanySettings() {
   const [user, setUser] = useState(null);
@@ -47,6 +48,7 @@ export default function CompanySettings() {
     { id: "company", label: "Dati Azienda", icon: Building2 },
     { id: "notifications", label: "Notifiche", icon: Bell },
     { id: "security", label: "Sicurezza", icon: Shield },
+    { id: "geofence", label: "Geofence", icon: Shield },
   ];
 
   return (
@@ -145,6 +147,10 @@ export default function CompanySettings() {
               <p className="text-sm text-blue-700 mt-1">L'autenticazione è gestita dalla piattaforma PulseHR. Per cambiare la password utilizza la pagina di login.</p>
             </div>
           </div>
+        )}
+
+        {activeTab === "geofence" && company && (
+          <GeofenceAlertSettings companyId={company.id} />
         )}
       </div>
     </AppShell>

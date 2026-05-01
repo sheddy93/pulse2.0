@@ -1,0 +1,33 @@
+{
+  "name": "CompanySettings",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "geofence_alerts_enabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "Abilita alert geofence per clock-in fuori sede"
+    },
+    "geofence_alert_notify_roles": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["company_admin", "hr_manager"]
+      },
+      "default": ["company_admin", "hr_manager"],
+      "description": "Ruoli a cui notificare gli alert geofence"
+    },
+    "theme_mode": {
+      "type": "string",
+      "enum": ["light", "dark", "auto"],
+      "default": "auto"
+    },
+    "language": {
+      "type": "string",
+      "default": "it"
+    }
+  },
+  "required": ["company_id"]
+}
