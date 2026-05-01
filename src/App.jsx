@@ -32,7 +32,6 @@ import DashboardHome from './pages/dashboard/DashboardHome';
 // Auth
 import RoleRedirect from './pages/auth/RoleRedirect';
 import RoleSelection from './pages/auth/RoleSelection';
-import UnknownRole from './pages/auth/UnknownRole';
 import RegisterCompany from './pages/auth/RegisterCompany';
 import RegisterConsultant from './pages/auth/RegisterConsultant';
 
@@ -186,7 +185,6 @@ const AuthenticatedApp = () => {
       <Route path="/auth/role-selection" element={<RoleSelection />} />
       <Route path="/auth/register/company" element={<RegisterCompany />} />
       <Route path="/auth/register/consultant" element={<RegisterConsultant />} />
-      <Route path="/error/unknown-role" element={<UnknownRole />} />
 
       {/* Super Admin */}
       <Route path="/dashboard/admin" element={<SuperAdminDashboard />} />
