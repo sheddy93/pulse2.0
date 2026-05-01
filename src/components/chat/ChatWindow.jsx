@@ -3,7 +3,6 @@
  * Per Chat page existing
  */
 import { useState, useEffect, useRef } from 'react';
-import { base44 } from '@/api/base44Client';
 import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { Send, AlertCircle } from 'lucide-react';
@@ -23,12 +22,8 @@ export default function ChatWindow({ conversation, user, employee }) {
   useEffect(() => {
     const loadMessages = async () => {
       try {
-        const msgs = await base44.entities.WorkMessage.filter(
-          { conversation_id: conversation.id },
-          '-sent_at',
-          100
-        );
-        setMessages(msgs.reverse());
+        // TODO: Replace with chat service to fetch messages
+        setMessages([]);
         setLoading(false);
       } catch (err) {
         setError(err.message);
@@ -37,17 +32,7 @@ export default function ChatWindow({ conversation, user, employee }) {
     };
 
     loadMessages();
-
-    // Subscribe per nuovi messaggi
-    const unsubscribe = base44.entities.WorkMessage.subscribe((event) => {
-      if (event.data?.conversation_id === conversation.id) {
-        if (event.type === 'create') {
-          setMessages(prev => [...prev, event.data]);
-        }
-      }
-    });
-
-    return unsubscribe;
+    // TODO: Replace with chat service for real-time subscriptions
   }, [conversation.id]);
 
   // Auto-scroll a fine
@@ -60,16 +45,7 @@ export default function ChatWindow({ conversation, user, employee }) {
 
     setSending(true);
     try {
-      await base44.entities.WorkMessage.create({
-        conversation_id: conversation.id,
-        sender_email: user.email,
-        sender_name: user.full_name,
-        company_id: user.company_id,
-        content: newMessage,
-        message_type: 'text',
-        sent_at: new Date().toISOString()
-      });
-
+      // TODO: Replace with chat service to send message
       setNewMessage('');
     } catch (err) {
       setError(err.message);

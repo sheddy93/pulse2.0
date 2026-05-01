@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { base44 } from "@/api/base44Client";
 import { useI18n } from "@/hooks/useI18n";
 import { Users, Clock, FileText, TrendingUp, Shield, Zap, CheckCircle2, ArrowRight, Menu, X, Star, Smartphone, Monitor, Zap as ZapIcon, BarChart3, Calendar, Lock } from "lucide-react";
 import { motion } from "framer-motion";
@@ -145,12 +144,12 @@ export default function LandingInnovative() {
           </nav>
 
           <div className="flex items-center gap-2 md:gap-4">
-            <button
-              onClick={() => base44.auth.redirectToLogin()}
-              className="px-4 md:px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg font-semibold hover:from-blue-600 hover:to-blue-700 transition-all text-xs md:text-sm"
+            <a
+              href="/auth/role-selection"
+              className="px-4 md:px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg font-semibold hover:from-blue-600 hover:to-blue-700 transition-all text-xs md:text-sm text-center"
             >
               Accedi
-            </button>
+            </a>
             <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden p-2">
               {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>

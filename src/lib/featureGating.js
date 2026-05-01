@@ -1,5 +1,3 @@
-import { base44 } from '@/api/base44Client';
-
 let featuresCache = null;
 let cacheTime = 0;
 const CACHE_DURATION = 5 * 60 * 1000; // 5 min
@@ -16,7 +14,8 @@ export async function getAllFeatures() {
   }
 
   try {
-    const features = await base44.entities.FeaturePlan.list();
+    // TODO: Replace with feature service API call
+    const features = [];
     featuresCache = features;
     cacheTime = now;
     return features;

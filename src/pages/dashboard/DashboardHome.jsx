@@ -3,15 +3,27 @@
  * Reindirizza a dashboard specifico per ruolo
  */
 import { useEffect, useState } from 'react';
-import { base44 } from '@/api/base44Client';
+import { authService } from '@/services/authService';
 import PageLoader from '@/components/layout/PageLoader';
 
 export default function DashboardHome() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // TODO: Replace with authService.me() call
-    setLoading(false);
+    (async () => {
+      try {
+        const user = await authService.me();
+        if (user?.role === 'employee') {
+          window.location.href = '/dashboard/employee';
+        } else if (user?.role === 'super_admin') {
+          window.location.href = '/dashboard/admin';
+        } else {
+          window.location.href = '/dashboard/company';
+        }
+      } catch (err) {
+        window.location.href = '/';
+      }
+    })();
   }, []);
 
   if (loading) return <PageLoader color="blue" />;
