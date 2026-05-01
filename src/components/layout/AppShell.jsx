@@ -23,6 +23,7 @@ const NAV = {
     { label: "Dipendenti", icon: Users, path: "/dashboard/consultant/employees" },
     { label: "Richieste collegamento", icon: Link2, path: "/dashboard/consultant/link-requests" },
     { label: "Revisione Documenti", icon: FileText, path: "/dashboard/consultant/document-review" },
+    { label: "Calendario HR", icon: Calendar, path: "/dashboard/consultant/calendar" },
     { label: "Impostazioni", icon: SettingsIcon, path: "/dashboard/consultant/settings" },
   ],
   company: [
@@ -47,6 +48,7 @@ const NAV = {
     { label: "Scadenziario Certificazioni", icon: Calendar, path: "/dashboard/company/certification-expiry" },
     { label: "Valutazioni 360°", icon: BarChart3, path: "/dashboard/company/performance" },
     { label: "Dai Feedback", icon: MessageCircle, path: "/dashboard/company/give-feedback" },
+    { label: "Calendario HR", icon: Calendar, path: "/dashboard/company/calendar" },
     { label: "HR Analytics", icon: TrendingUp, path: "/dashboard/company/analytics" },
     { label: "Rimborsi Spese", icon: Receipt, path: "/dashboard/company/expenses" },
     { label: "Approvazione Ferie", icon: CalendarDays, path: "/dashboard/company/leave-requests" },

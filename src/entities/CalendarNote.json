@@ -1,0 +1,44 @@
+{
+  "name": "CalendarNote",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "author_email": {
+      "type": "string"
+    },
+    "author_name": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "title": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string"
+    },
+    "color": {
+      "type": "string",
+      "enum": ["blue", "green", "orange", "red", "violet"],
+      "default": "blue"
+    },
+    "visibility": {
+      "type": "string",
+      "enum": ["company", "consultant", "both"],
+      "default": "both"
+    },
+    "reminder_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "reminder_sent": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": ["company_id", "date", "title"]
+}

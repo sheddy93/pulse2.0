@@ -45,6 +45,7 @@ import TrainingManagement from './pages/company/TrainingManagement';
 import PerformanceManagement from './pages/company/PerformanceManagement';
 import GivePerformanceReview from './pages/company/GivePerformanceReview';
 import HRAnalytics from './pages/company/HRAnalytics';
+import HRCalendarPage from './pages/company/HRCalendarPage';
 import ExpenseManagement from './pages/company/ExpenseManagement';
 import EmployeeExpenses from './pages/employee/EmployeeExpenses';
 import LeaveBalance from './pages/employee/LeaveBalance';
@@ -124,6 +125,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/consultant/employees" element={<EmployeeList />} />
       <Route path="/dashboard/consultant/link-requests" element={<LinkRequests />} />
       <Route path="/dashboard/consultant/document-review" element={<DocumentReviewPage />} />
+      <Route path="/dashboard/consultant/calendar" element={<HRCalendarPage />} />
       <Route path="/dashboard/consultant/documents" element={<ComingSoon title="Documenti" dashboardPath="/dashboard/consultant" />} />
       <Route path="/dashboard/consultant/settings" element={<ComingSoon title="Impostazioni" dashboardPath="/dashboard/consultant" />} />
       <Route path="/dashboard/consultant/employees/:id" element={<ComingSoon title="Scheda dipendente" dashboardPath="/dashboard/consultant/employees" />} />
@@ -153,6 +155,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/company/performance" element={<PerformanceManagement />} />
       <Route path="/dashboard/company/give-feedback" element={<GivePerformanceReview />} />
       <Route path="/dashboard/company/analytics" element={<HRAnalytics />} />
+      <Route path="/dashboard/company/calendar" element={<HRCalendarPage />} />
       <Route path="/dashboard/company/expenses" element={<ExpenseManagement />} />
       <Route path="/dashboard/company/leave-requests" element={<ManagerLeaveRequests />} />
       <Route path="/dashboard/company/onboarding-tracking" element={<OnboardingTracking />} />
