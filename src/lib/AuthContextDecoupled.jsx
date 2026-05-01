@@ -15,6 +15,8 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
   const [authError, setAuthError] = useState(null);
+  const [authChecked, setAuthChecked] = useState(false);
+  const [isLoadingPublicSettings] = useState(false);
 
   useEffect(() => {
     checkUserAuth();
@@ -36,7 +38,15 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(false);
     } finally {
       setIsLoadingAuth(false);
+      setAuthChecked(true);
     }
+  };
+
+  const navigateToLogin = (nextUrl) => {
+    if (nextUrl) {
+      sessionStorage.setItem('nextUrl', nextUrl);
+    }
+    window.location.href = '/auth/login';
   };
 
   const login = async (email, password) => {
@@ -81,11 +91,14 @@ export const AuthProvider = ({ children }) => {
         user,
         isAuthenticated,
         isLoadingAuth,
+        isLoadingPublicSettings,
         authError,
+        authChecked,
         login,
         logout,
         refreshAuth,
         checkUserAuth,
+        navigateToLogin,
       }}
     >
       {children}

@@ -119,21 +119,21 @@ export default function AttendancePage() {
 
     try {
        if (isOnline) {
-         // TODO: Replace with service.TimeEntry.create()
+          // TODO: Replace with service.TimeEntry.create()
        } else {
-          // Offline: salva in IndexedDB
-          await saveTimeEntryOffline(entry);
-          setPendingCount(prev => prev + 1);
+           // Offline: salva in IndexedDB
+           await saveTimeEntryOffline(entry);
+           setPendingCount(prev => prev + 1);
         }
 
         // Aggiungi entry alla lista locale per UI istantanea
         setEntries(prev => [entry, ...prev]);
-       setGpsPosition(null);
+        setGpsPosition(null);
      } catch (err) {
-       console.error('Errore salvataggio timbratura:', err);
-       alert('Errore: Timbratura non salvata. Riprova.');
+        console.error('Errore salvataggio timbratura:', err);
+        alert('Errore: Timbratura non salvata. Riprova.');
      } finally {
-       setStamping(null);
+        setStamping(null);
      }
   };
 

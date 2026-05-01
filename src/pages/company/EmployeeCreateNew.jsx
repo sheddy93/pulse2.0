@@ -6,7 +6,7 @@
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { base44 } from '@/api/base44Client';
+import { useAuth } from '@/lib/AuthContextDecoupled';
 import AppShell from '@/components/layout/AppShell';
 import PageLoader from '@/components/layout/PageLoader';
 import { employeeService } from '@/services/employeeService';
@@ -14,9 +14,8 @@ import { ArrowLeft, Plus } from 'lucide-react';
 
 export default function EmployeeCreateNew() {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const { user, isLoadingAuth, navigateToLogin } = useAuth();
   const [departments, setDepartments] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
     first_name: '',
@@ -33,21 +32,17 @@ export default function EmployeeCreateNew() {
   });
 
   useEffect(() => {
-    base44.auth.me().then(async (me) => {
-      if (!me?.company_id) {
-        window.location.href = '/';
+    if (!isLoadingAuth) {
+      if (!user?.company_id) {
+        navigateToLogin();
         return;
       }
-      setUser(me);
 
-      try {
-        const depts = await employeeService.fetchDepartments(me.company_id);
-        setDepartments(depts || []);
-      } catch (err) {
-        console.error('Error loading departments:', err);
-      }
-    }).finally(() => setLoading(false));
-  }, []);
+      employeeService.fetchDepartments(user.company_id)
+        .then(depts => setDepartments(depts || []))
+        .catch(err => console.error('Error loading departments:', err));
+    }
+  }, [user, isLoadingAuth, navigateToLogin]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -69,7 +64,7 @@ export default function EmployeeCreateNew() {
     }
   };
 
-  if (loading) return <PageLoader color="blue" />;
+  if (isLoadingAuth) return <PageLoader color="blue" />;
   if (!user) return null;
 
   return (

@@ -30,33 +30,8 @@ export default function InboxMessages() {
   const [deleting, setDeleting] = useState(null);
 
   useEffect(() => {
-    base44.auth.me().then(async (me) => {
-      setUser(me);
-
-      // Get employee profile
-      const emps = // TODO: Replace with service.EmployeeProfile.filter({
-        user_email: me.email
-      });
-
-      if (emps[0]) {
-        setEmployeeProfile(emps[0]);
-
-        // Get all messages for this company
-        const allMessages = // TODO: Replace with service.CompanyMessage.filter({
-          company_id: emps[0].company_id
-        });
-
-        // Filter messages that are for this employee
-        const relevantMessages = allMessages.filter(msg => {
-          if (msg.recipient_type === "all") return true;
-          if (msg.recipient_type === "individual" && msg.recipient_employees?.includes(emps[0].id)) return true;
-          if (msg.recipient_type === "department" && msg.recipient_department === emps[0].department) return true;
-          return false;
-        });
-
-        setMessages(relevantMessages.sort((a, b) => new Date(b.sent_at) - new Date(a.sent_at)));
-      }
-    }).finally(() => setLoading(false));
+    // TODO: Replace with authService.me() and service calls
+    setLoading(false);
   }, []);
 
   const handleMarkAsRead = async (msgId) => {
@@ -74,9 +49,7 @@ export default function InboxMessages() {
         { employee_id: employeeProfile.id, read_at: new Date().toISOString() }
       ];
 
-      // TODO: Replace with service.CompanyMessage.update(msgId, {
-        read_by: updatedReadBy
-      });
+      // TODO: Replace with service.CompanyMessage.update(msgId, { read_by: updatedReadBy });
 
       setMessages(messages.map(m =>
         m.id === msgId ? { ...m, read_by: updatedReadBy } : m

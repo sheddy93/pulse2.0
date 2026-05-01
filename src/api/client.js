@@ -139,6 +139,47 @@ class APIClient {
   async invokeFunction(functionName, payload) {
     return restAdapter.invoke(functionName, payload);
   }
+
+  // ========== Generic Methods (for services compatibility) ==========
+  async get(path, options = {}) {
+    return restAdapter.getPath(path, options);
+  }
+
+  async post(path, data, options = {}) {
+    return restAdapter.postPath(path, data, options);
+  }
+
+  async patch(path, data, options = {}) {
+    return restAdapter.patchPath(path, data, options);
+  }
+
+  async delete(path, options = {}) {
+    return restAdapter.deletePath(path, options);
+  }
+
+  async getPath(path, options = {}) {
+    return restAdapter.getPath(path, options);
+  }
+
+  async postPath(path, data, options = {}) {
+    return restAdapter.postPath(path, data, options);
+  }
+
+  async patchPath(path, data, options = {}) {
+    return restAdapter.patchPath(path, data, options);
+  }
+
+  async deletePath(path, options = {}) {
+    return restAdapter.deletePath(path, options);
+  }
+
+  async list(entity, query = {}) {
+    return restAdapter.list(entity, query);
+  }
+
+  async invoke(functionName, payload) {
+    return restAdapter.invoke(functionName, payload);
+  }
 }
 
 export const apiClient = new APIClient();

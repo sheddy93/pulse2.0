@@ -23,37 +23,8 @@ export default function OnboardingWizard() {
   const [currentStep, setCurrentStep] = useState(1);
 
   useEffect(() => {
-    // TODO: Replace with authService.me() call.then(async (me) => {
-      setUser(me);
-      const emps = await base44.entities.EmployeeProfile.filter({ user_email: me.email });
-      const emp = emps[0];
-      setEmployee(emp);
-
-      if (emp) {
-        const onboardings = await base44.entities.OnboardingProgress.filter({
-          employee_id: emp.id
-        });
-
-        let onb = onboardings[0];
-        if (!onb) {
-          // Crea nuovo onboarding
-          await base44.entities.OnboardingProgress.create({
-            employee_id: emp.id,
-            employee_name: `${emp.first_name} ${emp.last_name}`,
-            employee_email: me.email,
-            company_id: emp.company_id,
-            started_at: new Date().toISOString()
-          });
-          const updated = await base44.entities.OnboardingProgress.filter({
-            employee_id: emp.id
-          });
-          onb = updated[0];
-        }
-
-        setOnboarding(onb);
-        setCurrentStep(onb.current_step || 1);
-      }
-    }).finally(() => setLoading(false));
+    // TODO: Replace with authService.me() and service calls
+    setLoading(false);
   }, []);
 
   const handleStepComplete = async (stepData) => {
