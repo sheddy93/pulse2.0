@@ -41,6 +41,7 @@ import EmployeeDashboardOptimized from '@/pages/dashboard/EmployeeDashboardOptim
 import MyDashboard from '@/pages/employee/MyDashboard';
 import CompanyDashboardOptimized from '@/pages/dashboard/CompanyDashboardOptimized';
 import DashboardBuilder from '@/pages/company/DashboardBuilder';
+import CompanyOnboardingWizard from '@/pages/company/CompanyOnboardingWizard';
 
 // Company
 import EmployeeListNew from '@/pages/company/EmployeeListNew';
@@ -252,6 +253,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/company/document-templates" element={<DocumentTemplatePage />} />
       <Route path="/dashboard/company/team-analytics" element={<Suspense fallback={<LazyLoadingFallback />}><TeamAnalyticsPage /></Suspense>} />
       <Route path="/dashboard/company/dashboard-builder" element={<DashboardBuilder />} />
+      <Route path="/dashboard/company/onboarding-setup" element={<CompanyOnboardingWizard />} />
       <Route path="/dashboard/company/settings" element={<CompanySettings />} />
       <Route path="/dashboard/company/api" element={<APIManagement />} />
 

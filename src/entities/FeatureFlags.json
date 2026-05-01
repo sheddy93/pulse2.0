@@ -1,0 +1,85 @@
+{
+  "name": "FeatureFlags",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string",
+      "description": "ID azienda"
+    },
+    "attendance_enabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "Timbratura e presenze"
+    },
+    "leave_enabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "Ferie e permessi"
+    },
+    "documents_enabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "Gestione documenti"
+    },
+    "payroll_enabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Gestione payroll"
+    },
+    "ai_enabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Assistente AI"
+    },
+    "geofence_enabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Geofence GPS"
+    },
+    "consultant_enabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Consulenti esterni"
+    },
+    "billing_enabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Fatturazione integrata"
+    },
+    "training_enabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Piattaforma formazione"
+    },
+    "performance_reviews_enabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Valutazioni 360°"
+    },
+    "custom_workflows_enabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Workflow personalizzati"
+    },
+    "advanced_analytics_enabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Analytics avanzate"
+    },
+    "api_enabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "REST API"
+    },
+    "sso_enabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Single Sign-On"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": ["company_id"]
+}

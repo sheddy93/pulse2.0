@@ -1,0 +1,90 @@
+{
+  "name": "UsageLimits",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string",
+      "description": "ID azienda"
+    },
+    "plan_type": {
+      "type": "string",
+      "enum": ["starter", "professional", "enterprise", "custom"],
+      "default": "starter",
+      "description": "Tipo di piano"
+    },
+    "max_employees": {
+      "type": "number",
+      "default": 50,
+      "description": "Numero massimo dipendenti"
+    },
+    "max_storage_mb": {
+      "type": "number",
+      "default": 5000,
+      "description": "Storage massimo in MB"
+    },
+    "max_ai_requests": {
+      "type": "number",
+      "default": 1000,
+      "description": "Richieste AI mensili"
+    },
+    "max_documents": {
+      "type": "number",
+      "default": 10000,
+      "description": "Numero massimo documenti"
+    },
+    "max_admin_users": {
+      "type": "number",
+      "default": 5,
+      "description": "Numero massimo admin aziendali"
+    },
+    "max_consultants": {
+      "type": "number",
+      "default": 0,
+      "description": "Numero massimo consulenti collegati"
+    },
+    "max_api_calls_per_month": {
+      "type": "number",
+      "default": 10000,
+      "description": "Chiamate API mensili"
+    },
+    "max_custom_workflows": {
+      "type": "number",
+      "default": 0,
+      "description": "Workflow personalizzati"
+    },
+    "current_usage": {
+      "type": "object",
+      "properties": {
+        "employees": {
+          "type": "number",
+          "default": 0
+        },
+        "storage_mb": {
+          "type": "number",
+          "default": 0
+        },
+        "ai_requests_month": {
+          "type": "number",
+          "default": 0
+        },
+        "documents": {
+          "type": "number",
+          "default": 0
+        },
+        "api_calls_month": {
+          "type": "number",
+          "default": 0
+        }
+      }
+    },
+    "last_reset_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": ["company_id"]
+}

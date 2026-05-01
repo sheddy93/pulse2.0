@@ -1,110 +1,289 @@
-# Security Hardening Plan
+# Security Hardening Plan - AldevionHR
 
-**Status:** Planning phase
-**Priority:** HIGH - Must complete before production
-**Deadline:** Q2 2026 end
+## 1. RBAC Backend (Role-Based Access Control)
 
----
+**Status**: Design phase  
+**Priority**: CRITICAL
 
-## 🔒 Current Security Issues
+### Implementazione
+- [ ] Middleware Express/FastAPI per validare permessi su ogni endpoint
+- [ ] Policy engine per decision-making complesso (tenant, resource, action)
+- [ ] Matrice RBAC nel database (role_permissions table)
+- [ ] Audit log per ogni decisione di autorizzazione
 
-### CRITICAL
-- [ ] No rate limiting on API calls (abuse vector)
-- [ ] No CORS restrictions (CSRF risk)
-- [ ] Auth tokens in localStorage (XSS risk)
-- [ ] No HTTPS enforcement
-- [ ] No CSP headers
-
-### HIGH
-- [ ] API keys stored in frontend env vars (visible in source)
-- [ ] No request signature validation
-- [ ] No SQL injection protection (Base44 helps, but custom queries vulnerable)
-- [ ] Permissions checked on frontend only (should be backend)
-- [ ] No audit logging of sensitive operations
-
-### MEDIUM
-- [ ] No password complexity enforcement
-- [ ] No 2FA support
-- [ ] No session timeout
-- [ ] No data encryption at rest
-- [ ] No PII masking in logs
-
----
-
-## ✅ Mitigations
-
-### 1. Rate Limiting
+### Specifiche
 ```
-Implement:
-- 100 req/min per authenticated user
-- 10 req/min per IP for login endpoint
-- 50 req/min per company for bulk operations
-- Return 429 with Retry-After header
-```
-
-### 2. CORS & Security Headers
-```
-Add:
-- CORS: Allow only your domain
-- CSP: Restrict script sources
-- HSTS: Force HTTPS
-- X-Frame-Options: DENY (prevent clickjacking)
-- X-Content-Type-Options: nosniff
-```
-
-### 3. Token Management
-```
-Replace:
-- localStorage → httpOnly cookies (secure, sameSite=strict)
-- Add token refresh rotation
-- Add token revocation on logout
-- Add session timeout (15 min inactivity)
-```
-
-### 4. API Key Security
-```
-Required:
-- Move API keys to Backend Functions (Deno)
-- Use secret manager (Base44 secrets)
-- Never expose keys in frontend
-- Rotate keys every 90 days
-- Log all API key access
-```
-
-### 5. Permission Enforcement
-```
-Add:
-- Backend authorization checks (not frontend)
-- Row-level security (company_id filtering)
-- Field-level encryption for sensitive data
-- Audit logging for all CRUD operations
-```
-
-### 6. Audit Logging
-```
-Log:
-- All login attempts (success + failure)
-- All permission changes
-- All document access
-- All approval decisions
-- All exports (payroll, reports)
-- IP address + user agent for all actions
+Ogni endpoint deve:
+1. Verificare token JWT valido
+2. Recuperare ruolo utente da database (non da token)
+3. Verificare permesso specifico vs risorsa richiesta
+4. Loggare l'accesso
+5. Rifiutare se non autorizzato
 ```
 
 ---
 
-## 📋 Implementation Timeline
+## 2. Tenant Isolation
 
-| Task | Sprint | Effort |
-|------|--------|--------|
-| Rate limiting | S1 | 15h |
-| CORS + headers | S1 | 8h |
-| Token to httpOnly | S1 | 12h |
-| API key extraction | S2 | 20h |
-| Backend permission checks | S2 | 25h |
-| Audit logging | S3 | 30h |
-| 2FA support | S4 | 25h |
-| PII masking | S4 | 15h |
-| Penetration testing | S5 | 20h |
+**Status**: In progress  
+**Priority**: CRITICAL
 
-**Total:** ~170 hours
+### Implementazione
+- [x] Company-based data filtering (già implementato in entity queries)
+- [x] User associazione con company_id
+- [ ] Database-level row-level security (PostgreSQL RLS)
+- [ ] Network segregation future (VPC per azienda)
+
+### Validazione
+- [ ] Test: Utente azienda A non può accedere dati azienda B
+- [ ] Test: API chiama sempre filtrano per company_id
+- [ ] Test: Cross-company exploit impossibile anche con admin token
+
+---
+
+## 3. Audit Log Completo
+
+**Status**: Implementato (entità AuditLog)  
+**Priority**: HIGH
+
+### Campi tracciati
+- [x] Chi: user_id, email, IP
+- [x] Cosa: entity, operation, old_value, new_value
+- [x] Quando: timestamp
+- [x] Dove: company_id, resource_id
+- [x] Risultato: success/fail, error_message
+
+### Integrazioni richieste
+- [ ] Immutabilità log (append-only)
+- [ ] Retention policy (7 anni per compliance)
+- [ ] Sentry integration per anomalie
+- [ ] Monthly export per audit esterno
+
+---
+
+## 4. Rate Limiting
+
+**Status**: Parziale (implementato in backend)  
+**Priority**: MEDIUM
+
+### Implementazione
+- [x] checkRateLimit backend function
+- [ ] Redis per tracking globale
+- [ ] Per-user limits
+- [ ] Per-IP limits
+- [ ] Per-endpoint limits
+
+### Limiti consigliati
+```
+API Endpoint: 100 req/min per IP
+Login: 5 tentativi/5 min
+Export: 5 job/ora
+Sensitive ops: 10/ora
+```
+
+---
+
+## 5. GDPR Compliance
+
+**Status**: Design phase  
+**Priority**: HIGH
+
+### Data Export (Right to Portability)
+- [ ] Export full user data as JSON
+- [ ] Include all personal data across entities
+- [ ] Option per employee self-service
+- [ ] Log export per audit
+
+### Data Deletion (Right to be Forgotten)
+- [ ] Soft-delete user records
+- [ ] Anonymize in audit logs (keep hash only)
+- [ ] Remove from Stripe/integrations
+- [ ] Scheduled hard-delete after 30 days
+- [ ] Log deletion per audit
+
+### Data Residency
+- [ ] EU data on EU servers
+- [ ] Privacy notice in-app
+- [ ] Consent tracking per user
+
+---
+
+## 6. Backup & Disaster Recovery
+
+**Status**: Design phase  
+**Priority**: HIGH
+
+### Backup Strategy
+- [ ] Daily automated backups (full + incremental)
+- [ ] 30-day retention minimum
+- [ ] Offsite backup (different region)
+- [ ] Encryption at rest (AES-256)
+- [ ] Monthly backup test/restore
+
+### RTO/RPO
+- RTO: 4 ore (max downtime)
+- RPO: 1 ora (max data loss)
+
+---
+
+## 7. Document Security
+
+**Status**: Implementato (signed URLs)  
+**Priority**: HIGH
+
+### Signed URLs
+- [x] Temporary, time-limited access
+- [x] Single-use recommended
+- [ ] Custom expiration per document type
+- [ ] Audit log per download
+
+### File Validation
+- [x] Whitelist MIME types (PDF, DOCX, XLS, images)
+- [x] File size limits (50MB max)
+- [x] Virus scanning future (ClamAV)
+- [ ] OCR/DLP scanning per sensibilità
+
+### Storage Security
+- [x] Private bucket (no public access)
+- [x] Encryption in transit (TLS)
+- [ ] Encryption at rest
+- [ ] Access logs per file
+
+---
+
+## 8. CORS & CSRF
+
+**Status**: Design phase  
+**Priority**: MEDIUM
+
+### CORS
+- [ ] Whitelist origin domains
+- [ ] No wildcard `*` in production
+- [ ] Credentials only from same-site
+- [ ] Preflight validation
+
+### CSRF
+- [ ] Double-submit cookie tokens
+- [ ] SameSite=Strict per cookie
+- [ ] Validate Origin header
+- [ ] POST for state changes only
+
+---
+
+## 9. Secure Cookies
+
+**Status**: Design phase  
+**Priority**: MEDIUM
+
+### JWT/Session Cookies
+- [ ] HttpOnly flag (no JS access)
+- [ ] Secure flag (HTTPS only)
+- [ ] SameSite=Strict
+- [ ] Max-Age = 24h (short expiry)
+- [ ] Rotate on each login
+
+---
+
+## 10. Logging & Monitoring
+
+**Status**: Parziale  
+**Priority**: HIGH
+
+### Sentry Integration
+- [ ] Error tracking con stack traces
+- [ ] Performance monitoring
+- [ ] Release tracking
+- [ ] Alert su critical errors
+
+### Logging Strategy
+- [ ] Console logs in dev
+- [ ] Sentry in production
+- [ ] Structured logging (JSON)
+- [ ] Sensitive data masking (pwd, tokens)
+- [ ] Log retention: 90 giorni
+
+### Metriche monitorate
+- [ ] Failed login attempts
+- [ ] Permission denied errors
+- [ ] Data export requests
+- [ ] Large file uploads
+- [ ] API rate limit violations
+
+---
+
+## 11. Third-Party Security
+
+**Status**: In review  
+**Priority**: MEDIUM
+
+### OAuth Integrations
+- [x] GitHub: repo, workflow
+- [ ] Google: calendar, drive (coming)
+- [ ] Slack: (coming)
+- Security checklist: revoca token, scope minimization, refresh strategy
+
+### Stripe Integration
+- [x] Webhooks con signature validation
+- [x] No sensitive data in logs
+- [ ] PCI compliance (non-storage di card data)
+- [ ] Monthly reconciliation
+
+---
+
+## 12. Security Testing
+
+**Status**: Design phase  
+**Priority**: MEDIUM
+
+### Test coverage
+- [ ] Unit tests per permission check
+- [ ] Integration tests per endpoint
+- [ ] OWASP Top 10 penetration testing
+- [ ] SQL injection prevention
+- [ ] XSS prevention
+- [ ] CSRF prevention
+
+### Frequency
+- [ ] Per-sprint security review
+- [ ] Quarterly penetration test
+- [ ] Annual third-party audit
+
+---
+
+## Security Checklist Pre-Go-Live
+
+- [ ] RBAC backend implementato
+- [ ] Tenant isolation testato
+- [ ] Audit log completato
+- [ ] GDPR export/delete funzionante
+- [ ] Rate limiting attivo
+- [ ] Sentry integrato
+- [ ] CORS/CSRF implementati
+- [ ] Backup & restore testato
+- [ ] Signed URLs per documenti
+- [ ] All endpoints secured
+
+---
+
+## Timeline
+
+| Fase | Features | Timeline |
+|------|----------|----------|
+| **Phase 1** | RBAC backend, Tenant isolation, Rate limiting | Sprint 1-2 |
+| **Phase 2** | GDPR (export/delete), Backup/RDR, Sentry | Sprint 3-4 |
+| **Phase 3** | CORS/CSRF, Logging advanced, Security testing | Sprint 5-6 |
+| **Phase 4** | Penetration test, Audit esterno | Pre-launch |
+
+---
+
+## Compliance Standards
+
+- [ ] GDPR (EU)
+- [ ] ISO 27001 (future)
+- [ ] SOC 2 (future)
+- [ ] HIPAA (future, se healthcare)
+
+---
+
+**Last Updated**: 2026-05-01  
+**Owner**: Security Team
