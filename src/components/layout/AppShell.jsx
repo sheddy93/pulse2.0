@@ -8,6 +8,7 @@ import {
   ClipboardList, Briefcase, CalendarDays, FileBadge, Activity, Monitor, BookOpen, Award, Heart, GraduationCap, BarChart3, MessageCircle, TrendingUp, MessageSquare, Receipt, Calendar, Bell, CreditCard
 } from "lucide-react";
 import NotificationBell from "./NotificationBell";
+import HRAssistantWidget from "@/components/assistant/HRAssistantWidget";
 
 const NAV = {
   super_admin: [
@@ -172,6 +173,7 @@ export default function AppShell({ user, children }) {
         </header>
         <main className="flex-1 overflow-y-auto">{children}</main>
       </div>
+      <HRAssistantWidget user={user} />
     </div>
   );
 }
