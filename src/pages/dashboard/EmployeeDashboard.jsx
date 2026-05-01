@@ -7,12 +7,13 @@ import PageLoader from "@/components/layout/PageLoader";
 import QuickAttendanceCard from "@/components/pwa/QuickAttendanceCard";
 import DashboardGrid from "@/components/dashboard/DashboardGrid";
 import { useDashboardLayout } from "@/hooks/useDashboardLayout";
-import { Clock, CalendarDays, FileText, CheckCircle2, Settings } from "lucide-react";
+import { Clock, CalendarDays, FileText, CheckCircle2, Settings, HelpCircle } from "lucide-react";
 import ReportButton from "@/components/reports/ReportButton";
 import { format, startOfMonth } from "date-fns";
 import { it } from "date-fns/locale";
 import UpcomingShifts from "@/components/employee/UpcomingShifts";
 import AnnouncementWidget from "@/components/employee/AnnouncementWidget";
+import OnboardingTour, { useOnboardingTour } from "@/components/onboarding/OnboardingTour";
 
 export default function EmployeeDashboard() {
   const [user, setUser] = useState(null);
@@ -24,6 +25,7 @@ export default function EmployeeDashboard() {
   const [loading, setLoading] = useState(true);
   const [stamping, setStamping] = useState(false);
   const [isEditingLayout, setIsEditingLayout] = useState(false);
+  const { showTour, setShowTour, resetTour } = useOnboardingTour();
 
   const defaultLayout = {
     widgets: [
@@ -168,6 +170,7 @@ export default function EmployeeDashboard() {
 
   return (
     <AppShell user={user}>
+      {showTour && <OnboardingTour onClose={() => setShowTour(false)} />}
       <div className="p-6 max-w-6xl mx-auto space-y-6">
         {/* Quick Attendance (Mobile-First) */}
         {employee && (
@@ -187,14 +190,24 @@ export default function EmployeeDashboard() {
             </h1>
             <p className="text-emerald-200 text-sm">{format(new Date(), "EEEE d MMMM yyyy", { locale: it })}</p>
           </div>
-          {employee && <ReportButton employeeId={employee.id} userRole="employee" label="Report PDF" />}
-          <button
-          onClick={() => setIsEditingLayout(!isEditingLayout)}
-          className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg font-semibold text-sm flex items-center gap-2 transition-colors"
-          >
-            <Settings className="w-4 h-4" />
-            {isEditingLayout ? "Salva layout" : "Personalizza"}
-          </button>
+          <div className="flex items-center gap-2">
+            {employee && <ReportButton employeeId={employee.id} userRole="employee" label="Report PDF" />}
+            <button
+              onClick={resetTour}
+              className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg font-semibold text-sm flex items-center gap-2 transition-colors"
+              title="Rivedi il tour"
+            >
+              <HelpCircle className="w-4 h-4" />
+              Tour
+            </button>
+            <button
+              onClick={() => setIsEditingLayout(!isEditingLayout)}
+              className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg font-semibold text-sm flex items-center gap-2 transition-colors"
+            >
+              <Settings className="w-4 h-4" />
+              {isEditingLayout ? "Salva layout" : "Personalizza"}
+            </button>
+          </div>
         </div>
 
         {/* Dashboard Grid */}
