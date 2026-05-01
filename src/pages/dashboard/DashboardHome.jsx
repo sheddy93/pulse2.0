@@ -10,7 +10,7 @@ export default function DashboardHome() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    base44.auth.me().then(user => {
+    authService.me().then(user => {
       if (!user) {
         window.location.href = '/';
         return;

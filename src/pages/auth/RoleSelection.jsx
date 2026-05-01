@@ -15,7 +15,7 @@ export default function RoleSelection() {
         ? `CONS-${Date.now().toString().slice(-6)}`
         : null;
       
-      await base44.auth.updateMe({ 
+      await authService.updateMe({ 
         role,
         ...(publicId && { public_id: publicId }),
       });

@@ -52,8 +52,8 @@ export default function DocumentArchive() {
       setUser(me);
       if (me.company_id) {
         const [docs, emps] = await Promise.all([
-          base44.entities.Document.filter({ company_id: me.company_id }),
-          base44.entities.EmployeeProfile.filter({ company_id: me.company_id })
+          // TODO: Replace with service.Document.filter({ company_id: me.company_id }),
+          // TODO: Replace with service.EmployeeProfile.filter({ company_id: me.company_id })
         ]);
         setDocuments(docs);
         setEmployees(emps);
@@ -82,7 +82,7 @@ export default function DocumentArchive() {
       });
 
       // Create document record
-      await base44.entities.Document.create({
+      await // TODO: Replace with service.Document.create({
         company_id: user.company_id,
         title: formData.title,
         doc_type: formData.doc_type,
@@ -109,7 +109,7 @@ export default function DocumentArchive() {
         file: null
       });
 
-      const docs = await base44.entities.Document.filter({
+      const docs = await // TODO: Replace with service.Document.filter({
         company_id: user.company_id
       });
       setDocuments(docs);
@@ -124,9 +124,9 @@ export default function DocumentArchive() {
     if (!window.confirm("Sei sicuro di voler eliminare questo documento?")) return;
     
     try {
-      await base44.entities.Document.delete(docId);
+      await // TODO: Replace with service.Document.delete(docId);
       toast.success("Documento eliminato");
-      const docs = await base44.entities.Document.filter({
+      const docs = await // TODO: Replace with service.Document.filter({
         company_id: user.company_id
       });
       setDocuments(docs);
@@ -148,14 +148,14 @@ export default function DocumentArchive() {
     if (!selectedDoc) return;
 
     try {
-      await base44.entities.Document.update(selectedDoc.id, {
+      await // TODO: Replace with service.Document.update(selectedDoc.id, {
         allowed_employees: permissionsData.employees,
         visibility: permissionsData.visibility
       });
       toast.success("Permessi aggiornati");
       setShowPermissionsModal(false);
       
-      const docs = await base44.entities.Document.filter({
+      const docs = await // TODO: Replace with service.Document.filter({
         company_id: user.company_id
       });
       setDocuments(docs);

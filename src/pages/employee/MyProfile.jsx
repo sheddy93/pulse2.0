@@ -25,7 +25,7 @@ export default function MyProfile() {
   });
 
   useEffect(() => {
-    base44.auth.me().then(async (me) => {
+    authService.me().then(async (me) => {
       setUser(me);
 
       // Fetch employee profile

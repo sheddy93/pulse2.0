@@ -66,7 +66,7 @@ export default function RegisterCompany() {
       await base44.users.inviteUser(form.email, "company_owner");
 
       // Aggiorna profilo admin con dati azienda
-      await base44.auth.updateMe({
+      await authService.updateMe({
         role: "company_owner",
         company_id: company.id,
         full_name: `${form.owner_name} ${form.owner_surname}`,

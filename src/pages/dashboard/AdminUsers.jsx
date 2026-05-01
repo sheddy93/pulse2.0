@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+// Migration: removed base44 dependency
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import { Users, Search, Shield, Briefcase, Building2, User } from "lucide-react";
@@ -24,7 +24,7 @@ export default function AdminUsers() {
     base44.auth.me().then(async (me) => {
       if (me?.role !== "super_admin") { window.location.href = "/"; return; }
       setUser(me);
-      const allUsers = await base44.entities.User.list();
+      const allUsers = await // TODO: Replace with service.User.list();
       setUsers(allUsers);
     }).finally(() => setLoading(false));
   }, []);

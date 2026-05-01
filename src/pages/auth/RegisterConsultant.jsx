@@ -62,7 +62,7 @@ export default function RegisterConsultant() {
       await base44.users.inviteUser(form.email, "labor_consultant");
 
       // Aggiorna profilo
-      await base44.auth.updateMe({
+      await authService.updateMe({
         role: "labor_consultant",
         consultant_type: form.consultant_type,
         consultant_public_id: publicId,

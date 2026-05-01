@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { // TODO: Service integration } from '@/api/// TODO: Service integrationClient';
 import { Search, Shield, Lock, Mail } from 'lucide-react';
 
 export default function UserManagement() {
@@ -8,7 +8,7 @@ export default function UserManagement() {
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    base44.entities.User.list().then(setUsers).finally(() => setLoading(false));
+    // TODO: Service integration.entities.User.list().then(setUsers).finally(() => setLoading(false));
   }, []);
 
   const filtered = users.filter(u =>

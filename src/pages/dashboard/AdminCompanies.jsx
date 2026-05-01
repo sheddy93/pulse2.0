@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+// Migration: removed base44 dependency
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import { Building2, Search, Users, CheckCircle, XCircle } from "lucide-react";
@@ -19,9 +19,9 @@ export default function AdminCompanies() {
       if (me?.role !== "super_admin") { window.location.href = "/"; return; }
       setUser(me);
       const [comps, emps, subs] = await Promise.all([
-        base44.entities.Company.list(),
-        base44.entities.EmployeeProfile.list(),
-        base44.entities.CompanySubscription.list(),
+        // TODO: Replace with service.Company.list(),
+        // TODO: Replace with service.EmployeeProfile.list(),
+        // TODO: Replace with service.CompanySubscription.list(),
       ]);
       setCompanies(comps);
       setEmployees(emps);
@@ -30,7 +30,7 @@ export default function AdminCompanies() {
   }, []);
 
   const toggleActive = async (company) => {
-    const updated = await base44.entities.Company.update(company.id, { is_active: !company.is_active });
+    const updated = await // TODO: Replace with service.Company.update(company.id, { is_active: !company.is_active });
     setCompanies(prev => prev.map(c => c.id === company.id ? { ...c, is_active: !c.is_active } : c));
   };
 

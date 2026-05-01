@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { base44 } from "@/api/base44Client";
+// Migration: removed base44 dependency
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import LazyImage from "@/components/LazyImage";
@@ -40,7 +40,7 @@ export default function DocumentsPage() {
   const [form, setForm] = useState({ title: "", doc_type: "contratto", employee_id: "", visibility: "all", expiry_date: "", notes: "", file: null, signature_required: false });
 
   const loadDocs = async (companyId) => {
-    const d = await base44.entities.Document.filter({ company_id: companyId }, { skip: page * ITEMS_PER_PAGE, limit: ITEMS_PER_PAGE });
+    const d = await // TODO: Replace with service.Document.filter({ company_id: companyId }, { skip: page * ITEMS_PER_PAGE, limit: ITEMS_PER_PAGE });
     setDocs([...d].sort((a, b) => {
       if (a.expiry_date && b.expiry_date) return new Date(a.expiry_date) - new Date(b.expiry_date);
       if (a.expiry_date) return -1;
@@ -52,7 +52,7 @@ export default function DocumentsPage() {
   // Cache employees (30 min TTL)
   const { data: cachedEmployees } = useApiCache(
     'employees',
-    async () => base44.entities.EmployeeProfile.filter({ company_id: '' }),
+    async () => // TODO: Replace with service.EmployeeProfile.filter({ company_id: '' }),
     30 * 60 * 1000
   );
 
@@ -61,8 +61,8 @@ export default function DocumentsPage() {
       setUser(me);
       if (!me.company_id) { setLoading(false); return; }
       const [companies, emps] = await Promise.all([
-        base44.entities.Company.filter({ id: me.company_id }),
-        cachedEmployees || base44.entities.EmployeeProfile.filter({ company_id: me.company_id }),
+        // TODO: Replace with service.Company.filter({ id: me.company_id }),
+        cachedEmployees || // TODO: Replace with service.EmployeeProfile.filter({ company_id: me.company_id }),
       ]);
       setCompany(companies[0] || null);
       setEmployees(emps || cachedEmployees || []);
@@ -75,7 +75,7 @@ export default function DocumentsPage() {
     if (!company || !form.file) return;
     setUploading(true);
     const { file_url } = await base44.integrations.Core.UploadFile({ file: form.file });
-    await base44.entities.Document.create({
+    await // TODO: Replace with service.Document.create({
       company_id: company.id,
       employee_id: form.employee_id || undefined,
       title: form.title,
@@ -97,7 +97,7 @@ export default function DocumentsPage() {
 
   const handleDelete = async (doc) => {
     if (!confirm("Eliminare il documento?")) return;
-    await base44.entities.Document.delete(doc.id);
+    await // TODO: Replace with service.Document.delete(doc.id);
     await loadDocs(company.id);
   };
 

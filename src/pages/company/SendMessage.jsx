@@ -45,8 +45,8 @@ export default function SendMessage() {
       setUser(me);
       if (me.company_id) {
         const [emps, depts] = await Promise.all([
-          base44.entities.EmployeeProfile.filter({ company_id: me.company_id }),
-          base44.entities.EmployeeProfile.filter({ company_id: me.company_id })
+          // TODO: Replace with service.EmployeeProfile.filter({ company_id: me.company_id }),
+          // TODO: Replace with service.EmployeeProfile.filter({ company_id: me.company_id })
         ]);
         setEmployees(emps);
         
@@ -132,7 +132,7 @@ export default function SendMessage() {
       }
 
       // Create message
-      await base44.entities.CompanyMessage.create({
+      await // TODO: Replace with service.CompanyMessage.create({
         company_id: user.company_id,
         sender_email: user.email,
         sender_name: user.full_name,

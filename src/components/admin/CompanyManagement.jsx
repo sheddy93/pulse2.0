@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { // TODO: Service integration } from '@/api/// TODO: Service integrationClient';
 import { Search, Edit2, Trash2, Eye, Shield } from 'lucide-react';
 
 export default function CompanyManagement() {
@@ -9,7 +9,7 @@ export default function CompanyManagement() {
   const [selectedCompany, setSelectedCompany] = useState(null);
 
   useEffect(() => {
-    base44.entities.Company.list().then(setCompanies).finally(() => setLoading(false));
+    // TODO: Service integration.entities.Company.list().then(setCompanies).finally(() => setLoading(false));
   }, []);
 
   const filtered = companies.filter(c =>

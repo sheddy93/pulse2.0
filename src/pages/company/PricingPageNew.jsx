@@ -26,8 +26,8 @@ export default function PricingPageNew() {
     base44.auth.me().then(async (me) => {
       setUser(me);
       const [plansData, addonsData] = await Promise.all([
-        base44.entities.SubscriptionPlan.filter({ is_active: true }),
-        base44.entities.SubscriptionAddon.filter({ is_active: true }),
+        // TODO: Replace with service.SubscriptionPlan.filter({ is_active: true }),
+        // TODO: Replace with service.SubscriptionAddon.filter({ is_active: true }),
       ]);
       setPlans(plansData.sort((a, b) => a.base_price_monthly - b.base_price_monthly));
       setAllAddons(addonsData);

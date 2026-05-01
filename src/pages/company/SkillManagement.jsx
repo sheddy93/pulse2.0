@@ -49,9 +49,9 @@ export default function SkillManagement() {
       setUser(me);
       if (!me.company_id) { setLoading(false); return; }
       const [companies, emps, skillsData] = await Promise.all([
-        base44.entities.Company.filter({ id: me.company_id }),
-        base44.entities.EmployeeProfile.filter({ company_id: me.company_id }),
-        base44.entities.EmployeeSkill.filter({ company_id: me.company_id })
+        // TODO: Replace with service.Company.filter({ id: me.company_id }),
+        // TODO: Replace with service.EmployeeProfile.filter({ company_id: me.company_id }),
+        // TODO: Replace with service.EmployeeSkill.filter({ company_id: me.company_id })
       ]);
       setCompany(companies[0]);
       setEmployees(emps);
@@ -65,7 +65,7 @@ export default function SkillManagement() {
     if (!selectedEmployee || !company) return;
 
     const emp = employees.find(e => e.id === selectedEmployee);
-    await base44.entities.EmployeeSkill.create({
+    await // TODO: Replace with service.EmployeeSkill.create({
       company_id: company.id,
       employee_id: selectedEmployee,
       employee_name: `${emp.first_name} ${emp.last_name}`,
@@ -94,14 +94,14 @@ export default function SkillManagement() {
     });
     setShowForm(false);
 
-    const updatedSkills = await base44.entities.EmployeeSkill.filter({ company_id: company.id });
+    const updatedSkills = await // TODO: Replace with service.EmployeeSkill.filter({ company_id: company.id });
     setSkills(updatedSkills);
   };
 
   const handleDeleteSkill = async (skillId) => {
     if (!confirm("Eliminare questa competenza?")) return;
-    await base44.entities.EmployeeSkill.delete(skillId);
-    const updatedSkills = await base44.entities.EmployeeSkill.filter({ company_id: company.id });
+    await // TODO: Replace with service.EmployeeSkill.delete(skillId);
+    const updatedSkills = await // TODO: Replace with service.EmployeeSkill.filter({ company_id: company.id });
     setSkills(updatedSkills);
   };
 

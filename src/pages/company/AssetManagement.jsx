@@ -37,8 +37,8 @@ export default function AssetManagement() {
       setUser(me);
       if (!me.company_id) { setLoading(false); return; }
       const [companies, assetsList] = await Promise.all([
-        base44.entities.Company.filter({ id: me.company_id }),
-        base44.entities.Asset.filter({ company_id: me.company_id }, '-created_date')
+        // TODO: Replace with service.Company.filter({ id: me.company_id }),
+        // TODO: Replace with service.Asset.filter({ company_id: me.company_id }, '-created_date')
       ]);
       setCompany(companies[0]);
       setAssets(assetsList);
@@ -62,15 +62,15 @@ export default function AssetManagement() {
     };
 
     if (editId) {
-      await base44.entities.Asset.update(editId, data);
+      await // TODO: Replace with service.Asset.update(editId, data);
       setEditId(null);
     } else {
-      await base44.entities.Asset.create(data);
+      await // TODO: Replace with service.Asset.create(data);
     }
 
     setForm({ asset_type: "computer", asset_name: "", model: "", serial_number: "", purchase_date: "", cost: "", status: "disponibile", notes: "" });
     setShowForm(false);
-    const assetsList = await base44.entities.Asset.filter({ company_id: company.id }, '-created_date');
+    const assetsList = await // TODO: Replace with service.Asset.filter({ company_id: company.id }, '-created_date');
     setAssets(assetsList);
   };
 
@@ -91,7 +91,7 @@ export default function AssetManagement() {
 
   const handleDelete = async (id) => {
     if (!confirm("Eliminare l'asset?")) return;
-    await base44.entities.Asset.delete(id);
+    await // TODO: Replace with service.Asset.delete(id);
     setAssets(a => a.filter(asset => asset.id !== id));
   };
 

@@ -15,7 +15,7 @@ export default function LinkRequests() {
   };
 
   useEffect(() => {
-    base44.auth.me().then(async (me) => {
+    authService.me().then(async (me) => {
       setUser(me);
       await loadLinks(me.email);
     }).finally(() => setLoading(false));

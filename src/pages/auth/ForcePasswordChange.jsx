@@ -30,7 +30,7 @@ export default function ForcePasswordChange({ onComplete }) {
     if (!allRulesPassed) { setError("La password non soddisfa tutti i requisiti"); return; }
     if (newPw !== confirmPw) { setError("Le password non coincidono"); return; }
     setSaving(true);
-    await base44.auth.updateMe({ must_change_password: false });
+    await authService.updateMe({ must_change_password: false });
     setSaving(false);
     if (onComplete) onComplete();
     else window.location.reload();

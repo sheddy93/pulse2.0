@@ -17,8 +17,8 @@ export default function OvertimePage() {
       setUser(me);
       if (!me.company_id) { setLoading(false); return; }
       const [companies, emps] = await Promise.all([
-        base44.entities.Company.filter({ id: me.company_id }),
-        base44.entities.EmployeeProfile.filter({ company_id: me.company_id }),
+        // TODO: Replace with service.Company.filter({ id: me.company_id }),
+        // TODO: Replace with service.EmployeeProfile.filter({ company_id: me.company_id }),
       ]);
       setCompany(companies[0] || null);
       setEmployees(emps);

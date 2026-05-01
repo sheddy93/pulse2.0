@@ -25,16 +25,16 @@ export default function MyAccountSubscription() {
 
       if (me.company_id) {
         const [comp, subs, trials] = await Promise.all([
-          base44.entities.Company.filter({ id: me.company_id }),
-          base44.entities.CompanySubscription.filter({ company_email: me.email }),
-          base44.entities.TrialSubscription.filter({ company_email: me.email || me.company_id })
+          // TODO: Replace with service.Company.filter({ id: me.company_id }),
+          // TODO: Replace with service.CompanySubscription.filter({ company_email: me.email }),
+          // TODO: Replace with service.TrialSubscription.filter({ company_email: me.email || me.company_id })
         ]);
 
         if (comp[0]) setCompany(comp[0]);
         if (subs[0]) {
           setSubscription(subs[0]);
           // Carica il piano
-          const plans = await base44.entities.SubscriptionPlan.filter({ id: subs[0].plan_id });
+          const plans = await // TODO: Replace with service.SubscriptionPlan.filter({ id: subs[0].plan_id });
           if (plans[0]) setPlan(plans[0]);
           // Carica cronologia pagamenti
           await loadPaymentHistory(subs[0].stripe_customer_id);

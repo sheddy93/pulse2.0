@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+// Migration: removed base44 dependency
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import { ArrowLeft, CheckCircle2, AlertCircle, Loader } from "lucide-react";
@@ -25,12 +25,12 @@ export default function CheckoutPage() {
       
       // Carica il piano selezionato
       if (planId) {
-        const plans = await base44.entities.SubscriptionPlan.filter({ id: planId });
+        const plans = await // TODO: Replace with service.SubscriptionPlan.filter({ id: planId });
         if (plans[0]) setPlan(plans[0]);
       }
 
       // Carica tutti gli add-ons
-      const addons = await base44.entities.SubscriptionAddon.filter({ is_active: true });
+      const addons = await // TODO: Replace with service.SubscriptionAddon.filter({ is_active: true });
       setAllAddons(addons.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0)));
     }).finally(() => setLoading(false));
   }, [planId]);

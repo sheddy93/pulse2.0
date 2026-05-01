@@ -57,7 +57,7 @@ export default function TemporaryLogins() {
       }
 
       if (Object.keys(query).length > 0) {
-        const result = await base44.entities.TemporaryLogin.filter(query);
+        const result = await // TODO: Replace with service.TemporaryLogin.filter(query);
         setLogins(result.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
       }
     }).finally(() => setLoading(false));
@@ -79,7 +79,7 @@ export default function TemporaryLogins() {
       const expiresAt = new Date();
       expiresAt.setHours(expiresAt.getHours() + formData.expiry_hours);
 
-      const tempLogin = await base44.entities.TemporaryLogin.create({
+      const tempLogin = await // TODO: Replace with service.TemporaryLogin.create({
         company_id: isCompanyAdmin ? user.company_id : null,
         user_email: formData.user_email,
         user_role: formData.user_role,
@@ -103,7 +103,7 @@ export default function TemporaryLogins() {
       setShowModal(false);
       setFormData({ user_email: "", user_role: "employee", expiry_hours: 48 });
 
-      const result = await base44.entities.TemporaryLogin.filter(
+      const result = await // TODO: Replace with service.TemporaryLogin.filter(
         isAdmin ? { company_id: null } : { company_id: user.company_id }
       );
       setLogins(result.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
@@ -118,10 +118,10 @@ export default function TemporaryLogins() {
     if (!window.confirm("Revocare questo login temporaneo?")) return;
 
     try {
-      await base44.entities.TemporaryLogin.update(loginId, { status: "revoked" });
+      await // TODO: Replace with service.TemporaryLogin.update(loginId, { status: "revoked" });
       toast.success("Login revocato");
 
-      const result = await base44.entities.TemporaryLogin.filter(
+      const result = await // TODO: Replace with service.TemporaryLogin.filter(
         isAdmin ? { company_id: null } : { company_id: user.company_id }
       );
       setLogins(result.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));

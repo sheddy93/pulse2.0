@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+// Migration: removed base44 dependency
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import { Server, Database, Activity, CheckCircle, AlertTriangle, Zap, RefreshCw } from "lucide-react";
@@ -15,12 +15,12 @@ export default function AdminSystem() {
 
   const loadStats = async () => {
     const [companies, users, employees, docs, leaves, audits] = await Promise.all([
-      base44.entities.Company.list(),
-      base44.entities.User.list(),
-      base44.entities.EmployeeProfile.list(),
-      base44.entities.Document.list(),
-      base44.entities.LeaveRequest.list(),
-      base44.entities.AuditLog.list(),
+      // TODO: Replace with service.Company.list(),
+      // TODO: Replace with service.User.list(),
+      // TODO: Replace with service.EmployeeProfile.list(),
+      // TODO: Replace with service.Document.list(),
+      // TODO: Replace with service.LeaveRequest.list(),
+      // TODO: Replace with service.AuditLog.list(),
     ]);
     setStats({
       companies: companies.length,

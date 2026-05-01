@@ -41,8 +41,8 @@ export default function BenefitManagement() {
       setUser(me);
       if (!me.company_id) { setLoading(false); return; }
       const [companies, plans] = await Promise.all([
-        base44.entities.Company.filter({ id: me.company_id }),
-        base44.entities.BenefitPlan.filter({ company_id: me.company_id })
+        // TODO: Replace with service.Company.filter({ id: me.company_id }),
+        // TODO: Replace with service.BenefitPlan.filter({ company_id: me.company_id })
       ]);
       setCompany(companies[0]);
       setPlans(plans);
@@ -60,12 +60,12 @@ export default function BenefitManagement() {
     };
 
     if (editingId) {
-      await base44.entities.BenefitPlan.update(editingId, data);
+      await // TODO: Replace with service.BenefitPlan.update(editingId, data);
     } else {
-      await base44.entities.BenefitPlan.create(data);
+      await // TODO: Replace with service.BenefitPlan.create(data);
     }
 
-    const updated = await base44.entities.BenefitPlan.filter({ company_id: company.id });
+    const updated = await // TODO: Replace with service.BenefitPlan.filter({ company_id: company.id });
     setPlans(updated);
     setShowForm(false);
     setEditingId(null);
@@ -85,7 +85,7 @@ export default function BenefitManagement() {
 
   const handleDelete = async (id) => {
     if (confirm("Elimina questo piano benefit?")) {
-      await base44.entities.BenefitPlan.delete(id);
+      await // TODO: Replace with service.BenefitPlan.delete(id);
       setPlans(plans.filter(p => p.id !== id));
     }
   };

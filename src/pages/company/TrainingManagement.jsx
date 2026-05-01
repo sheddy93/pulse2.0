@@ -31,8 +31,8 @@ export default function TrainingManagement() {
       setUser(me);
       if (!me.company_id) { setLoading(false); return; }
       const [companies, courses] = await Promise.all([
-        base44.entities.Company.filter({ id: me.company_id }),
-        base44.entities.TrainingCourse.filter({ company_id: me.company_id })
+        // TODO: Replace with service.Company.filter({ id: me.company_id }),
+        // TODO: Replace with service.TrainingCourse.filter({ company_id: me.company_id })
       ]);
       setCompany(companies[0]);
       setCourses(courses);
@@ -51,12 +51,12 @@ export default function TrainingManagement() {
     };
 
     if (editingId) {
-      await base44.entities.TrainingCourse.update(editingId, data);
+      await // TODO: Replace with service.TrainingCourse.update(editingId, data);
     } else {
-      await base44.entities.TrainingCourse.create(data);
+      await // TODO: Replace with service.TrainingCourse.create(data);
     }
 
-    const updated = await base44.entities.TrainingCourse.filter({ company_id: company.id });
+    const updated = await // TODO: Replace with service.TrainingCourse.filter({ company_id: company.id });
     setCourses(updated);
     setShowForm(false);
     setEditingId(null);
@@ -65,7 +65,7 @@ export default function TrainingManagement() {
 
   const handleDelete = async (id) => {
     if (confirm("Elimina questo corso?")) {
-      await base44.entities.TrainingCourse.delete(id);
+      await // TODO: Replace with service.TrainingCourse.delete(id);
       setCourses(courses.filter(c => c.id !== id));
     }
   };

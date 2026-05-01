@@ -45,15 +45,15 @@ export default function EmployeeCard() {
   useEffect(() => {
     base44.auth.me().then(async (me) => {
       setUser(me);
-      const emps = await base44.entities.EmployeeProfile.filter({ id });
+      const emps = await // TODO: Replace with service.EmployeeProfile.filter({ id });
       const emp = emps[0];
       setEmployee(emp);
       if (emp) {
         const [entries, ctrs, docs, lvs] = await Promise.all([
-          base44.entities.TimeEntry.filter({ employee_id: emp.id }),
-          base44.entities.EmployeeContract.filter({ employee_id: emp.id }),
-          base44.entities.Document.filter({ employee_id: emp.id }),
-          base44.entities.LeaveRequest.filter({ employee_id: emp.id }),
+          // TODO: Replace with service.TimeEntry.filter({ employee_id: emp.id }),
+          // TODO: Replace with service.EmployeeContract.filter({ employee_id: emp.id }),
+          // TODO: Replace with service.Document.filter({ employee_id: emp.id }),
+          // TODO: Replace with service.LeaveRequest.filter({ employee_id: emp.id }),
         ]);
         setTimeEntries(entries.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)));
         setContracts(ctrs.sort((a, b) => new Date(b.start_date) - new Date(a.start_date)));
@@ -67,7 +67,7 @@ export default function EmployeeCard() {
   const saveNote = async () => {
     if (!employee) return;
     setSavingNote(true);
-    await base44.entities.EmployeeProfile.update(employee.id, { internal_notes: note });
+    await // TODO: Replace with service.EmployeeProfile.update(employee.id, { internal_notes: note });
     setSavingNote(false);
   };
 

@@ -22,7 +22,7 @@ export default function EmployeeImport() {
     base44.auth.me().then(async (me) => {
       setUser(me);
       if (!me.company_id) { setLoading(false); return; }
-      const companies = await base44.entities.Company.filter({ id: me.company_id });
+      const companies = await // TODO: Replace with service.Company.filter({ id: me.company_id });
       setCompany(companies[0]);
     }).finally(() => setLoading(false));
   }, []);

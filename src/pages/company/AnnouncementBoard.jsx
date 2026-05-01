@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+// Migration: removed base44 dependency
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import LazyImage from "@/components/LazyImage";
@@ -36,7 +36,7 @@ export default function AnnouncementBoard() {
   // Cache company data (2 hour TTL)
   const { data: cachedCompany } = useApiCache(
     'company_metadata',
-    async () => base44.entities.Company.filter({ id: '' }),
+    async () => // TODO: Replace with service.Company.filter({ id: '' }),
     2 * 60 * 60 * 1000
   );
 
@@ -45,8 +45,8 @@ export default function AnnouncementBoard() {
       setUser(me);
       if (!me.company_id) { setLoading(false); return; }
       const [companies, announces] = await Promise.all([
-        cachedCompany || base44.entities.Company.filter({ id: me.company_id }),
-        base44.entities.Announcement.filter({ company_id: me.company_id }, { skip: page * ITEMS_PER_PAGE, limit: ITEMS_PER_PAGE }, '-created_date')
+        cachedCompany || // TODO: Replace with service.Company.filter({ id: me.company_id }),
+        // TODO: Replace with service.Announcement.filter({ company_id: me.company_id }, { skip: page * ITEMS_PER_PAGE, limit: ITEMS_PER_PAGE }, '-created_date')
       ]);
       setCompany(companies[0]);
       setAnnouncements(announces);
@@ -57,7 +57,7 @@ export default function AnnouncementBoard() {
     e.preventDefault();
     if (!company || !form.title || !form.content) return;
 
-    await base44.entities.Announcement.create({
+    await // TODO: Replace with service.Announcement.create({
       company_id: company.id,
       title: form.title,
       content: form.content,
@@ -70,18 +70,18 @@ export default function AnnouncementBoard() {
 
     setForm({ title: "", content: "", priority: "normal", visibility: "all", expires_at: "", is_pinned: false });
     setShowForm(false);
-    const announces = await base44.entities.Announcement.filter({ company_id: company.id }, '-created_date');
+    const announces = await // TODO: Replace with service.Announcement.filter({ company_id: company.id }, '-created_date');
     setAnnouncements(announces);
   };
 
   const handleDelete = async (id) => {
     if (!confirm("Eliminare l'annuncio?")) return;
-    await base44.entities.Announcement.delete(id);
+    await // TODO: Replace with service.Announcement.delete(id);
     setAnnouncements(a => a.filter(ann => ann.id !== id));
   };
 
   const handleTogglePin = async (id, currentPin) => {
-    await base44.entities.Announcement.update(id, { is_pinned: !currentPin });
+    await // TODO: Replace with service.Announcement.update(id, { is_pinned: !currentPin });
     setAnnouncements(a => a.map(ann => ann.id === id ? { ...ann, is_pinned: !currentPin } : ann));
   };
 

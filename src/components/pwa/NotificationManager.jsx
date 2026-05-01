@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { // TODO: Service integration } from '@/api/// TODO: Service integrationClient';
 import {
   registerServiceWorker,
   requestNotificationPermission,
@@ -23,7 +23,7 @@ export default function NotificationManager({ user }) {
         if (subscription) {
           // Send subscription to backend
           try {
-            await base44.functions.invoke('registerPushSubscription', {
+            await // TODO: Service integration.functions.invoke('registerPushSubscription', {
               subscription: {
                 endpoint: subscription.endpoint,
                 keys: {

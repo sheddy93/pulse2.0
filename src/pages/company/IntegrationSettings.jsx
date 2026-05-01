@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+// Migration: removed base44 dependency
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import { Plus, Copy, Trash2, Eye, EyeOff, CheckCircle2, AlertCircle } from "lucide-react";
@@ -46,9 +46,9 @@ export default function IntegrationSettings() {
       setUser(me);
       if (!me.company_id) { setLoading(false); return; }
       const [companies, webhooks, apiKeys] = await Promise.all([
-        base44.entities.Company.filter({ id: me.company_id }),
-        base44.entities.WebhookIntegration.filter({ company_id: me.company_id }),
-        base44.entities.APIKey.filter({ company_id: me.company_id })
+        // TODO: Replace with service.Company.filter({ id: me.company_id }),
+        // TODO: Replace with service.WebhookIntegration.filter({ company_id: me.company_id }),
+        // TODO: Replace with service.APIKey.filter({ company_id: me.company_id })
       ]);
       setCompany(companies[0]);
       setWebhooks(webhooks);
@@ -58,11 +58,11 @@ export default function IntegrationSettings() {
 
   const handleAddWebhook = async (e) => {
     e.preventDefault();
-    await base44.entities.WebhookIntegration.create({
+    await // TODO: Replace with service.WebhookIntegration.create({
       company_id: company.id,
       ...webhookForm
     });
-    const updated = await base44.entities.WebhookIntegration.filter({ company_id: company.id });
+    const updated = await // TODO: Replace with service.WebhookIntegration.filter({ company_id: company.id });
     setWebhooks(updated);
     setShowWebhookForm(false);
     setWebhookForm({ name: "", integration_type: "custom", webhook_url: "", events: [] });
@@ -70,7 +70,7 @@ export default function IntegrationSettings() {
 
   const handleDeleteWebhook = async (id) => {
     if (confirm("Elimina questo webhook?")) {
-      await base44.entities.WebhookIntegration.delete(id);
+      await // TODO: Replace with service.WebhookIntegration.delete(id);
       setWebhooks(webhooks.filter(w => w.id !== id));
     }
   };
@@ -81,20 +81,20 @@ export default function IntegrationSettings() {
     const key = `pk_live_${Math.random().toString(36).substring(2, 15)}`;
     setGeneratedKey(key);
     
-    await base44.entities.APIKey.create({
+    await // TODO: Replace with service.APIKey.create({
       company_id: company.id,
       ...apiKeyForm,
       key_hash: key.substring(8), // Simulated hash
       prefix: `pk_live_${key.substring(8, 15)}`
     });
-    const updated = await base44.entities.APIKey.filter({ company_id: company.id });
+    const updated = await // TODO: Replace with service.APIKey.filter({ company_id: company.id });
     setApiKeys(updated);
     setApiKeyForm({ name: "", permissions: [] });
   };
 
   const handleDeleteApiKey = async (id) => {
     if (confirm("Elimina questa chiave API?")) {
-      await base44.entities.APIKey.delete(id);
+      await // TODO: Replace with service.APIKey.delete(id);
       setApiKeys(apiKeys.filter(k => k.id !== id));
     }
   };

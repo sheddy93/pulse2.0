@@ -21,7 +21,7 @@
  */
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { base44 } from "@/api/base44Client";
+import { authService } from '@/services/authService';
 import { cn } from "@/lib/utils";
 import useDarkMode from "@/hooks/useDarkMode";
 import {
@@ -217,7 +217,7 @@ export default function AppShell({ user, children }) {
 
         <div className="p-3 border-t border-slate-100 dark:border-slate-700">
           <button
-            onClick={() => base44.auth.logout("/")}
+            onClick={() => authService.logout()}
             className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 dark:hover:text-red-400 transition-colors"
           >
             <LogOut className="w-4 h-4" />

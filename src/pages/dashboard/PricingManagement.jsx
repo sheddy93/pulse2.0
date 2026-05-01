@@ -31,9 +31,9 @@ export default function PricingManagement() {
       setUser(me);
       if (me.role === "super_admin") {
         const [plansData, addonsData, subsData] = await Promise.all([
-          base44.entities.SubscriptionPlan.list(),
-          base44.entities.SubscriptionAddon.list(),
-          base44.entities.CompanySubscription.list(),
+          // TODO: Replace with service.SubscriptionPlan.list(),
+          // TODO: Replace with service.SubscriptionAddon.list(),
+          // TODO: Replace with service.CompanySubscription.list(),
         ]);
         setPlans(plansData);
         setAddons(addonsData);
@@ -200,9 +200,9 @@ function PlanEditor({ plan, onClose }) {
 
   const handleSave = async () => {
     if (plan.id) {
-      await base44.entities.SubscriptionPlan.update(plan.id, formData);
+      await // TODO: Replace with service.SubscriptionPlan.update(plan.id, formData);
     } else {
-      await base44.entities.SubscriptionPlan.create(formData);
+      await // TODO: Replace with service.SubscriptionPlan.create(formData);
     }
     onClose();
   };
@@ -261,9 +261,9 @@ function AddonEditor({ addon, onClose }) {
 
   const handleSave = async () => {
     if (addon.id) {
-      await base44.entities.SubscriptionAddon.update(addon.id, formData);
+      await // TODO: Replace with service.SubscriptionAddon.update(addon.id, formData);
     } else {
-      await base44.entities.SubscriptionAddon.create(formData);
+      await // TODO: Replace with service.SubscriptionAddon.create(formData);
     }
     onClose();
   };
@@ -328,7 +328,7 @@ function DiscountEditor({ subscription, onClose }) {
   const total = subtotal - discountAmount;
 
   const handleSave = async () => {
-    await base44.entities.CompanySubscription.update(subscription.id, {
+    await // TODO: Replace with service.CompanySubscription.update(subscription.id, {
       discount_percentage: discountPercentage,
       discount_reason: discountReason,
       total_monthly: total,

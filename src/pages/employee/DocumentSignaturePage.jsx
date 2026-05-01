@@ -27,10 +27,10 @@ export default function DocumentSignaturePage() {
   useEffect(() => {
     base44.auth.me().then(async (me) => {
       setUser(me);
-      const emps = await base44.entities.EmployeeProfile.filter({ user_email: me.email });
+      const emps = await // TODO: Replace with service.EmployeeProfile.filter({ user_email: me.email });
       if (emps[0]) {
         setEmployee(emps[0]);
-        const docs = await base44.entities.Document.filter({ employee_id: emps[0].id, signature_required: true });
+        const docs = await // TODO: Replace with service.Document.filter({ employee_id: emps[0].id, signature_required: true });
         setDocs(docs.sort((a, b) => {
           // Pending first, then signed, then rejected
           const order = { pending: 0, signed: 1, rejected: 2 };
@@ -45,7 +45,7 @@ export default function DocumentSignaturePage() {
     const doc = docs.find(d => d.id === signingDocId);
     if (!doc) return;
 
-    await base44.entities.Document.update(doc.id, {
+    await // TODO: Replace with service.Document.update(doc.id, {
       signature_status: "signed",
       signed_by: user.email,
       signed_at: new Date().toISOString(),
@@ -67,7 +67,7 @@ export default function DocumentSignaturePage() {
     const doc = docs.find(d => d.id === signingDocId);
     if (!doc) return;
 
-    await base44.entities.Document.update(doc.id, {
+    await // TODO: Replace with service.Document.update(doc.id, {
       signature_status: "rejected",
       signed_by: user.email,
       signed_at: new Date().toISOString(),

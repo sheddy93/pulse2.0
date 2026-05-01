@@ -34,7 +34,7 @@ export default function InboxMessages() {
       setUser(me);
 
       // Get employee profile
-      const emps = await base44.entities.EmployeeProfile.filter({
+      const emps = await // TODO: Replace with service.EmployeeProfile.filter({
         user_email: me.email
       });
 
@@ -42,7 +42,7 @@ export default function InboxMessages() {
         setEmployeeProfile(emps[0]);
 
         // Get all messages for this company
-        const allMessages = await base44.entities.CompanyMessage.filter({
+        const allMessages = await // TODO: Replace with service.CompanyMessage.filter({
           company_id: emps[0].company_id
         });
 
@@ -74,7 +74,7 @@ export default function InboxMessages() {
         { employee_id: employeeProfile.id, read_at: new Date().toISOString() }
       ];
 
-      await base44.entities.CompanyMessage.update(msgId, {
+      await // TODO: Replace with service.CompanyMessage.update(msgId, {
         read_by: updatedReadBy
       });
 
@@ -91,7 +91,7 @@ export default function InboxMessages() {
 
     setDeleting(msgId);
     try {
-      await base44.entities.CompanyMessage.delete(msgId);
+      await // TODO: Replace with service.CompanyMessage.delete(msgId);
       toast.success("Messaggio eliminato");
       setMessages(messages.filter(m => m.id !== msgId));
     } catch (e) {

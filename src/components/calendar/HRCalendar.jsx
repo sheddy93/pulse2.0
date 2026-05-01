@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { // TODO: Service integration } from "@/api/// TODO: Service integrationClient";
 import { ChevronLeft, ChevronRight, Plus, X, Bell, FileText, Calendar, Loader2, Trash2 } from "lucide-react";
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, getDay, isSameMonth, isToday, isSameDay, addMonths, subMonths, parseISO, isPast, differenceInDays } from "date-fns";
 import { it } from "date-fns/locale";
@@ -39,11 +39,11 @@ export default function HRCalendar({ companyId, userRole, userEmail }) {
     setLoading(true);
     try {
       const [docs, contracts, certifications, leaves, calNotes] = await Promise.all([
-        base44.entities.Document.filter({ company_id: companyId }),
-        base44.entities.EmployeeContract.filter({ company_id: companyId }),
-        base44.entities.EmployeeSkill.filter({ company_id: companyId }),
-        base44.entities.LeaveRequest.filter({ company_id: companyId, status: "approved" }),
-        base44.entities.CalendarNote.filter({ company_id: companyId }),
+        // TODO: Service integration.entities.Document.filter({ company_id: companyId }),
+        // TODO: Service integration.entities.EmployeeContract.filter({ company_id: companyId }),
+        // TODO: Service integration.entities.EmployeeSkill.filter({ company_id: companyId }),
+        // TODO: Service integration.entities.LeaveRequest.filter({ company_id: companyId, status: "approved" }),
+        // TODO: Service integration.entities.CalendarNote.filter({ company_id: companyId }),
       ]);
 
       const allEvents = [];
@@ -133,7 +133,7 @@ export default function HRCalendar({ companyId, userRole, userEmail }) {
   const handleSaveNote = async () => {
     if (!noteForm.title.trim() || !selectedDay) return;
     setSaving(true);
-    await base44.entities.CalendarNote.create({
+    await // TODO: Service integration.entities.CalendarNote.create({
       company_id: companyId,
       author_email: userEmail,
       date: format(selectedDay, "yyyy-MM-dd"),
@@ -150,7 +150,7 @@ export default function HRCalendar({ companyId, userRole, userEmail }) {
   };
 
   const handleDeleteNote = async (noteId) => {
-    await base44.entities.CalendarNote.delete(noteId);
+    await // TODO: Service integration.entities.CalendarNote.delete(noteId);
     await loadAll();
   };
 
