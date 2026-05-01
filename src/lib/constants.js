@@ -3,8 +3,8 @@
  * Costanti globali app
  */
 
-export const APP_NAME = 'PulseHR';
-export const APP_VERSION = '0.1.0';
+export const APP_NAME = 'AldevionHR';
+export const APP_VERSION = '1.0.0';
 
 // Enum stati
 export const EMPLOYMENT_STATUS = {

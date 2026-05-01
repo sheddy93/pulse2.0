@@ -98,10 +98,8 @@ import TemporaryLogins from '@/pages/dashboard/TemporaryLogins';
 import PricingManagement from '@/pages/dashboard/PricingManagement';
 import PricingPageNew from '@/pages/company/PricingPageNew';
 import TrainingPortal from '@/pages/employee/TrainingPortal';
-import PersonalDocuments from '@/pages/employee/PersonalDocuments';
 import PerformanceFeedback from '@/pages/employee/PerformanceFeedback';
 import Chat from '@/pages/employee/Chat';
-import Messaging from '@/pages/employee/Messaging';
 import TwoFactorAuthPage from '@/pages/employee/TwoFactorAuthPage';
 
 // Consultant
@@ -196,7 +194,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/admin/system" element={<AdminSystem />} />
 
       {/* Consultant */}
-      <Route path="/dashboard/consultant" element={<CompanyOwnerDashboard />} />
+      <Route path="/dashboard/consultant" element={<ManagerDashboard />} />
       <Route path="/dashboard/consultant/companies" element={<EmployeeListNew />} />
       <Route path="/dashboard/consultant/employees" element={<EmployeeListNew />} />
       <Route path="/dashboard/consultant/link-requests" element={<LinkRequests />} />
@@ -261,12 +259,10 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/employee" element={<MyDashboard />} />
       <Route path="/dashboard/employee/attendance" element={<AttendancePage />} />
       <Route path="/dashboard/employee/calendar" element={<AttendanceCalendarPage />} />
-      <Route path="/dashboard/employee/history" element={<AttendancePage />} />
       <Route path="/dashboard/employee/leave" element={<LeaveRequestPage />} />
       <Route path="/dashboard/employee/leave-balance" element={<LeaveBalance />} />
       <Route path="/dashboard/employee/overtime" element={<OvertimeRequestPage />} />
       <Route path="/dashboard/employee/documents" element={<DocumentSignaturePage />} />
-      <Route path="/dashboard/employee/personal-documents" element={<PersonalDocuments />} />
       <Route path="/dashboard/employee/document-management" element={<DocumentManagement />} />
       <Route path="/dashboard/employee/messages" element={<InboxMessages />} />
       <Route path="/dashboard/employee/skills" element={<SkillsPage />} />
@@ -275,7 +271,6 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/employee/training-plans" element={<TrainingDashboard />} />
       <Route path="/dashboard/employee/feedback" element={<PerformanceFeedback />} />
       <Route path="/dashboard/employee/chat" element={<Chat />} />
-      <Route path="/dashboard/employee/messaging" element={<Messaging />} />
       <Route path="/dashboard/employee/two-factor" element={<TwoFactorAuthPage />} />
       <Route path="/dashboard/employee/expenses" element={<EmployeeExpenses />} />
       <Route path="/dashboard/employee/onboarding" element={<OnboardingWizard />} />
