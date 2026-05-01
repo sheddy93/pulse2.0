@@ -65,10 +65,14 @@ export default function SuperAdminDashboard() {
     { id: 'overview', label: 'Panoramica', icon: LayoutGrid },
     { id: 'companies', label: 'Aziende', icon: Building2 },
     { id: 'users', label: 'Utenti', icon: Users },
-    { id: 'pricing', label: 'Pricing', icon: DollarSign },
-    { id: 'landing', label: 'Landing Page', icon: Palette },
+    { id: 'subscriptions', label: 'Abbonamenti', icon: DollarSign },
+    { id: 'audit', label: 'Audit Log', icon: Activity },
+    { id: 'emails', label: 'Email Log', icon: BarChart3 },
+    { id: 'stripe', label: 'Stripe Events', icon: DollarSign },
+    { id: 'features', label: 'Feature Flags', icon: Palette },
+    { id: 'ai', label: 'AI Usage', icon: BarChart3 },
+    { id: 'storage', label: 'Storage', icon: Activity },
     { id: 'system', label: 'Sistema', icon: Activity },
-    { id: 'analytics', label: 'Analytics', icon: BarChart3 },
   ];
 
   return (
@@ -108,15 +112,50 @@ export default function SuperAdminDashboard() {
             {activeTab === 'overview' && <SuperAdminOverview stats={stats} />}
             {activeTab === 'companies' && <CompanyManagement />}
             {activeTab === 'users' && <UserManagement />}
-            {activeTab === 'pricing' && <PricingConfigManager />}
-            {activeTab === 'landing' && <LandingPageManager />}
-            {activeTab === 'system' && <SystemHealth />}
-            {activeTab === 'analytics' && (
+            {activeTab === 'subscriptions' && (
               <div className="text-center py-12 text-slate-500">
-                <BarChart3 className="w-12 h-12 mx-auto mb-3 text-slate-300" />
-                <p>Analytics avanzate - Coming Soon</p>
+                <DollarSign className="w-12 h-12 mx-auto mb-3 text-slate-300" />
+                <p>Gestione Abbonamenti - Coming Soon</p>
               </div>
             )}
+            {activeTab === 'audit' && (
+              <div className="text-center py-12 text-slate-500">
+                <Activity className="w-12 h-12 mx-auto mb-3 text-slate-300" />
+                <p>Audit Log Completo - Coming Soon</p>
+              </div>
+            )}
+            {activeTab === 'emails' && (
+              <div className="text-center py-12 text-slate-500">
+                <BarChart3 className="w-12 h-12 mx-auto mb-3 text-slate-300" />
+                <p>Email Log - Coming Soon</p>
+              </div>
+            )}
+            {activeTab === 'stripe' && (
+              <div className="text-center py-12 text-slate-500">
+                <DollarSign className="w-12 h-12 mx-auto mb-3 text-slate-300" />
+                <p>Stripe Events - Coming Soon</p>
+              </div>
+            )}
+            {activeTab === 'features' && (
+              <div className="text-center py-12 text-slate-500">
+                <Palette className="w-12 h-12 mx-auto mb-3 text-slate-300" />
+                <p>Feature Flags Management - Coming Soon</p>
+              </div>
+            )}
+            {activeTab === 'ai' && (
+              <div className="text-center py-12 text-slate-500">
+                <BarChart3 className="w-12 h-12 mx-auto mb-3 text-slate-300" />
+                <p>AI Usage Analytics - Disattivato (Assistente base only)</p>
+                <p className="text-xs text-slate-400 mt-2">Pronto per Gemini/Claude integration</p>
+              </div>
+            )}
+            {activeTab === 'storage' && (
+              <div className="text-center py-12 text-slate-500">
+                <Activity className="w-12 h-12 mx-auto mb-3 text-slate-300" />
+                <p>Storage Usage - Coming Soon</p>
+              </div>
+            )}
+            {activeTab === 'system' && <SystemHealth />}
           </div>
         </div>
       </div>
