@@ -1,28 +1,16 @@
 /**
- * Service Layer Exports
- * ────────────────────
- * Central import point for all services.
- * ✅ Zero SDK dependency
- * ✅ Fully testable
- * ✅ Swappable implementations
+ * src/services/index.ts
+ * =====================
+ * Barrel export services
  */
 
-export { employeeService, EmployeeService } from './employeeService';
-export { leaveService, LeaveService } from './leaveService';
-export { attendanceService, AttendanceService } from './attendanceService';
-export { notificationService, NotificationService } from './notificationService';
-export { workflowService, WorkflowService } from './workflowService';
-export { payrollService, PayrollService } from './payrollService';
-export { integrationService, IntegrationService } from './integrationService';
-
-/**
- * Usage in components:
- * 
- * import { employeeService, leaveService } from '@/services';
- * 
- * const employees = await employeeService.getEmployees(companyId);
- * const leave = await leaveService.createLeaveRequest({...});
- * 
- * TODO MIGRATION: Services will work unchanged with PostgreSQL
- * by replacing the repository implementation only.
- */
+export { employeeService } from './employeeService';
+export { attendanceService } from './attendanceService';
+export { leaveService } from './leaveService';
+export { permissionService } from './permissionService';
+// TODO MIGRATION: aggiungi altri services
+// export { companyService } from './companyService';
+// export { departmentService } from './departmentService';
+// export { documentService } from './documentService';
+// export { payrollService } from './payrollService';
+// export { billingService } from './billingService';
