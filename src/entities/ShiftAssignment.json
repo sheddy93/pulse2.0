@@ -1,0 +1,76 @@
+{
+  "name": "ShiftAssignment",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "employee_id": {
+      "type": "string"
+    },
+    "employee_email": {
+      "type": "string"
+    },
+    "employee_name": {
+      "type": "string"
+    },
+    "shift_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "start_time": {
+      "type": "string",
+      "pattern": "^[0-2][0-9]:[0-5][0-9]$",
+      "description": "HH:MM format"
+    },
+    "end_time": {
+      "type": "string",
+      "pattern": "^[0-2][0-9]:[0-5][0-9]$",
+      "description": "HH:MM format"
+    },
+    "shift_type": {
+      "type": "string",
+      "enum": ["morning", "afternoon", "night", "full_day", "custom"],
+      "description": "Tipo di turno standard"
+    },
+    "location_id": {
+      "type": "string",
+      "description": "ID della sede di lavoro"
+    },
+    "location_name": {
+      "type": "string"
+    },
+    "assigned_by": {
+      "type": "string",
+      "description": "Email dell'HR che ha assegnato"
+    },
+    "assigned_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["scheduled", "confirmed", "completed", "cancelled"],
+      "default": "scheduled",
+      "description": "Stato dell'assegnazione"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "swap_request_id": {
+      "type": "string",
+      "description": "Se è una richiesta di scambio turno"
+    },
+    "is_overtime": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "company_id",
+    "employee_id",
+    "shift_date",
+    "start_time",
+    "end_time"
+  ]
+}

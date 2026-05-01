@@ -51,7 +51,7 @@ import CompanyConsultants from './pages/company/CompanyConsultants';
 import DocumentsPage from './pages/company/DocumentsPage';
 import ExpiryCalendar from './pages/company/ExpiryCalendar';
 import OvertimePage from './pages/company/OvertimePage';
-import ShiftManagement from './pages/company/ShiftManagement';
+import ShiftManagement from './pages/company/ShiftManagementEnhanced';
 import AnnouncementBoard from './pages/company/AnnouncementBoard';
 import SkillManagement from './pages/company/SkillManagement';
 import AssetManagement from './pages/company/AssetManagement';
@@ -104,6 +104,7 @@ import LeaveRequestPage from './pages/employee/LeaveRequestPage';
 import EmployeeProfilePage from './pages/employee/EmployeeProfilePage';
 import MyProfile from './pages/employee/MyProfile';
 import DocumentSignaturePage from './pages/employee/DocumentSignaturePage';
+import EmployeeShiftCalendarPage from './pages/employee/EmployeeShiftCalendarPage';
 import OvertimeRequestPage from './pages/employee/OvertimeRequestPage';
 import SkillsPage from './pages/employee/SkillsPage';
 import BenefitsPage from './pages/employee/BenefitsPage';
@@ -270,6 +271,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/employee/notification-settings" element={<NotificationPreferencesPage />} />
       <Route path="/dashboard/employee/contract" element={<EmployeeContract />} />
       <Route path="/dashboard/employee/my-profile" element={<MyProfile />} />
+      <Route path="/dashboard/employee/shifts" element={<EmployeeShiftCalendarPage />} />
 
       <Route path="*" element={<PageNotFound />} />
     </Routes>

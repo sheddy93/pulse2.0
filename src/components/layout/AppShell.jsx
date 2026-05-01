@@ -122,6 +122,7 @@ const NAV = {
     { label: "Le mie presenze", icon: ClipboardList, path: "/dashboard/employee/history" },
     { label: "Ferie & Permessi", icon: CalendarDays, path: "/dashboard/employee/leave" },
     { label: "Saldo Ferie", icon: Calendar, path: "/dashboard/employee/leave-balance" },
+    { label: "I Miei Turni", icon: Calendar, path: "/dashboard/employee/shifts" },
     { label: "Straordinari", icon: Clock, path: "/dashboard/employee/overtime" },
     { label: "I miei benefit", icon: Heart, path: "/dashboard/employee/benefits" },
     { label: "Documenti da firmare", icon: FileText, path: "/dashboard/employee/documents" },
