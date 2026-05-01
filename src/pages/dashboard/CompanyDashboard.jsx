@@ -8,6 +8,7 @@ import { Users, Briefcase, CalendarDays, UserPlus, Copy, Check, Building2 } from
 import PayrollExport from "@/components/company/PayrollExport";
 import PayrollArchive from "@/components/company/PayrollArchive";
 import PayrollUploadPanel from "@/components/company/PayrollUploadPanel";
+import ReportButton from "@/components/reports/ReportButton";
 
 const STATUS_BADGE = {
   active: { label: "Attivo", cls: "bg-emerald-100 text-emerald-700" },
@@ -78,6 +79,7 @@ export default function CompanyDashboard() {
             </Link>
             {company && <PayrollExport companyId={company.id} employees={employees} />}
             {company && <PayrollArchive companyId={company.id} employees={employees} />}
+            {company && <ReportButton companyId={company.id} userRole="company" label="Genera Report PDF" />}
           </div>
         </div>
 

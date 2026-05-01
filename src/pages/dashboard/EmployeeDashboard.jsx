@@ -8,6 +8,7 @@ import QuickAttendanceCard from "@/components/pwa/QuickAttendanceCard";
 import DashboardGrid from "@/components/dashboard/DashboardGrid";
 import { useDashboardLayout } from "@/hooks/useDashboardLayout";
 import { Clock, CalendarDays, FileText, CheckCircle2, Settings } from "lucide-react";
+import ReportButton from "@/components/reports/ReportButton";
 import { format, startOfMonth } from "date-fns";
 import { it } from "date-fns/locale";
 import UpcomingShifts from "@/components/employee/UpcomingShifts";
@@ -186,9 +187,10 @@ export default function EmployeeDashboard() {
             </h1>
             <p className="text-emerald-200 text-sm">{format(new Date(), "EEEE d MMMM yyyy", { locale: it })}</p>
           </div>
+          {employee && <ReportButton employeeId={employee.id} userRole="employee" label="Report PDF" />}
           <button
-            onClick={() => setIsEditingLayout(!isEditingLayout)}
-            className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg font-semibold text-sm flex items-center gap-2 transition-colors"
+          onClick={() => setIsEditingLayout(!isEditingLayout)}
+          className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg font-semibold text-sm flex items-center gap-2 transition-colors"
           >
             <Settings className="w-4 h-4" />
             {isEditingLayout ? "Salva layout" : "Personalizza"}
