@@ -1,0 +1,77 @@
+{
+  "name": "AttendanceFailureLog",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "employee_id": {
+      "type": "string"
+    },
+    "employee_email": {
+      "type": "string"
+    },
+    "employee_name": {
+      "type": "string"
+    },
+    "location_id": {
+      "type": "string"
+    },
+    "location_name": {
+      "type": "string"
+    },
+    "attempt_type": {
+      "type": "string",
+      "enum": [
+        "check_in",
+        "check_out",
+        "break_start",
+        "break_end"
+      ],
+      "description": "Tipo di timbratura tentata"
+    },
+    "failure_reason": {
+      "type": "string",
+      "enum": [
+        "outside_geofence",
+        "gps_disabled",
+        "no_location_set",
+        "gps_error"
+      ],
+      "description": "Motivo del fallimento"
+    },
+    "employee_latitude": {
+      "type": "number",
+      "description": "Latitudine del dipendente al momento del tentativo"
+    },
+    "employee_longitude": {
+      "type": "number",
+      "description": "Longitudine del dipendente al momento del tentativo"
+    },
+    "distance_from_location_meters": {
+      "type": "number",
+      "description": "Distanza dal perimetro consentito"
+    },
+    "ip_address": {
+      "type": "string"
+    },
+    "user_agent": {
+      "type": "string"
+    },
+    "attempted_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "company_id",
+    "employee_id",
+    "employee_email",
+    "attempt_type",
+    "failure_reason",
+    "attempted_at"
+  ]
+}
