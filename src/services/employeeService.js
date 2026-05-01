@@ -39,4 +39,17 @@ export const employeeService = {
   async exportEmployees(format = 'csv') {
     return employeesApi.export(format);
   },
+
+  async createNewEmployee(companyId, data) {
+    return this.createEmployee({
+      company_id: companyId,
+      ...data,
+    });
+  },
+
+  async fetchDepartments(companyId) {
+    // TODO: Implement via API when backend has departments endpoint
+    // For now, return empty array
+    return [];
+  },
 };
