@@ -26,13 +26,17 @@ export const authService = {
     localStorage.removeItem('user');
   },
 
-  async getMe() {
+  async me() {
     try {
       const response = await apiClient.get('/auth/me');
       return response.data || response;
     } catch (err) {
       throw new Error('Not authenticated');
     }
+  },
+
+  async getMe() {
+    return this.me();
   },
 
   async refreshToken() {
@@ -65,5 +69,34 @@ export const authService = {
 
   isAuthenticated() {
     return !!this.getToken();
+  },
+
+  async logout(redirectUrl) {
+    try {
+      await apiClient.post('/auth/logout', {});
+    } catch (err) {
+      console.error('Logout error:', err);
+    }
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('user');
+    if (redirectUrl) {
+      window.location.href = redirectUrl;
+    } else {
+      window.location.reload();
+    }
+  },
+
+  async redirectToLogin(nextUrl) {
+    if (nextUrl) {
+      sessionStorage.setItem('nextUrl', nextUrl);
+    }
+    window.location.href = '/auth/login';
+  },
+
+  async updateMe(data) {
+    const response = await apiClient.put('/auth/me', data);
+    const updatedUser = response.data || response;
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+    return updatedUser;
   },
 };

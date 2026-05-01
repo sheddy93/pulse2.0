@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 // Migration: removed base44 dependency
+import { useState, useEffect } from "react";
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
-import { useState, useEffect } from "react";
 import { Plus, Copy, Trash2, Eye, EyeOff, CheckCircle2, AlertCircle } from "lucide-react";
 
 const INTEGRATION_TYPES = {
