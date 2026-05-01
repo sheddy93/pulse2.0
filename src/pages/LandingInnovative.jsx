@@ -115,19 +115,6 @@ const ROLE_DASHBOARDS = [
       { label: 'HR Analytics', detail: 'Dashboard BI avanzata' },
       { label: 'Audit Log', detail: 'Compliance GDPR' }
     ]
-  },
-  {
-    role: 'Super Admin',
-    icon: Zap,
-    color: 'from-red-500 to-red-600',
-    features: [
-      { label: 'Gestione Feature', detail: 'Feature plan globale' },
-      { label: 'Pricing Plans', detail: 'Piani di sottoscrizione' },
-      { label: 'Aziende', detail: 'Onboarding & monitoraggio' },
-      { label: 'Analytics', detail: 'Metriche piattaforma' },
-      { label: 'Configurazione', detail: 'Email, integrazioni' },
-      { label: 'Supporto Tier-2', detail: 'Gestione ticket' }
-    ]
   }
 ];
 
@@ -223,8 +210,11 @@ export default function LandingInnovative() {
         </motion.div>
       </section>
 
+      {/* Visual Divider */}
+      <div className="h-1 bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-500" />
+
       {/* Features Interactive */}
-      <section id="features" className="py-20 md:py-28 bg-gradient-to-b from-transparent via-blue-500/5 to-transparent">
+      <section id="features" className="py-20 md:py-28 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
         <div className="max-w-7xl mx-auto px-4 md:px-6 space-y-12 md:space-y-16">
           <motion.div variants={fadeInUp} initial="initial" whileInView="animate" viewport={{ once: true }} className="text-center space-y-4">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold">Funzionalità Potenti</h2>
@@ -236,6 +226,14 @@ export default function LandingInnovative() {
             {FEATURE_SCREENS.map((feature) => {
               const Icon = feature.icon;
               const isActive = activeFeature === feature.id;
+              const gradients = {
+                attendance: 'from-emerald-500 to-teal-600',
+                documents: 'from-blue-500 to-indigo-600',
+                training: 'from-purple-500 to-pink-600',
+                shifts: 'from-orange-500 to-red-600',
+                performance: 'from-yellow-500 to-orange-600',
+                security: 'from-slate-600 to-slate-800'
+              };
               return (
                 <motion.button
                   key={feature.id}
@@ -243,12 +241,12 @@ export default function LandingInnovative() {
                   whileHover={{ y: -4 }}
                   className={`p-4 rounded-lg border transition-all text-center space-y-2 ${
                     isActive
-                      ? 'border-blue-400 bg-blue-500/20 ring-2 ring-blue-500/50'
-                      : 'border-blue-500/20 bg-blue-500/5 hover:border-blue-500/40 hover:bg-blue-500/10'
+                      ? `border-transparent bg-gradient-to-br ${gradients[feature.id]} ring-2 ring-offset-2 ring-offset-slate-950`
+                      : 'border-slate-700 bg-slate-800/50 hover:border-slate-600 hover:bg-slate-800'
                   }`}
                 >
-                  <Icon className={`w-6 h-6 mx-auto ${isActive ? 'text-blue-300' : 'text-slate-400'}`} />
-                  <div className="text-xs md:text-sm font-medium line-clamp-2">{feature.title}</div>
+                  <Icon className={`w-6 h-6 mx-auto ${isActive ? 'text-white' : 'text-slate-400'}`} />
+                  <div className={`text-xs md:text-sm font-medium line-clamp-2 ${isActive ? 'text-white' : 'text-slate-400'}`}>{feature.title}</div>
                 </motion.button>
               );
             })}
@@ -264,8 +262,8 @@ export default function LandingInnovative() {
             >
               <div className="grid md:grid-cols-2 gap-6 md:gap-8 items-center">
                 <div className="space-y-4 md:space-y-6">
-                  <div className={`inline-flex items-center gap-3 px-4 py-2 bg-gradient-to-r ${currentFeature.color} rounded-full`}>
-                    {/* Icon placeholder */}
+                  <div className={`inline-flex items-center gap-3 px-4 py-2 bg-gradient-to-r ${currentFeature.color} rounded-full text-white font-semibold text-sm`}>
+                    ✨ {currentFeature.subtitle}
                   </div>
                   <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold">{currentFeature.title}</h3>
                   <p className="text-lg text-slate-300">{currentFeature.description}</p>
@@ -280,15 +278,23 @@ export default function LandingInnovative() {
                   </div>
                 </div>
 
-                <div className={`hidden md:block h-96 bg-gradient-to-br ${currentFeature.color} rounded-xl opacity-20`} />
+                <div className={`hidden md:block h-96 bg-gradient-to-br ${currentFeature.color} rounded-xl shadow-2xl flex items-center justify-center`}>
+                  <div className="text-center text-white/50">
+                    <div className="text-6xl mb-2">{currentFeature.icon === Clock ? '⏱️' : currentFeature.icon === FileText ? '📄' : currentFeature.icon === Zap ? '⚡' : currentFeature.icon === Calendar ? '📅' : currentFeature.icon === BarChart3 ? '📊' : '🔒'}</div>
+                    <p className="text-sm">Preview Feature</p>
+                  </div>
+                </div>
               </div>
             </motion.div>
           )}
         </div>
       </section>
 
+      {/* Visual Divider */}
+      <div className="h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-emerald-500" />
+
       {/* Role Dashboards */}
-      <section id="dashboards" className="py-20 md:py-28">
+      <section id="dashboards" className="py-20 md:py-28 bg-gradient-to-b from-slate-950 via-blue-950 to-slate-950">
         <div className="max-w-7xl mx-auto px-4 md:px-6 space-y-12 md:space-y-16">
           <motion.div variants={fadeInUp} initial="initial" whileInView="animate" viewport={{ once: true }} className="text-center space-y-4">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold">Dashboard Personalizzati</h2>
@@ -297,15 +303,15 @@ export default function LandingInnovative() {
 
           {/* Role Tabs */}
           <div className="flex flex-wrap gap-2 md:gap-3 justify-center">
-            {ROLE_DASHBOARDS.map((roleItem, i) => {
+            {ROLE_DASHBOARDS.map((roleItem, idx) => {
               const Icon = roleItem.icon;
               return (
                 <motion.button
-                  key={i}
-                  onClick={() => setActiveRoleTab(i)}
+                  key={idx}
+                  onClick={() => setActiveRoleTab(idx)}
                   whileHover={{ scale: 1.05 }}
                   className={`flex items-center gap-2 px-4 md:px-6 py-2 md:py-3 rounded-lg border transition-all font-medium text-sm md:text-base ${
-                    activeRoleTab === i
+                    activeRoleTab === idx
                       ? `bg-gradient-to-r ${roleItem.color} border-transparent text-white`
                       : 'border-blue-500/20 bg-blue-500/5 text-slate-300 hover:border-blue-500/40'
                   }`}
@@ -324,24 +330,30 @@ export default function LandingInnovative() {
             animate={{ opacity: 1, y: 0 }}
             className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
           >
-            {currentRole.features.map((feature, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.05 }}
-                className="p-4 md:p-6 rounded-xl border border-blue-500/20 bg-gradient-to-br from-blue-500/10 to-slate-900/50 hover:border-blue-500/40 transition-all"
-              >
-                <h4 className="font-semibold text-white mb-1">{feature.label}</h4>
-                <p className="text-sm text-slate-400">{feature.detail}</p>
-              </motion.div>
-            ))}
+            {currentRole.features.map((feature, i) => {
+              const colors = ['from-emerald-500/20 to-teal-600/20', 'from-blue-500/20 to-indigo-600/20', 'from-purple-500/20 to-pink-600/20', 'from-orange-500/20 to-red-600/20', 'from-yellow-500/20 to-orange-600/20', 'from-slate-600/20 to-slate-800/20'];
+              return (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                  className={`p-4 md:p-6 rounded-xl border border-slate-700 bg-gradient-to-br ${colors[i % colors.length]} hover:border-slate-600 transition-all`}
+                >
+                  <h4 className="font-semibold text-white mb-1">{feature.label}</h4>
+                  <p className="text-sm text-slate-400">{feature.detail}</p>
+                </motion.div>
+              );
+            })}
           </motion.div>
         </div>
       </section>
 
+      {/* Visual Divider */}
+      <div className="h-1 bg-gradient-to-r from-pink-500 via-blue-500 to-emerald-500" />
+
       {/* CTA Section */}
-      <section className="py-16 md:py-20 bg-gradient-to-r from-blue-600/20 via-blue-500/10 to-purple-600/20 border-y border-blue-500/20">
+      <section className="py-16 md:py-20 bg-gradient-to-b from-slate-950 via-purple-950 to-slate-950 border-y border-purple-500/20">
         <motion.div
           variants={fadeInUp}
           initial="initial"

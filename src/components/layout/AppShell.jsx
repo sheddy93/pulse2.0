@@ -168,12 +168,26 @@ export default function AppShell({ user, children }) {
           </button>
         </div>
 
-        <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
-          <div className={cn("inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold text-white", getRoleColor(role))}>
-            <div className="w-1.5 h-1.5 bg-white/60 rounded-full" />
-            {getRoleLabel(role)}
+        <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700 space-y-2">
+          <div className="flex items-center justify-between">
+            <div className={cn("inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold text-white", getRoleColor(role))}>
+              <div className="w-1.5 h-1.5 bg-white/60 rounded-full" />
+              {getRoleLabel(role)}
+            </div>
+            <select
+              onChange={(e) => {
+                // Language change logic
+                localStorage.setItem('language', e.target.value);
+                window.location.reload();
+              }}
+              defaultValue={localStorage.getItem('language') || 'it'}
+              className="px-2 py-1 text-xs bg-slate-800 border border-slate-600 text-white rounded cursor-pointer focus:outline-none"
+            >
+              <option value="it">🇮🇹 IT</option>
+              <option value="en">🇬🇧 EN</option>
+            </select>
           </div>
-          <p className="text-xs text-slate-400 dark:text-slate-500 mt-1.5 truncate">{user?.email}</p>
+          <p className="text-xs text-slate-400 dark:text-slate-500 truncate">{user?.email}</p>
         </div>
 
         <nav className="flex-1 overflow-y-auto py-3 px-3 space-y-0.5">
