@@ -11,7 +11,8 @@ import SuperAdminOverview from '@/components/admin/SuperAdminOverview';
 import CompanyManagement from '@/components/admin/CompanyManagement';
 import UserManagement from '@/components/admin/UserManagement';
 import SystemHealth from '@/components/admin/SystemHealth';
-import { LayoutGrid, Building2, Users, Activity, BarChart3 } from 'lucide-react';
+import LandingPageManager from '@/components/admin/LandingPageManager';
+import { LayoutGrid, Building2, Users, Activity, BarChart3, Palette } from 'lucide-react';
 
 export default function SuperAdminDashboard() {
   const [user, setUser] = useState(null);
@@ -64,6 +65,7 @@ export default function SuperAdminDashboard() {
     { id: 'companies', label: 'Aziende', icon: Building2 },
     { id: 'users', label: 'Utenti', icon: Users },
     { id: 'system', label: 'Sistema', icon: Activity },
+    { id: 'landing', label: 'Landing Page', icon: Palette },
     { id: 'analytics', label: 'Analytics', icon: BarChart3 },
   ];
 
@@ -105,6 +107,7 @@ export default function SuperAdminDashboard() {
             {activeTab === 'companies' && <CompanyManagement />}
             {activeTab === 'users' && <UserManagement />}
             {activeTab === 'system' && <SystemHealth />}
+            {activeTab === 'landing' && <LandingPageManager />}
             {activeTab === 'analytics' && (
               <div className="text-center py-12 text-slate-500">
                 <BarChart3 className="w-12 h-12 mx-auto mb-3 text-slate-300" />
