@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
-import { Settings, Globe, Megaphone, DollarSign, Share2, Save, CreditCard } from "lucide-react";
+import { Settings, Globe, Megaphone, DollarSign, Share2, Save, CreditCard, Plus, Trash2, ExternalLink } from "lucide-react";
 import StripePlansManager from "@/components/admin/StripePlansManager";
 import { toast } from "sonner";
 
@@ -11,7 +11,8 @@ const PLATFORMS = ["linkedin", "twitter", "facebook", "instagram", "github", "yo
 export default function SuperAdminSettings() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("hero");
+  const urlParams = new URLSearchParams(window.location.search);
+  const [activeTab, setActiveTab] = useState(urlParams.get("tab") || "hero");
   const [heroContent, setHeroContent] = useState({});
   const [pricingPlans, setPricingPlans] = useState([]);
   const [announcements, setAnnouncements] = useState([]);
@@ -63,17 +64,49 @@ export default function SuperAdminSettings() {
   const savePricing = async () => {
     setSaving(true);
     try {
-      const pricing = { ...heroContent, section: "pricing", pricing_plans: pricingPlans };
-      if (pricing.id) {
-        await base44.entities.LandingPageContent.update(pricing.id, pricing);
+      const existing = await base44.entities.LandingPageContent.filter({ section: "pricing" });
+      if (existing[0]) {
+        await base44.entities.LandingPageContent.update(existing[0].id, { section: "pricing", pricing_plans: pricingPlans });
       } else {
-        await base44.entities.LandingPageContent.create(pricing);
+        await base44.entities.LandingPageContent.create({ section: "pricing", pricing_plans: pricingPlans });
       }
       toast.success("Prezzi salvati");
     } catch (e) {
       toast.error(e.message);
     }
     setSaving(false);
+  };
+
+  const updatePlan = (idx, field, value) => {
+    const newPlans = [...pricingPlans];
+    newPlans[idx] = { ...newPlans[idx], [field]: value };
+    setPricingPlans(newPlans);
+  };
+
+  const addFeature = (idx) => {
+    const newPlans = [...pricingPlans];
+    newPlans[idx].features = [...(newPlans[idx].features || []), "Nuova feature"];
+    setPricingPlans(newPlans);
+  };
+
+  const updateFeature = (planIdx, featIdx, value) => {
+    const newPlans = [...pricingPlans];
+    newPlans[planIdx].features[featIdx] = value;
+    setPricingPlans(newPlans);
+  };
+
+  const removeFeature = (planIdx, featIdx) => {
+    const newPlans = [...pricingPlans];
+    newPlans[planIdx].features = newPlans[planIdx].features.filter((_, i) => i !== featIdx);
+    setPricingPlans(newPlans);
+  };
+
+  const addPlan = () => {
+    setPricingPlans([...pricingPlans, { name: "Nuovo Piano", price: "€0", users: "10", features: [] }]);
+  };
+
+  const removePlan = (idx) => {
+    setPricingPlans(pricingPlans.filter((_, i) => i !== idx));
   };
 
   const saveSocialLink = async (platform, url, icon) => {
@@ -182,42 +215,77 @@ export default function SuperAdminSettings() {
 
         {/* Pricing */}
         {activeTab === "pricing" && (
-          <div className="bg-white rounded-xl border border-slate-200 p-6 space-y-4">
-            <p className="text-sm text-slate-600">Modifica i piani di prezzo:</p>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-slate-600">Modifica i piani visibili sulla landing page</p>
+              <div className="flex gap-2">
+                <a href="/landing" target="_blank" className="flex items-center gap-1.5 px-3 py-2 border border-slate-200 text-slate-600 rounded-lg text-sm font-medium hover:bg-slate-50">
+                  <ExternalLink className="w-4 h-4" /> Anteprima
+                </a>
+                <button onClick={addPlan} className="flex items-center gap-1.5 px-3 py-2 border border-blue-200 text-blue-600 rounded-lg text-sm font-medium hover:bg-blue-50">
+                  <Plus className="w-4 h-4" /> Aggiungi Piano
+                </button>
+              </div>
+            </div>
+            {pricingPlans.length === 0 && (
+              <div className="bg-white rounded-xl border border-dashed border-slate-300 p-8 text-center text-slate-500">
+                <p>Nessun piano configurato. Clicca "Aggiungi Piano" per iniziare.</p>
+              </div>
+            )}
             {pricingPlans.map((plan, idx) => (
-              <div key={idx} className="p-4 border border-slate-200 rounded-lg space-y-3">
-                <input
-                  type="text"
-                  value={plan.name || ""}
-                  onChange={e => {
-                    const newPlans = [...pricingPlans];
-                    newPlans[idx].name = e.target.value;
-                    setPricingPlans(newPlans);
-                  }}
-                  className="w-full px-3 py-2 border border-slate-200 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Nome piano"
-                />
-                <input
-                  type="text"
-                  value={plan.price || ""}
-                  onChange={e => {
-                    const newPlans = [...pricingPlans];
-                    newPlans[idx].price = e.target.value;
-                    setPricingPlans(newPlans);
-                  }}
-                  className="w-full px-3 py-2 border border-slate-200 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="€99"
-                />
+              <div key={idx} className="bg-white rounded-xl border border-slate-200 p-5 space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-bold text-slate-700">Piano {idx + 1}</span>
+                  <button onClick={() => removePlan(idx)} className="p-1.5 text-red-400 hover:bg-red-50 rounded-lg">
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-500 mb-1">Nome Piano</label>
+                    <input type="text" value={plan.name || ""} onChange={e => updatePlan(idx, 'name', e.target.value)}
+                      className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Startup" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-500 mb-1">Prezzo (es. €99)</label>
+                    <input type="text" value={plan.price || ""} onChange={e => updatePlan(idx, 'price', e.target.value)}
+                      className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="€99" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-500 mb-1">Max utenti</label>
+                    <input type="text" value={plan.users || ""} onChange={e => updatePlan(idx, 'users', e.target.value)}
+                      className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="10" />
+                  </div>
+                  <div className="flex items-center gap-2 mt-5">
+                    <input type="checkbox" id={`popular-${idx}`} checked={!!plan.popular} onChange={e => updatePlan(idx, 'popular', e.target.checked)} className="w-4 h-4 accent-blue-600" />
+                    <label htmlFor={`popular-${idx}`} className="text-sm text-slate-700">Più popolare</label>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-slate-500 mb-2">Features incluse</label>
+                  <div className="space-y-2">
+                    {(plan.features || []).map((feat, fi) => (
+                      <div key={fi} className="flex gap-2">
+                        <input type="text" value={feat} onChange={e => updateFeature(idx, fi, e.target.value)}
+                          className="flex-1 px-3 py-1.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        <button onClick={() => removeFeature(idx, fi)} className="p-1.5 text-red-400 hover:bg-red-50 rounded-lg">
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    ))}
+                    <button onClick={() => addFeature(idx)} className="flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-700 font-medium">
+                      <Plus className="w-3.5 h-3.5" /> Aggiungi feature
+                    </button>
+                  </div>
+                </div>
               </div>
             ))}
-            <button
-              onClick={savePricing}
-              disabled={saving}
-              className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50"
-            >
-              <Save className="w-4 h-4" />
-              {saving ? "Salvataggio..." : "Salva Prezzi"}
-            </button>
+            {pricingPlans.length > 0 && (
+              <button onClick={savePricing} disabled={saving} className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50">
+                <Save className="w-4 h-4" />
+                {saving ? "Salvataggio..." : "Salva Prezzi"}
+              </button>
+            )}
           </div>
         )}
 

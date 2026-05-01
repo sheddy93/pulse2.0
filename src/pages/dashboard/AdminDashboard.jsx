@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
-import { Users, Building2, Activity, TrendingUp, Settings, BarChart3 } from "lucide-react";
+import { Users, Building2, Activity, TrendingUp, Settings, BarChart3, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function AdminDashboard() {
@@ -67,6 +67,15 @@ export default function AdminDashboard() {
             <div>
               <p className="font-semibold text-slate-800">Impostazioni</p>
               <p className="text-sm text-slate-500">Configura piani, Stripe e sistema</p>
+            </div>
+          </Link>
+          <Link to="/dashboard/admin/settings?tab=hero" className="bg-white rounded-xl border border-slate-200 p-5 hover:border-blue-300 transition-colors flex items-center gap-4">
+            <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center">
+              <Globe className="w-5 h-5 text-blue-600" />
+            </div>
+            <div>
+              <p className="font-semibold text-slate-800">Modifica Landing Page</p>
+              <p className="text-sm text-slate-500">Testi hero, prezzi abbonamento</p>
             </div>
           </Link>
         </div>

@@ -21,6 +21,13 @@ const staggerContainer = {
 export default function LandingNew() {
   const { lang, t, changeLang } = useI18n();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [heroContent, setHeroContent] = useState(null);
+  const [dbPricingPlans, setDbPricingPlans] = useState(null);
+
+  useEffect(() => {
+    base44.entities.LandingPageContent.filter({ section: "hero" }).then(r => { if (r[0]) setHeroContent(r[0]); });
+    base44.entities.LandingPageContent.filter({ section: "pricing" }).then(r => { if (r[0]?.pricing_plans?.length) setDbPricingPlans(r[0].pricing_plans); });
+  }, []);
 
   const handleLogin = () => {
     base44.auth.redirectToLogin();
@@ -84,10 +91,15 @@ export default function LandingNew() {
         <motion.div variants={staggerContainer} initial="initial" animate="animate" className="space-y-8">
           <motion.div variants={fadeInUp} className="space-y-4">
             <h1 className="text-5xl md:text-7xl font-bold leading-tight">
-              {t('hero_title').split(' ').slice(0, 3).join(' ')} <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">{t('hero_title').split(' ').slice(3).join(' ')}</span>
+              {(() => {
+                const title = heroContent?.hero_title || t('hero_title');
+                const words = title.split(' ');
+                const half = Math.ceil(words.length / 2);
+                return <>{words.slice(0, half).join(' ')} <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">{words.slice(half).join(' ')}</span></>;
+              })()}
             </h1>
             <p className="text-xl text-slate-300 max-w-2xl">
-              {t('hero_subtitle')}
+              {heroContent?.hero_subtitle || t('hero_subtitle')}
             </p>
           </motion.div>
 
@@ -206,11 +218,11 @@ export default function LandingNew() {
             viewport={{ once: true }}
             className="grid md:grid-cols-3 gap-8"
           >
-            {[
+            {(dbPricingPlans || [
               { name: 'startup', price: '€99', users: '10', features: ['Gestione dipendenti', 'Presenze', 'Documenti', 'Chat'] },
               { name: 'professional', price: '€299', users: '50', popular: true, features: ['Tutto da Startup', 'Valutazioni 360°', 'Workflow', 'Export', 'API'] },
               { name: 'enterprise', price: 'Custom', users: 'unlimited', features: ['Tutto da Professional', 'SSO/SAML', 'Supporto dedicato', 'Custom'] },
-            ].map((plan, i) => (
+            ]).map((plan, i) => (
               <motion.div
                 key={i}
                 variants={fadeInUp}
