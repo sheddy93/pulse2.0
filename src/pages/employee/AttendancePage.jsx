@@ -161,10 +161,9 @@ export default function AttendancePage() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {(["check_in", "check_out", "break_start", "break_end"]).map((type) => {
               const cfg = TYPES[type];
-              const Icon = cfg.icon;
-              const enabled = type === "check_in" ? !isClockedIn : type === "check_out" ? isClockedIn : type === "break_start" ? isClockedIn : !isClockedIn;
-              const needsGps = location && (type === "check_in" || type === "check_out");
-              const canStamp = !needsGps || gpsPosition;
+               const Icon = cfg.icon;
+               const enabled = type === "check_in" ? !isClockedIn : type === "check_out" ? isClockedIn : type === "break_start" ? isClockedIn : !isClockedIn;
+               const canStamp = true;
               return (
                 <button key={type} onClick={() => handleStamp(type)} disabled={!enabled || stamping === type || !canStamp}
                   className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 font-medium text-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed ${
