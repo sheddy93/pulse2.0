@@ -53,6 +53,7 @@ const COMPANY_NAV = [
     { label: "HR Analytics", icon: TrendingUp, path: "/dashboard/company/analytics" },
     { label: "Analytics IA", icon: Sparkles, path: "/dashboard/company/ai-analytics" },
     { label: "Rimborsi Spese", icon: Receipt, path: "/dashboard/company/expenses" },
+    { label: "Esportazione Payroll", icon: FileText, path: "/dashboard/company/payroll-export" },
     { label: "Abbonamento", icon: CreditCard, path: "/dashboard/company/subscription" },
     { label: "Il mio account", icon: UserCog, path: "/dashboard/company/my-account" },
     { label: "Impostazioni", icon: SettingsIcon, path: "/dashboard/company/settings" },
