@@ -40,15 +40,13 @@ export default function WorkflowConfiguration() {
   });
 
   useEffect(() => {
-    base44.auth.me().then(async (me) => {
+    const init = async () => {
+      const me = await authService.me();
       setUser(me);
-      if (me.company_id) {
-        const result = await base44.entities.WorkflowDefinition.filter({
-          company_id: me.company_id
-        });
-        setWorkflows(result.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0)));
-      }
-    }).finally(() => setLoading(false));
+      // TODO: Replace with workflow service
+      setLoading(false);
+    };
+    init();
   }, []);
 
   const handleAddStep = () => {
@@ -81,63 +79,12 @@ export default function WorkflowConfiguration() {
   };
 
   const handleSave = async () => {
-    if (!formData.name || !formData.request_type) {
-      toast.error("Nome e tipo di richiesta sono obbligatori");
-      return;
-    }
-
-    setSaving(true);
-    try {
-      if (editingId) {
-        await base44.entities.WorkflowDefinition.update(editingId, {
-          ...formData,
-          company_id: user.company_id
-        });
-        toast.success("Workflow aggiornato");
-      } else {
-        await base44.entities.WorkflowDefinition.create({
-          ...formData,
-          company_id: user.company_id
-        });
-        toast.success("Workflow creato");
-      }
-
-      setEditingId(null);
-      setFormData({
-        name: "",
-        request_type: "leave_request",
-        description: "",
-        is_active: true,
-        approval_steps: [
-          { step_number: 1, approver_role: "manager", allow_rejection: true, allow_comments: true }
-        ],
-        auto_approve_after_days: null,
-      });
-
-      const result = await base44.entities.WorkflowDefinition.filter({
-        company_id: user.company_id
-      });
-      setWorkflows(result.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0)));
-    } catch (e) {
-      toast.error(e.message);
-    } finally {
-      setSaving(false);
-    }
+    // TODO: Replace with workflow service
+    setSaving(false);
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Sei sicuro di voler eliminare questo workflow?")) return;
-    
-    try {
-      await base44.entities.WorkflowDefinition.delete(id);
-      toast.success("Workflow eliminato");
-      const result = await base44.entities.WorkflowDefinition.filter({
-        company_id: user.company_id
-      });
-      setWorkflows(result);
-    } catch (e) {
-      toast.error(e.message);
-    }
+    // TODO: Replace with workflow service
   };
 
   const handleEdit = (workflow) => {

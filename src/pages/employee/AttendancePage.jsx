@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useState, useEffect } from 'react';
 import { authService } from '@/services/authService';
 import employeeService from '@/services/employees.service';
 import attendanceService from '@/services/attendance.service';

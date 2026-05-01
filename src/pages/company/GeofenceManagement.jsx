@@ -20,29 +20,18 @@ export default function GeofenceManagement() {
   const [showFailureLogs, setShowFailureLogs] = useState(false);
 
   useEffect(() => {
-    base44.auth.me().then(async (me) => {
+    const init = async () => {
+      const me = await authService.me();
       if (!me || !["company_owner", "company_admin", "hr_manager"].includes(me.role)) {
         window.location.href = "/";
         return;
       }
       
       setUser(me);
-
-      // Fetch company data
-      const [locs, geofenceList, logs] = await Promise.all([
-        base44.entities.CompanyLocation.filter({ is_deleted: false }),
-        base44.entities.LocationGeofence.filter({}),
-        base44.entities.AttendanceFailureLog.filter({}),
-      ]);
-
-      setLocations(locs);
-      setGeofences(geofenceList);
-      setFailureLogs(logs.sort((a, b) => new Date(b.attempted_at) - new Date(a.attempted_at)));
-      
-      if (locs.length > 0) {
-        setSelectedLocation(locs[0]);
-      }
-    }).finally(() => setLoading(false));
+      // TODO: Replace with service calls for locations, geofences, failures
+      setLoading(false);
+    };
+    init();
   }, []);
 
   const getGeofenceForLocation = (locationId) => {
@@ -50,49 +39,12 @@ export default function GeofenceManagement() {
   };
 
   const handleSaveGeofence = async (geofenceData) => {
-    if (!selectedLocation) return;
-
-    setSaving(true);
-    try {
-      const existing = getGeofenceForLocation(selectedLocation.id);
-
-      const payload = {
-        ...geofenceData,
-        location_id: selectedLocation.id,
-        location_name: selectedLocation.name,
-      };
-
-      if (existing) {
-        await base44.entities.LocationGeofence.update(existing.id, payload);
-        toast.success("Geofence aggiornato");
-        setGeofences(prev =>
-          prev.map(g => g.id === existing.id ? { ...g, ...payload } : g)
-        );
-      } else {
-        const created = await base44.entities.LocationGeofence.create(payload);
-        toast.success("Geofence creato");
-        setGeofences(prev => [...prev, created]);
-      }
-
-      setShowEditor(false);
-      setEditingGeofence(null);
-    } catch (e) {
-      toast.error(e.message);
-    } finally {
-      setSaving(false);
-    }
+    // TODO: Replace with service calls
+    setSaving(false);
   };
 
   const handleDeleteGeofence = async (id) => {
-    if (!window.confirm("Eliminare questo geofence?")) return;
-
-    try {
-      await base44.entities.LocationGeofence.delete(id);
-      toast.success("Geofence eliminato");
-      setGeofences(prev => prev.filter(g => g.id !== id));
-    } catch (e) {
-      toast.error(e.message);
-    }
+    // TODO: Replace with service calls
   };
 
   if (loading) return <PageLoader />;

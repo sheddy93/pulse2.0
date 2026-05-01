@@ -22,50 +22,25 @@ export default function PayrollExport() {
   const [generating, setGenerating] = useState(false);
 
   useEffect(() => {
-    base44.auth.me().then(async (me) => {
+    const init = async () => {
+      const me = await authService.me();
       setUser(me);
-      if (me.company_id) {
-        const [comp, emps, payrolls] = await Promise.all([
-          base44.entities.Company.filter({ id: me.company_id }),
-          base44.entities.EmployeeProfile.filter({ company_id: me.company_id, is_deleted: false }),
-          base44.entities.PayrollFile.filter({ company_id: me.company_id }),
-        ]);
+      if (me?.company_id) {
+        const comp = await companyService.filter({ id: me.company_id });
+        const emps = await employeeService.filter({ company_id: me.company_id });
+        // TODO: Replace with payroll service
         if (comp[0]) setCompany(comp[0]);
         setEmployees(emps);
-        setPayrollFiles(payrolls);
+        setPayrollFiles([]);
       }
-    }).finally(() => setLoading(false));
+      setLoading(false);
+    };
+    init();
   }, []);
 
   const handleExport = async () => {
-    setGenerating(true);
-    try {
-      const response = await base44.functions.invoke(
-        format === "csv" ? "generatePayrollCSV" : "generatePayrollPDF",
-        {
-          company_id: company.id,
-          month: filters.month,
-          year: filters.year,
-          employee_id: filters.employee !== "all" ? filters.employee : null,
-        }
-      );
-
-      if (response.data.file_url) {
-        // Trigger download
-        const link = document.createElement("a");
-        link.href = response.data.file_url;
-        link.download = `payroll_${filters.year}-${String(filters.month).padStart(2, "0")}${filters.employee !== "all" ? `_${filters.employee}` : ""}.${format}`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        toast.success(`Esportazione ${format.toUpperCase()} completata`);
-      }
-    } catch (error) {
-      toast.error(error.message || "Errore durante l'esportazione");
-      console.error("Export error:", error);
-    } finally {
-      setGenerating(false);
-    }
+    // TODO: Replace with service or API endpoint
+    setGenerating(false);
   };
 
   if (loading) return <PageLoader />;

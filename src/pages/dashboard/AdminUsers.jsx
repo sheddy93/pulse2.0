@@ -21,7 +21,8 @@ export default function AdminUsers() {
   const [roleFilter, setRoleFilter] = useState("all");
 
   useEffect(() => {
-    authService.me().then(async (me) => {
+    const init = async () => {
+    const me = await authService.me();
       if (me?.role !== "super_admin") { window.location.href = "/"; return; }
       setUser(me);
       const allUsers = await // TODO: Replace with service.User.list();

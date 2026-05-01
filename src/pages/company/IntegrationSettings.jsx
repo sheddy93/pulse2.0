@@ -42,7 +42,8 @@ export default function IntegrationSettings() {
   });
 
   useEffect(() => {
-    authService.me().then(async (me) => {
+    const init = async () => {
+    const me = await authService.me();
       setUser(me);
       if (!me.company_id) { setLoading(false); return; }
       const [companies, webhooks, apiKeys] = await Promise.all([

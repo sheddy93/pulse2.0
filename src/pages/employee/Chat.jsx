@@ -18,7 +18,8 @@ export default function Chat() {
   const [newChatEmail, setNewChatEmail] = useState("");
 
   useEffect(() => {
-    base44.auth.me().then(async (me) => {
+    const init = async () => {
+    const me = await authService.me();
       setUser(me);
       if (!me.company_id) { setLoading(false); return; }
 

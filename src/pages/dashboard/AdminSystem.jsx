@@ -34,7 +34,8 @@ export default function AdminSystem() {
   };
 
   useEffect(() => {
-    authService.me().then(async (me) => {
+    const init = async () => {
+    const me = await authService.me();
       if (me?.role !== "super_admin") { window.location.href = "/"; return; }
       setUser(me);
       await loadStats();

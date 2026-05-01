@@ -24,17 +24,20 @@ export default function CompanyAttendancePage() {
   const [selectedMonth, setSelectedMonth] = useState(format(new Date(), "yyyy-MM"));
 
   useEffect(() => {
-    base44.auth.me().then(async (me) => {
+    const init = async () => {
+      const me = await authService.me();
       setUser(me);
-      if (me.company_id) {
+      if (me?.company_id) {
         const [emps, allEntries] = await Promise.all([
-          base44.entities.EmployeeProfile.filter({ company_id: me.company_id, status: "active" }),
-          base44.entities.TimeEntry.filter({ company_id: me.company_id }),
+          employeeService.filter({ company_id: me.company_id }),
+          attendanceService.filter({ company_id: me.company_id }),
         ]);
         setEmployees(emps);
-        setEntries(allEntries.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)));
+        setEntries(allEntries);
       }
-    }).finally(() => setLoading(false));
+      setLoading(false);
+    };
+    init();
   }, []);
 
   const monthStart = startOfMonth(new Date(selectedMonth + "-01"));

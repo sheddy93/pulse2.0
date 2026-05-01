@@ -42,7 +42,8 @@ export default function EmployeeExpenses() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    base44.auth.me().then(async (me) => {
+    const init = async () => {
+    const me = await authService.me();
       setUser(me);
       const emps = await base44.entities.EmployeeProfile.filter({ user_email: me.email });
       const emp = emps[0];
