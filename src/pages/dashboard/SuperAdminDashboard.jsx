@@ -1,22 +1,29 @@
 /**
  * pages/dashboard/SuperAdminDashboard.jsx
- * Dashboard per super_admin: panoramica aziende, utenti, analytics
+ * Dashboard master super_admin: Overview, Companies, Users, System, Analytics
  */
 
 import { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import AppShell from '@/components/layout/AppShell';
 import PageLoader from '@/components/layout/PageLoader';
-import { Building2, Users, TrendingUp, AlertCircle } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import SuperAdminOverview from '@/components/admin/SuperAdminOverview';
+import CompanyManagement from '@/components/admin/CompanyManagement';
+import UserManagement from '@/components/admin/UserManagement';
+import SystemHealth from '@/components/admin/SystemHealth';
+import { LayoutGrid, Building2, Users, Activity, BarChart3 } from 'lucide-react';
 
 export default function SuperAdminDashboard() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('overview');
   const [stats, setStats] = useState({
     companies: 0,
     users: 0,
     activeSubscriptions: 0,
+    totalEmployees: 0,
+    totalStorage: 0,
+    alerts: 0,
   });
 
   useEffect(() => {
@@ -28,16 +35,20 @@ export default function SuperAdminDashboard() {
       setUser(me);
       
       try {
-        const [companies, users, subs] = await Promise.all([
+        const [companies, users, subs, employees] = await Promise.all([
           base44.entities.Company.list(),
           base44.entities.User.list(),
           base44.entities.CompanySubscription.list(),
+          base44.entities.EmployeeProfile.list(),
         ]);
         
         setStats({
           companies: companies?.length || 0,
           users: users?.length || 0,
           activeSubscriptions: subs?.filter(s => s.status === 'active')?.length || 0,
+          totalEmployees: employees?.length || 0,
+          totalStorage: Math.round((employees?.length || 0) * 2.5),
+          alerts: 1,
         });
       } catch (err) {
         console.error('Error loading stats:', err);
@@ -48,74 +59,59 @@ export default function SuperAdminDashboard() {
   if (loading) return <PageLoader color="red" />;
   if (!user) return null;
 
+  const tabs = [
+    { id: 'overview', label: 'Panoramica', icon: LayoutGrid },
+    { id: 'companies', label: 'Aziende', icon: Building2 },
+    { id: 'users', label: 'Utenti', icon: Users },
+    { id: 'system', label: 'Sistema', icon: Activity },
+    { id: 'analytics', label: 'Analytics', icon: BarChart3 },
+  ];
+
   return (
     <AppShell user={user}>
-      <div className="p-6 max-w-6xl mx-auto space-y-6">
+      <div className="p-6 max-w-7xl mx-auto space-y-6">
+        {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">Super Admin Dashboard</h1>
-          <p className="text-slate-600 mt-1">Panoramica piattaforma PulseHR</p>
+          <h1 className="text-3xl font-bold text-slate-900">Control Center</h1>
+          <p className="text-slate-600 mt-1">Gestione completa della piattaforma PulseHR</p>
         </div>
 
-        {/* KPI Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-white rounded-lg border border-slate-200 p-6">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center">
-                <Building2 className="w-6 h-6 text-blue-600" />
-              </div>
-              <div>
-                <p className="text-3xl font-bold text-slate-900">{stats.companies}</p>
-                <p className="text-sm text-slate-500">Aziende</p>
-              </div>
-            </div>
+        {/* Tabs */}
+        <div className="bg-white rounded-lg border border-slate-200">
+          <div className="flex gap-1 p-1 border-b border-slate-200 overflow-x-auto">
+            {tabs.map(tab => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex items-center gap-2 px-4 py-2.5 font-medium text-sm whitespace-nowrap transition-colors ${
+                    isActive
+                      ? 'text-blue-600 border-b-2 border-blue-600'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  {tab.label}
+                </button>
+              );
+            })}
           </div>
 
-          <div className="bg-white rounded-lg border border-slate-200 p-6">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-violet-50 rounded-lg flex items-center justify-center">
-                <Users className="w-6 h-6 text-violet-600" />
+          {/* Tab Content */}
+          <div className="p-6">
+            {activeTab === 'overview' && <SuperAdminOverview stats={stats} />}
+            {activeTab === 'companies' && <CompanyManagement />}
+            {activeTab === 'users' && <UserManagement />}
+            {activeTab === 'system' && <SystemHealth />}
+            {activeTab === 'analytics' && (
+              <div className="text-center py-12 text-slate-500">
+                <BarChart3 className="w-12 h-12 mx-auto mb-3 text-slate-300" />
+                <p>Analytics avanzate - Coming Soon</p>
               </div>
-              <div>
-                <p className="text-3xl font-bold text-slate-900">{stats.users}</p>
-                <p className="text-sm text-slate-500">Utenti totali</p>
-              </div>
-            </div>
+            )}
           </div>
-
-          <div className="bg-white rounded-lg border border-slate-200 p-6">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-emerald-50 rounded-lg flex items-center justify-center">
-                <TrendingUp className="w-6 h-6 text-emerald-600" />
-              </div>
-              <div>
-                <p className="text-3xl font-bold text-slate-900">{stats.activeSubscriptions}</p>
-                <p className="text-sm text-slate-500">Abbonamenti attivi</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Quick Links */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Link to="/dashboard/admin/companies" className="bg-white rounded-lg border border-slate-200 p-6 hover:border-blue-300 transition-colors">
-            <div className="flex items-center gap-4">
-              <Building2 className="w-8 h-8 text-blue-600" />
-              <div>
-                <p className="font-semibold text-slate-900">Gestione Aziende</p>
-                <p className="text-sm text-slate-500">Monitora e configura</p>
-              </div>
-            </div>
-          </Link>
-
-          <Link to="/dashboard/admin/users" className="bg-white rounded-lg border border-slate-200 p-6 hover:border-violet-300 transition-colors">
-            <div className="flex items-center gap-4">
-              <Users className="w-8 h-8 text-violet-600" />
-              <div>
-                <p className="font-semibold text-slate-900">Gestione Utenti</p>
-                <p className="text-sm text-slate-500">Ruoli e permessi</p>
-              </div>
-            </div>
-          </Link>
         </div>
       </div>
     </AppShell>
