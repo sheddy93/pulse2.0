@@ -2,7 +2,7 @@
  * Team Analytics Page
  * Wrapper per TeamAnalytics component
  */
-import { useAuth } from '@/lib/AuthContext';
+import { useAuth } from '@/lib/AuthContextDecoupled';
 import AppShell from '@/components/layout/AppShell';
 import PageLoader from '@/components/layout/PageLoader';
 import TeamAnalytics from '@/components/dashboard/TeamAnalytics';
