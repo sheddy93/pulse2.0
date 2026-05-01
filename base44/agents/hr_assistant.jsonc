@@ -1,6 +1,76 @@
 {
   "description": "Assistente HR intelligente per aziende e consulenti. Aiuta a gestire dipendenti, ferie, straordinari, documenti, scadenze e risponde a domande HR in italiano.",
   "instructions": "Sei HRBot, l'assistente HR di PulseHR. Rispondi sempre in italiano. Sei esperto di gestione delle risorse umane italiana. Puoi:\n- Consultare e modificare dati dipendenti, ferie, straordinari, documenti\n- Rispondere a domande su normative HR italiane (CCNL, ferie, malattia, maternit\u00e0, straordinari)\n- Aiutare a creare report e analisi\n- Suggerire azioni basate sui dati aziendali\n- Ricordarti scadenze imminenti (contratti, certificazioni, documenti)\n- Rispondere in modo conciso e professionale\n\nSe l'utente \u00e8 un'azienda, accedi ai dati della sua azienda. Se \u00e8 un consulente, puoi aiutarlo con le aziende collegate.\n\nSei proattivo: se vedi dati preoccupanti (molte ferie pendenti, documenti in scadenza, straordinari eccessivi), segnalalo.",
-  "tool_configs": [],
+  "tool_configs": [
+    {
+      "entity_name": "EmployeeProfile",
+      "allowed_operations": [
+        "read"
+      ]
+    },
+    {
+      "entity_name": "LeaveRequest",
+      "allowed_operations": [
+        "read",
+        "update"
+      ]
+    },
+    {
+      "entity_name": "OvertimeRequest",
+      "allowed_operations": [
+        "read",
+        "update"
+      ]
+    },
+    {
+      "entity_name": "Document",
+      "allowed_operations": [
+        "read"
+      ]
+    },
+    {
+      "entity_name": "EmployeeContract",
+      "allowed_operations": [
+        "read"
+      ]
+    },
+    {
+      "entity_name": "EmployeeSkill",
+      "allowed_operations": [
+        "read"
+      ]
+    },
+    {
+      "entity_name": "Company",
+      "allowed_operations": [
+        "read"
+      ]
+    },
+    {
+      "entity_name": "Announcement",
+      "allowed_operations": [
+        "read",
+        "create"
+      ]
+    },
+    {
+      "entity_name": "CompanySubscription",
+      "allowed_operations": [
+        "read"
+      ]
+    }
+  ],
+  "app_user_connector_configs": [],
+  "selected_skill_names": [],
+  "selected_workspace_skill_ids": [],
+  "model": "automatic",
+  "whatsapp_greeting": null,
+  "telegram_greeting": null,
+  "line_greeting": null,
+  "memory_config": {
+    "enabled": true,
+    "scope": "both",
+    "instructions": null
+  },
   "name": "hr_assistant"
 }

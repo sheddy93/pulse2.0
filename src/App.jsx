@@ -77,6 +77,13 @@ import SkillsPage from './pages/employee/SkillsPage';
 import BenefitsPage from './pages/employee/BenefitsPage';
 import NotificationSettings from './pages/employee/NotificationSettings';
 import SubscriptionPage from './pages/company/SubscriptionPage';
+import CompanyAttendancePage from './pages/company/CompanyAttendancePage';
+import CompanySettings from './pages/company/CompanySettings';
+import ConsultantSettings from './pages/consultant/ConsultantSettings';
+import AdminCompanies from './pages/dashboard/AdminCompanies';
+import AdminUsers from './pages/dashboard/AdminUsers';
+import AdminSystem from './pages/dashboard/AdminSystem';
+import EmployeeContract from './pages/employee/EmployeeContract';
 
 // Shared
 import ComingSoon from './components/layout/ComingSoon';
@@ -117,9 +124,9 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/admin" element={<AdminDashboard />} />
       <Route path="/dashboard/admin/analytics" element={<AdminAnalytics />} />
       <Route path="/dashboard/admin/settings" element={<SuperAdminSettings />} />
-      <Route path="/dashboard/admin/companies" element={<ComingSoon title="Gestione Aziende" dashboardPath="/dashboard/admin" />} />
-      <Route path="/dashboard/admin/users" element={<ComingSoon title="Gestione Utenti" dashboardPath="/dashboard/admin" />} />
-      <Route path="/dashboard/admin/system" element={<ComingSoon title="Sistema" dashboardPath="/dashboard/admin" />} />
+      <Route path="/dashboard/admin/companies" element={<AdminCompanies />} />
+      <Route path="/dashboard/admin/users" element={<AdminUsers />} />
+      <Route path="/dashboard/admin/system" element={<AdminSystem />} />
 
       {/* Consultant */}
       <Route path="/dashboard/consultant" element={<ConsultantDashboard />} />
@@ -129,7 +136,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/consultant/document-review" element={<DocumentReviewPage />} />
       <Route path="/dashboard/consultant/calendar" element={<HRCalendarPage />} />
       <Route path="/dashboard/consultant/documents" element={<ComingSoon title="Documenti" dashboardPath="/dashboard/consultant" />} />
-      <Route path="/dashboard/consultant/settings" element={<ComingSoon title="Impostazioni" dashboardPath="/dashboard/consultant" />} />
+      <Route path="/dashboard/consultant/settings" element={<ConsultantSettings />} />
       <Route path="/dashboard/consultant/employees/:id" element={<ComingSoon title="Scheda dipendente" dashboardPath="/dashboard/consultant/employees" />} />
 
       {/* Company */}
@@ -139,7 +146,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/company/employees/import" element={<EmployeeImport />} />
       <Route path="/dashboard/company/employees/:id" element={<ComingSoon title="Scheda dipendente" dashboardPath="/dashboard/company/employees" />} />
       <Route path="/dashboard/company/consultants" element={<CompanyConsultants />} />
-      <Route path="/dashboard/company/attendance" element={<ComingSoon title="Presenze aziendali" dashboardPath="/dashboard/company" />} />
+      <Route path="/dashboard/company/attendance" element={<CompanyAttendancePage />} />
       <Route path="/dashboard/company/overtime" element={<OvertimePage />} />
       <Route path="/dashboard/company/shifts" element={<ShiftManagement />} />
       <Route path="/dashboard/company/announcements" element={<AnnouncementBoard />} />
@@ -164,7 +171,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/company/training-plans" element={<TrainingPlanManagement />} />
       <Route path="/dashboard/company/certification-expiry" element={<CertificationExpiry />} />
       <Route path="/dashboard/company/subscription" element={<SubscriptionPage />} />
-      <Route path="/dashboard/company/settings" element={<ComingSoon title="Impostazioni azienda" dashboardPath="/dashboard/company" />} />
+      <Route path="/dashboard/company/settings" element={<CompanySettings />} />
 
       {/* Employee */}
       <Route path="/dashboard/employee" element={<EmployeeDashboard />} />
@@ -175,18 +182,18 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/employee/leave-balance" element={<LeaveBalance />} />
       <Route path="/dashboard/employee/overtime" element={<OvertimeRequestPage />} />
       <Route path="/dashboard/employee/documents" element={<DocumentSignaturePage />} />
+      <Route path="/dashboard/employee/personal-documents" element={<PersonalDocuments />} />
       <Route path="/dashboard/employee/skills" element={<SkillsPage />} />
       <Route path="/dashboard/employee/benefits" element={<BenefitsPage />} />
       <Route path="/dashboard/employee/training" element={<TrainingPortal />} />
       <Route path="/dashboard/employee/training-plans" element={<TrainingDashboard />} />
-      <Route path="/dashboard/employee/documents" element={<PersonalDocuments />} />
       <Route path="/dashboard/employee/feedback" element={<PerformanceFeedback />} />
       <Route path="/dashboard/employee/chat" element={<Chat />} />
       <Route path="/dashboard/employee/expenses" element={<EmployeeExpenses />} />
       <Route path="/dashboard/employee/onboarding" element={<OnboardingWizard />} />
       <Route path="/dashboard/employee/profile" element={<EmployeeProfilePage />} />
       <Route path="/dashboard/employee/notification-settings" element={<NotificationSettings />} />
-      <Route path="/dashboard/employee/contract" element={<ComingSoon title="Il mio contratto" dashboardPath="/dashboard/employee" />} />
+      <Route path="/dashboard/employee/contract" element={<EmployeeContract />} />
 
       <Route path="*" element={<PageNotFound />} />
     </Routes>

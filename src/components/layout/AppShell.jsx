@@ -62,7 +62,7 @@ const NAV = {
     { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard/employee" },
     { label: "Timbratura", icon: Clock, path: "/dashboard/employee/attendance" },
     { label: "Calendario Presenze", icon: ClipboardList, path: "/dashboard/employee/calendar" },
-    { label: "Miei Documenti", icon: FileText, path: "/dashboard/employee/documents" },
+    { label: "Miei Documenti", icon: FileText, path: "/dashboard/employee/personal-documents" },
     { label: "Le mie presenze", icon: ClipboardList, path: "/dashboard/employee/history" },
     { label: "Ferie & Permessi", icon: CalendarDays, path: "/dashboard/employee/leave" },
     { label: "Saldo Ferie", icon: Calendar, path: "/dashboard/employee/leave-balance" },
@@ -139,14 +139,7 @@ export default function AppShell({ user, children }) {
           })}
         </nav>
 
-        <div className="p-3 border-t border-slate-100 space-y-2">
-          <div className="px-3 py-2">
-            <label className="text-xs font-semibold text-slate-500 block mb-1.5">Lingua</label>
-            <select className="w-full px-2 py-1.5 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-              <option value="it">Italiano</option>
-              <option value="en">English</option>
-            </select>
-          </div>
+        <div className="p-3 border-t border-slate-100">
           <button
             onClick={() => base44.auth.logout("/")}
             className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-red-50 hover:text-red-600 transition-colors"
@@ -155,6 +148,7 @@ export default function AppShell({ user, children }) {
             Esci
           </button>
         </div>
+
       </aside>
 
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
