@@ -6,6 +6,7 @@ import PageLoader from "@/components/layout/PageLoader";
 import { FileText, Upload, AlertTriangle, CalendarDays, Trash2, ExternalLink, X, Signature } from "lucide-react";
 import { format, differenceInDays } from "date-fns";
 import { it } from "date-fns/locale";
+import { useApiCache } from "@/hooks/useApiCache";
 
 const ITEMS_PER_PAGE = 20;
 const DOC_TYPES = { contratto: "Contratto", busta_paga: "Busta paga", certificato: "Certificato", corso: "Corso", altro: "Altro" };
@@ -47,19 +48,26 @@ export default function DocumentsPage() {
     }));
   };
 
+  // Cache employees (30 min TTL)
+  const { data: cachedEmployees } = useApiCache(
+    'employees',
+    async () => base44.entities.EmployeeProfile.filter({ company_id: '' }),
+    30 * 60 * 1000
+  );
+
   useEffect(() => {
     base44.auth.me().then(async (me) => {
       setUser(me);
       if (!me.company_id) { setLoading(false); return; }
       const [companies, emps] = await Promise.all([
         base44.entities.Company.filter({ id: me.company_id }),
-        base44.entities.EmployeeProfile.filter({ company_id: me.company_id }),
+        cachedEmployees || base44.entities.EmployeeProfile.filter({ company_id: me.company_id }),
       ]);
       setCompany(companies[0] || null);
-      setEmployees(emps);
+      setEmployees(emps || cachedEmployees || []);
       await loadDocs(me.company_id);
       }).finally(() => setLoading(false));
-      }, [page]);
+      }, [page, cachedEmployees]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

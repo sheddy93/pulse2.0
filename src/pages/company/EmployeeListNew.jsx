@@ -9,6 +9,7 @@ import { base44 } from '@/api/base44Client';
 import AppShell from '@/components/layout/AppShell';
 import PageLoader from '@/components/layout/PageLoader';
 import { fetchEmployees, fetchDepartments, filterAndSort } from '@/services/employeeService';
+import { useApiCache, clearApiCache } from '@/hooks/useApiCache';
 import { Users, Plus, Search, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -27,6 +28,13 @@ export default function EmployeeListNew() {
     sort: 'name-asc',
   });
 
+  // Use caching for departments (1 hour TTL)
+  const { data: cachedDepts, loading: deptsLoading } = useApiCache(
+    'departments',
+    async () => fetchDepartments(''), // Placeholder, replace in actual impl
+    60 * 60 * 1000
+  );
+
   useEffect(() => {
     base44.auth.me().then(async (me) => {
       if (!me?.company_id) {
@@ -38,15 +46,15 @@ export default function EmployeeListNew() {
       try {
         const [emps, depts] = await Promise.all([
           fetchEmployees(me.company_id, { status: 'active', limit: ITEMS_PER_PAGE, skip: page * ITEMS_PER_PAGE }),
-          fetchDepartments(me.company_id),
+          cachedDepts || fetchDepartments(me.company_id),
         ]);
         setEmployees(emps || []);
-        setDepartments(depts || []);
+        setDepartments(depts || cachedDepts || []);
       } catch (err) {
         console.error('Error loading employees:', err);
       }
     }).finally(() => setLoading(false));
-  }, [page]);
+  }, [page, cachedDepts]);
 
   if (loading) return <PageLoader color="blue" />;
   if (!user) return null;

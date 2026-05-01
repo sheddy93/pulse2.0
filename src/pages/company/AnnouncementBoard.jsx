@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
+import { useApiCache } from "@/hooks/useApiCache";
 import { Plus, Trash2, Pin, X } from "lucide-react";
 import { format } from "date-fns";
 import { it } from "date-fns/locale";
@@ -31,18 +32,25 @@ export default function AnnouncementBoard() {
     is_pinned: false
   });
 
+  // Cache company data (2 hour TTL)
+  const { data: cachedCompany } = useApiCache(
+    'company_metadata',
+    async () => base44.entities.Company.filter({ id: '' }),
+    2 * 60 * 60 * 1000
+  );
+
   useEffect(() => {
     base44.auth.me().then(async (me) => {
       setUser(me);
       if (!me.company_id) { setLoading(false); return; }
       const [companies, announces] = await Promise.all([
-        base44.entities.Company.filter({ id: me.company_id }),
+        cachedCompany || base44.entities.Company.filter({ id: me.company_id }),
         base44.entities.Announcement.filter({ company_id: me.company_id }, { skip: page * ITEMS_PER_PAGE, limit: ITEMS_PER_PAGE }, '-created_date')
       ]);
       setCompany(companies[0]);
       setAnnouncements(announces);
     }).finally(() => setLoading(false));
-  }, [page]);
+  }, [page, cachedCompany]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -66,23 +66,30 @@ import IntegrationSettings from './pages/company/IntegrationSettings';
 import JobPostings from './pages/company/JobPostings';
 import CandidateTracking from './pages/company/CandidateTracking';
 import TrainingManagement from './pages/company/TrainingManagement';
-import PerformanceManagement from './pages/company/PerformanceManagement';
 import GivePerformanceReview from './pages/company/GivePerformanceReview';
-import HRAnalytics from './pages/company/HRAnalytics';
-import AdvancedAnalytics from './pages/company/AdvancedAnalytics';
+import { Suspense } from 'react';
+import { LazyLoadingFallback } from '@/lib/lazyLoadConfig';
 import HRCalendarPage from './pages/company/HRCalendarPage';
 import ExpenseManagement from './pages/company/ExpenseManagement';
+
+// Lazy load heavy pages
+import {
+  AdvancedAnalytics,
+  HRAnalytics,
+  ReportGenerator,
+  TeamAnalyticsPage,
+  AdminAnalyticsDashboard,
+  PerformanceManagement
+} from '@/lib/lazyLoadConfig';
 import EmployeeExpenses from './pages/employee/EmployeeExpenses';
 import LeaveBalance from './pages/employee/LeaveBalance';
 import ManagerLeaveRequests from './pages/company/ManagerLeaveRequests';
 import AdminAnalytics from './pages/dashboard/AdminAnalytics';
-import AdminAnalyticsDashboard from './pages/dashboard/AdminAnalyticsDashboard';
 import OnboardingWizard from './pages/employee/OnboardingWizard';
 import OnboardingTracking from './pages/company/OnboardingTracking';
 import TrainingPlanManagement from './pages/company/TrainingPlanManagement';
 import TimeOffCalendarPage from './pages/company/TimeOffCalendarPage';
 import DocumentTemplatePage from './pages/company/DocumentTemplatePage';
-import TeamAnalyticsPage from './pages/company/TeamAnalyticsPage';
 import APIManagement from './pages/company/APIManagement';
 import IntegrationsPage from './pages/company/IntegrationsPage';
 import TrainingDashboard from './pages/employee/TrainingDashboard';
@@ -121,7 +128,6 @@ import SubscriptionPage from './pages/company/SubscriptionPage';
 import CheckoutPage from './pages/company/CheckoutPage';
 import MyAccountSubscription from './pages/company/MyAccountSubscription';
 import PayrollExport from './pages/company/PayrollExport';
-import ReportGenerator from './pages/company/ReportGenerator';
 import WorkflowConfiguration from './pages/company/WorkflowConfiguration';
 import GeofenceManagement from './pages/company/GeofenceManagement';
 import CompanyAttendancePage from './pages/company/CompanyAttendancePage';
@@ -185,7 +191,7 @@ const AuthenticatedApp = () => {
       {/* Super Admin */}
       <Route path="/dashboard/admin" element={<SuperAdminDashboard />} />
       <Route path="/dashboard/admin/analytics" element={<AdminAnalytics />} />
-      <Route path="/dashboard/admin/analytics-advanced" element={<AdminAnalyticsDashboard />} />
+      <Route path="/dashboard/admin/analytics-advanced" element={<Suspense fallback={<LazyLoadingFallback />}><AdminAnalyticsDashboard /></Suspense>} />
       <Route path="/dashboard/admin/settings" element={<SuperAdminSettings />} />
       <Route path="/dashboard/admin/platform-settings" element={<SuperAdminPlatformSettings />} />
       <Route path="/dashboard/admin/tier2" element={<Tier2Dashboard />} />
@@ -233,10 +239,10 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/company/job-postings" element={<JobPostings />} />
       <Route path="/dashboard/company/candidates" element={<CandidateTracking />} />
       <Route path="/dashboard/company/training" element={<TrainingManagement />} />
-      <Route path="/dashboard/company/performance" element={<PerformanceManagement />} />
+      <Route path="/dashboard/company/performance" element={<Suspense fallback={<LazyLoadingFallback />}><PerformanceManagement /></Suspense>} />
       <Route path="/dashboard/company/give-feedback" element={<GivePerformanceReview />} />
-      <Route path="/dashboard/company/analytics" element={<HRAnalytics />} />
-      <Route path="/dashboard/company/ai-analytics" element={<AdvancedAnalytics />} />
+      <Route path="/dashboard/company/analytics" element={<Suspense fallback={<LazyLoadingFallback />}><HRAnalytics /></Suspense>} />
+      <Route path="/dashboard/company/ai-analytics" element={<Suspense fallback={<LazyLoadingFallback />}><AdvancedAnalytics /></Suspense>} />
       <Route path="/dashboard/company/calendar" element={<HRCalendarPage />} />
       <Route path="/dashboard/company/time-off-calendar" element={<TimeOffCalendarPage />} />
       <Route path="/dashboard/company/expenses" element={<ExpenseManagement />} />
@@ -249,11 +255,11 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/company/my-account" element={<MyAccountSubscription />} />
       <Route path="/dashboard/company/pricing-plans" element={<PricingPageNew />} />
       <Route path="/dashboard/company/payroll-export" element={<PayrollExport />} />
-      <Route path="/dashboard/company/report-generator" element={<ReportGenerator />} />
+      <Route path="/dashboard/company/report-generator" element={<Suspense fallback={<LazyLoadingFallback />}><ReportGenerator /></Suspense>} />
       <Route path="/dashboard/company/workflow-configuration" element={<WorkflowConfiguration />} />
       <Route path="/dashboard/company/geofence" element={<GeofenceManagement />} />
       <Route path="/dashboard/company/document-templates" element={<DocumentTemplatePage />} />
-      <Route path="/dashboard/company/team-analytics" element={<TeamAnalyticsPage />} />
+      <Route path="/dashboard/company/team-analytics" element={<Suspense fallback={<LazyLoadingFallback />}><TeamAnalyticsPage /></Suspense>} />
       <Route path="/dashboard/company/dashboard-builder" element={<DashboardBuilder />} />
       <Route path="/dashboard/company/settings" element={<CompanySettings />} />
       <Route path="/dashboard/company/api" element={<APIManagement />} />
