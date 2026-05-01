@@ -117,20 +117,26 @@ export default function AttendancePage() {
     };
 
     try {
-      if (isOnline) {
-        // Online: salva direttamente al server
-        await base44.entities.TimeEntry.create(entry);
-      } else {
-        // Offline: salva in IndexedDB
-        await saveTimeEntryOffline(entry);
-        setPendingCount(prev => prev + 1);
-      }
-      
-      await loadEntries(user);
-      setGpsPosition(null);
-    } finally {
-      setStamping(null);
-    }
+       if (isOnline) {
+         // Online: salva direttamente al server
+         await base44.entities.TimeEntry.create(entry);
+         // Piccolo delay per assicurare che il DB ha registrato
+         await new Promise(r => setTimeout(r, 500));
+       } else {
+         // Offline: salva in IndexedDB
+         await saveTimeEntryOffline(entry);
+         setPendingCount(prev => prev + 1);
+       }
+
+       // Ricarica le timbrature
+       const all = await base44.entities.TimeEntry.filter({ user_email: user.email });
+       setEntries([...all].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)));
+       setGpsPosition(null);
+     } catch (err) {
+       console.error('Errore salvataggio timbratura:', err);
+     } finally {
+       setStamping(null);
+     }
   };
 
   const grouped = entries.reduce((acc, e) => {
