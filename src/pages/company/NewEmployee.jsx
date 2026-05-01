@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
-import { generateTempPassword } from "@/lib/roles";
+import { generateTempPassword, generatePublicId } from "@/lib/roles";
 import { UserPlus, Eye, EyeOff, Check, Copy } from "lucide-react";
 
 const FIELDS = [
@@ -52,7 +52,7 @@ export default function NewEmployee() {
 
     await base44.entities.EmployeeProfile.create({
       ...form,
-      employee_code: form.employee_code || `EMP-${Date.now().toString().slice(-6)}`,
+      employee_code: form.employee_code || generatePublicId("EMP"),
       company_id: company.id,
       has_account: !!form.email,
       temp_password: tempPassword,
