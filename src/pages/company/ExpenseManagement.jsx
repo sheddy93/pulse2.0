@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
-// Migration: removed base44 dependency
+import { useState, useEffect } from "react";
+import { authService } from '@/services/authService';
+import companyService from '@/services/companies.service';
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import ExpenseApprovalPanel from "@/components/company/ExpenseApprovalPanel";

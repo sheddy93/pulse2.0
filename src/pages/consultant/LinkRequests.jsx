@@ -15,12 +15,17 @@ export default function LinkRequests() {
   };
 
   useEffect(() => {
-    // TODO: Replace with service calls for REST API
     const loadData = async () => {
-      // const me = await authService.me();
-      setUser(me);
-      await loadLinks(me.email);
-    }).finally(() => setLoading(false));
+      try {
+        // TODO: Replace with service calls for REST API
+        // const me = await authService.me();
+        // setUser(me);
+        // await loadLinks(me.email);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
   }, []);
 
   const handleDecision = async (link, status) => {
