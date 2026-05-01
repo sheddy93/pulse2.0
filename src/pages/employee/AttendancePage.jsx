@@ -149,11 +149,9 @@ export default function AttendancePage() {
         <h1 className="text-xl font-bold text-slate-800">Timbratura</h1>
 
         {location && (
-        <GPSValidator 
-          location={location}
-          onValidated={setGpsPosition}
-          disabled={stamping !== null}
-        />
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+          <p className="text-sm text-blue-700">📍 <strong>Test mode:</strong> GPS disabilitato. Clicca i bottoni per testare le timbrature.</p>
+        </div>
       )}
 
       <div className="bg-white rounded-xl border border-slate-200 p-6">
