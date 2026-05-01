@@ -75,6 +75,7 @@ import TrainingPlanManagement from './pages/company/TrainingPlanManagement';
 import TrainingDashboard from './pages/employee/TrainingDashboard';
 import CertificationExpiry from './pages/company/CertificationExpiry';
 import SuperAdminSettings from './pages/dashboard/SuperAdminSettings';
+import TemporaryLogins from './pages/dashboard/TemporaryLogins';
 import TrainingPortal from './pages/employee/TrainingPortal';
 import PersonalDocuments from './pages/employee/PersonalDocuments';
 import PerformanceFeedback from './pages/employee/PerformanceFeedback';
@@ -162,6 +163,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/admin" element={<AdminDashboard />} />
       <Route path="/dashboard/admin/analytics" element={<AdminAnalytics />} />
       <Route path="/dashboard/admin/settings" element={<SuperAdminSettings />} />
+      <Route path="/dashboard/admin/temporary-logins" element={<TemporaryLogins />} />
       <Route path="/dashboard/admin/companies" element={<AdminCompanies />} />
       <Route path="/dashboard/admin/users" element={<AdminUsers />} />
       <Route path="/dashboard/admin/system" element={<AdminSystem />} />

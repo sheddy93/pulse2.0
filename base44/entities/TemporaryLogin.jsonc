@@ -1,0 +1,79 @@
+{
+  "name": "TemporaryLogin",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string",
+      "description": "Azienda (opzionale, null per super admin)"
+    },
+    "user_email": {
+      "type": "string",
+      "description": "Email dell'utente a cui \u00e8 destinato il login"
+    },
+    "user_role": {
+      "type": "string",
+      "enum": [
+        "super_admin",
+        "company_owner",
+        "company_admin",
+        "hr_manager",
+        "manager",
+        "employee",
+        "consultant",
+        "labor_consultant",
+        "external_consultant",
+        "safety_consultant"
+      ]
+    },
+    "temp_password": {
+      "type": "string",
+      "description": "Password temporanea (hash)"
+    },
+    "plain_password": {
+      "type": "string",
+      "description": "Password in chiaro (da mostrare una sola volta)"
+    },
+    "generated_by": {
+      "type": "string",
+      "description": "Email dell'admin che ha generato il login"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "first_login_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Quando l'utente ha effettuato il primo login"
+    },
+    "used": {
+      "type": "boolean",
+      "default": false
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "used",
+        "expired",
+        "revoked"
+      ],
+      "default": "active"
+    },
+    "expiry_hours": {
+      "type": "number",
+      "default": 48,
+      "description": "Ore di validit\u00e0"
+    }
+  },
+  "required": [
+    "user_email",
+    "user_role",
+    "temp_password",
+    "expires_at"
+  ]
+}

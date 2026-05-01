@@ -35,6 +35,7 @@ import HRAssistantWidget from "@/components/assistant/HRAssistantWidget";
 // Shared company nav (used by all company roles)
 const COMPANY_NAV = [
     { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard/company" },
+    { label: "Login Temporanei", icon: Users, path: "/dashboard/admin/temporary-logins" },
     { label: "Dipendenti", icon: Users, path: "/dashboard/company/employees" },
     { label: "Aggiungi lavoratore", icon: UserCog, path: "/dashboard/company/employees/new" },
     { label: "Admin Aziendali", icon: Shield, path: "/dashboard/company/admins" },
@@ -89,6 +90,7 @@ const NAV = {
     { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard/admin" },
     { label: "Analytics", icon: Activity, path: "/dashboard/admin/analytics" },
     { label: "Aziende", icon: Building2, path: "/dashboard/admin/companies" },
+    { label: "Login Temporanei", icon: Users, path: "/dashboard/admin/temporary-logins" },
     { label: "Utenti", icon: Users, path: "/dashboard/admin/users" },
     { label: "Settings", icon: SettingsIcon, path: "/dashboard/admin/settings" },
   ],
