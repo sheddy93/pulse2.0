@@ -53,8 +53,8 @@ const NAV = {
     { label: "Rimborsi Spese", icon: Receipt, path: "/dashboard/company/expenses" },
     { label: "Approvazione Ferie", icon: CalendarDays, path: "/dashboard/company/leave-requests" },
     { label: "Onboarding Dipendenti", icon: Users, path: "/dashboard/company/onboarding-tracking" },
-    { label: "Abbonamento", icon: CreditCard, path: "/dashboard/company/subscription" },
     { label: "Integrazioni API", icon: SettingsIcon, path: "/dashboard/company/integrations" },
+    { label: "Abbonamento", icon: CreditCard, path: "/dashboard/company/subscription" },
     { label: "Impostazioni", icon: SettingsIcon, path: "/dashboard/company/settings" },
   ],
   employee: [

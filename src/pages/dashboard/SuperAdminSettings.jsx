@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import { Settings, Globe, Megaphone, DollarSign, Share2, Save, CreditCard } from "lucide-react";
-import StripeAdminPanel from "@/components/admin/StripeAdminPanel";
+import StripePlansManager from "@/components/admin/StripePlansManager";
 import { toast } from "sonner";
 
 const PLATFORMS = ["linkedin", "twitter", "facebook", "instagram", "github", "youtube"];
@@ -241,11 +241,6 @@ export default function SuperAdminSettings() {
           </div>
         )}
 
-        {/* Stripe */}
-        {activeTab === "stripe" && (
-          <StripeAdminPanel />
-        )}
-
         {/* Social Links */}
         {activeTab === "social" && (
           <div className="bg-white rounded-xl border border-slate-200 p-6 space-y-4">
@@ -265,6 +260,10 @@ export default function SuperAdminSettings() {
               </div>
             ))}
           </div>
+        )}
+        {/* Stripe Plans */}
+        {activeTab === "stripe" && (
+          <StripePlansManager />
         )}
       </div>
     </AppShell>

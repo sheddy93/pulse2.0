@@ -57,7 +57,6 @@ import TrainingPlanManagement from './pages/company/TrainingPlanManagement';
 import TrainingDashboard from './pages/employee/TrainingDashboard';
 import CertificationExpiry from './pages/company/CertificationExpiry';
 import SuperAdminSettings from './pages/dashboard/SuperAdminSettings';
-import SubscriptionPage from './pages/company/SubscriptionPage';
 import TrainingPortal from './pages/employee/TrainingPortal';
 import PersonalDocuments from './pages/employee/PersonalDocuments';
 import PerformanceFeedback from './pages/employee/PerformanceFeedback';
@@ -77,6 +76,7 @@ import OvertimeRequestPage from './pages/employee/OvertimeRequestPage';
 import SkillsPage from './pages/employee/SkillsPage';
 import BenefitsPage from './pages/employee/BenefitsPage';
 import NotificationSettings from './pages/employee/NotificationSettings';
+import SubscriptionPage from './pages/company/SubscriptionPage';
 
 // Shared
 import ComingSoon from './components/layout/ComingSoon';
