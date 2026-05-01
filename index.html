@@ -2,20 +2,74 @@
 <html lang="it">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="https://base44.com/logo_v2.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
-    <meta name="apple-mobile-web-app-capable" content="true" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+    <meta name="description" content="AldevionHR - Piattaforma HR moderna: presenze GPS, ferie, documenti, formazione, analytics e payroll" />
+    <meta name="theme-color" content="#0F172A" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="PulseHR" />
-    <meta name="theme-color" content="#2563eb" />
-    <meta name="description" content="PulseHR - Complete HR management platform for employee lifecycle, payroll, and compliance" />
-    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="AldevionHR" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta property="og:title" content="AldevionHR" />
+    <meta property="og:description" content="Gestione HR intelligente e connessa" />
+    <meta property="og:type" content="website" />
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%230F172A' width='180' height='180' rx='40'/><text x='50%' y='50%' font-size='100' font-weight='bold' fill='white' text-anchor='middle' dominant-baseline='central'>A</text></svg>" />
     <link rel="manifest" href="/manifest.json" />
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%232563eb' width='180' height='180'/><text x='50%' y='50%' font-size='90' font-weight='bold' fill='white' text-anchor='middle' dominant-baseline='central'>P</text></svg>" />
-    <title>PulseHR - HR Management</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="application-name" content="AldevionHR" />
+    <meta name="msapplication-TileColor" content="#0F172A" />
+    
+    <!-- Preconnect to critical resources -->
+    <link rel="preconnect" href="https://api.base44.com" crossorigin />
+    <link rel="dns-prefetch" href="https://api.stripe.com" />
+    
+    <!-- Web App & PWA Performance -->
+    <meta name="color-scheme" content="light dark" />
+    <meta name="supported-color-schemes" content="light dark" />
+    
+    <title>AldevionHR - Gestione HR Intelligente</title>
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <p style="text-align: center; padding: 20px; font-family: sans-serif; color: #666;">
+        AldevionHR richiede JavaScript. Per cortesia abilita JavaScript nel tuo browser.
+      </p>
+    </noscript>
+    
+    <!-- Main app -->
     <script type="module" src="/src/main.jsx"></script>
+    
+    <!-- PWA Support Script -->
+    <script>
+      // PWA support detection and Service Worker registration
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/service-worker-v3.js', { scope: '/' })
+            .then(reg => {
+              console.log('[PWA] Service Worker v3 registered');
+              // Check for updates every hour
+              setInterval(() => reg.update(), 60 * 60 * 1000);
+            })
+            .catch(err => console.error('[PWA] Service Worker registration failed:', err));
+        });
+        
+        // Handle SW updates
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          console.log('[PWA] New Service Worker activated');
+        });
+      }
+      
+      // Prevent pinch zoom on iOS
+      document.addEventListener('touchmove', (e) => {
+        if (e.scale !== 1) {
+          e.preventDefault();
+        }
+      }, { passive: false });
+    </script>
   </body>
 </html>
