@@ -2,92 +2,19 @@
   "name": "PlatformSettings",
   "type": "object",
   "properties": {
-    "setting_key": {
+    "key": {
       "type": "string",
-      "description": "Chiave univoca della configurazione (es: 'app_name', 'api_rate_limit')"
+      "description": "Chiave della impostazione (es. 'pricing_config')"
     },
-    "setting_category": {
-      "type": "string",
-      "enum": ["general", "api", "security", "email", "integrations", "features", "billing", "database"],
-      "description": "Categoria della configurazione"
-    },
-    "display_name": {
-      "type": "string",
-      "description": "Nome visualizzabile nel UI"
+    "value": {
+      "type": "object",
+      "description": "Valore della impostazione (JSON object)",
+      "additionalProperties": true
     },
     "description": {
       "type": "string",
-      "description": "Descrizione della configurazione"
-    },
-    "setting_type": {
-      "type": "string",
-      "enum": ["string", "number", "boolean", "json", "select", "text_area"],
-      "description": "Tipo di valore"
-    },
-    "value": {
-      "type": ["string", "number", "boolean", "object"],
-      "description": "Valore della configurazione"
-    },
-    "default_value": {
-      "type": ["string", "number", "boolean", "object"],
-      "description": "Valore di default"
-    },
-    "is_encrypted": {
-      "type": "boolean",
-      "default": false,
-      "description": "Se true, il valore è crittografato (es. API keys)"
-    },
-    "options": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "label": { "type": "string" },
-          "value": { "type": "string" }
-        }
-      },
-      "description": "Opzioni per select dropdown"
-    },
-    "min_value": {
-      "type": "number",
-      "description": "Valore minimo (per number)"
-    },
-    "max_value": {
-      "type": "number",
-      "description": "Valore massimo (per number)"
-    },
-    "validation_regex": {
-      "type": "string",
-      "description": "Regex per validazione"
-    },
-    "is_required": {
-      "type": "boolean",
-      "default": false
-    },
-    "is_readonly": {
-      "type": "boolean",
-      "default": false,
-      "description": "Se true, non può essere modificato dal UI"
-    },
-    "restart_required": {
-      "type": "boolean",
-      "default": false,
-      "description": "Se true, richiede restart dell'app"
-    },
-    "modified_by": {
-      "type": "string",
-      "description": "Email dell'utente che ha modificato"
-    },
-    "modified_at": {
-      "type": "string",
-      "format": "date-time"
-    },
-    "environment": {
-      "type": "string",
-      "enum": ["development", "staging", "production"],
-      "default": "production",
-      "description": "A quale ambiente si applica"
+      "description": "Descrizione della impostazione"
     }
   },
-  "required": ["setting_key", "setting_category", "display_name", "setting_type", "value"]
+  "required": ["key", "value"]
 }

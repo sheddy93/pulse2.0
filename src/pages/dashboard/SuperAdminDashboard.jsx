@@ -12,7 +12,8 @@ import CompanyManagement from '@/components/admin/CompanyManagement';
 import UserManagement from '@/components/admin/UserManagement';
 import SystemHealth from '@/components/admin/SystemHealth';
 import LandingPageManager from '@/components/admin/LandingPageManager';
-import { LayoutGrid, Building2, Users, Activity, BarChart3, Palette } from 'lucide-react';
+import PricingConfigManager from '@/components/admin/PricingConfigManager';
+import { LayoutGrid, Building2, Users, Activity, BarChart3, Palette, DollarSign } from 'lucide-react';
 
 export default function SuperAdminDashboard() {
   const [user, setUser] = useState(null);
@@ -64,8 +65,9 @@ export default function SuperAdminDashboard() {
     { id: 'overview', label: 'Panoramica', icon: LayoutGrid },
     { id: 'companies', label: 'Aziende', icon: Building2 },
     { id: 'users', label: 'Utenti', icon: Users },
-    { id: 'system', label: 'Sistema', icon: Activity },
+    { id: 'pricing', label: 'Pricing', icon: DollarSign },
     { id: 'landing', label: 'Landing Page', icon: Palette },
+    { id: 'system', label: 'Sistema', icon: Activity },
     { id: 'analytics', label: 'Analytics', icon: BarChart3 },
   ];
 
@@ -106,8 +108,9 @@ export default function SuperAdminDashboard() {
             {activeTab === 'overview' && <SuperAdminOverview stats={stats} />}
             {activeTab === 'companies' && <CompanyManagement />}
             {activeTab === 'users' && <UserManagement />}
-            {activeTab === 'system' && <SystemHealth />}
+            {activeTab === 'pricing' && <PricingConfigManager />}
             {activeTab === 'landing' && <LandingPageManager />}
+            {activeTab === 'system' && <SystemHealth />}
             {activeTab === 'analytics' && (
               <div className="text-center py-12 text-slate-500">
                 <BarChart3 className="w-12 h-12 mx-auto mb-3 text-slate-300" />
