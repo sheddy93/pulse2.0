@@ -77,7 +77,7 @@ export default function SuperAdminDashboard() {
         {/* Header */}
         <div>
           <h1 className="text-3xl font-bold text-slate-900">Control Center</h1>
-          <p className="text-slate-600 mt-1">Gestione completa della piattaforma PulseHR</p>
+          <p className="text-slate-600 mt-1">Gestione completa della piattaforma AldevionHR</p>
         </div>
 
         {/* Tabs */}

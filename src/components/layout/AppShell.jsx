@@ -161,10 +161,10 @@ export default function AppShell({ user, children }) {
         open ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
       )}>
         <div className="flex items-center gap-3 px-5 py-4 border-b border-slate-100 dark:border-slate-700">
-          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-sm">P</span>
+          <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-lg flex items-center justify-center">
+            <span className="text-white font-bold text-sm">A</span>
           </div>
-          <span className="font-bold text-slate-800 dark:text-white text-lg">PulseHR</span>
+          <span className="font-bold text-slate-800 dark:text-white text-lg">AldevionHR</span>
           <button className="ml-auto lg:hidden" onClick={() => setOpen(false)}>
             <X className="w-5 h-5 text-slate-400 dark:text-slate-500" />
           </button>

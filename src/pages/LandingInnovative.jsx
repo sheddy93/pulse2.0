@@ -5,7 +5,7 @@ import { Users, Clock, FileText, TrendingUp, Shield, Zap, CheckCircle2, ArrowRig
 import { motion } from "framer-motion";
 import DemoRequestModal from "@/components/landing/DemoRequestModal";
 
-const LOGO = "https://media.base44.com/images/public/69f3ad50c2e669c8723343df/a5026eec8_generated_image.png";
+const LOGO = "https://media.base44.com/images/public/69f3ad50c2e669c8723343df/7bee81eaa_ChatGPTImage1mag202619_47_14.png";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -134,8 +134,8 @@ export default function LandingInnovative() {
       <motion.header initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-lg border-b border-blue-500/20">
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2 md:gap-3">
-            <img src={LOGO} alt="PulseHR" className="h-8 md:h-10 w-8 md:w-10" />
-            <span className="text-lg md:text-xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">PulseHR</span>
+            <img src={LOGO} alt="AldevionHR" className="h-8 md:h-10 w-auto" />
+            <span className="text-lg md:text-xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">AldevionHR</span>
           </div>
 
           <nav className="hidden md:flex items-center gap-8">
@@ -204,7 +204,7 @@ export default function LandingInnovative() {
             </div>
             <div>
               <p className="text-slate-300 font-medium text-sm md:text-base">+50 aziende italiane</p>
-              <p className="text-xs md:text-sm text-slate-500">Già utilizzano PulseHR</p>
+              <p className="text-xs md:text-sm text-slate-500">Già utilizzano AldevionHR</p>
             </div>
           </motion.div>
         </motion.div>
@@ -376,7 +376,7 @@ export default function LandingInnovative() {
       <footer className="bg-slate-950/80 border-t border-blue-500/20 py-8 md:py-12">
         <div className="max-w-7xl mx-auto px-4 md:px-6">
           <div className="text-center">
-            <p className="text-sm text-slate-500">&copy; 2026 PulseHR. Gestione HR per aziende innovative.</p>
+            <p className="text-sm text-slate-500">&copy; 2026 AldevionHR. Gestione HR intelligente e connessa.</p>
           </div>
         </div>
       </footer>
