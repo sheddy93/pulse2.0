@@ -1,3 +1,29 @@
+/**
+ * PermissionsEditor.jsx
+ * ----------------------
+ * Modal per modificare i permessi di un utente su un'azienda specifica.
+ * Usato per: consulenti collegati e admin aziendali interni.
+ *
+ * Props:
+ *  - targetUser  (object): { email, full_name } — utente su cui modificare i permessi
+ *  - companyId   (string): ID azienda di riferimento
+ *  - grantedBy   (string): email di chi sta concedendo i permessi
+ *  - onClose     (fn):     callback chiusura modal
+ *  - isConsultant (bool):  se true → richiede approvazione (PermissionChangeRequest)
+ *                          se false → salva direttamente su UserPermissions
+ *
+ * Flusso consulente (isConsultant=true):
+ *  1. Admin configura i permessi desiderati
+ *  2. Clicca "Richiedi modifiche" → si apre modale di conferma
+ *  3. Può aggiungere una nota opzionale
+ *  4. Viene creato un record PermissionChangeRequest con status "pending"
+ *  5. Il titolare aziendale vede la richiesta in CompanyConsultants → PermissionRequestsPanel
+ *  6. Dopo approvazione → i permessi vengono aggiornati in UserPermissions
+ *
+ * Flusso admin interno (isConsultant=false):
+ *  1. Admin configura i permessi
+ *  2. Clicca "Salva permessi" → salva direttamente su UserPermissions
+ */
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { Shield, Save, X, AlertCircle, Clock } from "lucide-react";

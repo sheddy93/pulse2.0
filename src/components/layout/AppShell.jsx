@@ -1,3 +1,24 @@
+/**
+ * AppShell.jsx
+ * ------------
+ * Layout principale usato da TUTTE le pagine autenticate.
+ * Fornisce: sidebar navigazione, header, area contenuto principale.
+ *
+ * Props:
+ *  - user  (object): oggetto utente Base44 con almeno { role, email, full_name }
+ *  - children: contenuto della pagina
+ *
+ * Comportamento:
+ *  - La navigazione sidebar cambia in base a user.role (vedi oggetto NAV)
+ *  - Su mobile: hamburger menu con overlay
+ *  - Badge ruolo colorato (colori da getRoleColor in lib/roles.js)
+ *  - Campanella notifiche (NotificationBell) nell'header
+ *  - AI Assistant Widget (HRAssistantWidget) flotante in basso a destra
+ *
+ * Per aggiungere una voce di menu:
+ *  → Aggiungila nell'array corretto (COMPANY_NAV, CONSULTANT_NAV, ecc.)
+ *  → Formato: { label: "...", icon: IconComponent, path: "/path/..." }
+ */
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { base44 } from "@/api/base44Client";

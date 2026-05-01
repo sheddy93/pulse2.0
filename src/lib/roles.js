@@ -1,3 +1,18 @@
+/**
+ * roles.js
+ * --------
+ * Definizione centralizzata di tutti i ruoli utente della piattaforma.
+ * Usato da: AppShell (navigazione), RoleRedirect (routing), UI (label/colori).
+ *
+ * Funzioni esportate:
+ *  - getDashboardPath(role)   → path dashboard per il ruolo (es. "/dashboard/company")
+ *  - getRoleLabel(role)       → label UI leggibile (es. "Consulente del Lavoro")
+ *  - getRoleColor(role)       → classe Tailwind colore (es. "bg-blue-600")
+ *  - isCompanyRole(role)      → true se appartiene al gruppo aziendale
+ *  - isConsultantRole(role)   → true se è un tipo di consulente
+ *  - generatePublicId(prefix) → ID pubblico univoco (es. "CONS-XXXXXXXX")
+ *  - generateTempPassword()   → password temporanea sicura per nuovi utenti
+ */
 export const ROLES = {
   SUPER_ADMIN: "super_admin",
   CONSULTANT: "consultant",

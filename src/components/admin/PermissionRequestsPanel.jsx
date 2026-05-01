@@ -1,3 +1,19 @@
+/**
+ * PermissionRequestsPanel.jsx
+ * ----------------------------
+ * Panel modale per il titolare aziendale per gestire le richieste
+ * di modifica permessi inviate dai consulenti.
+ *
+ * Props:
+ *  - companyId (string): ID azienda — filtra le richieste pending
+ *  - onClose   (fn):     callback chiusura panel
+ *
+ * Comportamento:
+ *  - Carica tutte le PermissionChangeRequest con status "pending" per l'azienda
+ *  - Mostra per ogni richiesta: permessi aggiunti (verde) e rimossi (rosso)
+ *  - Approvazione → aggiorna/crea UserPermissions + imposta request status "approved"
+ *  - Rifiuto → imposta request status "rejected" con nota opzionale
+ */
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { Shield, Check, X, ChevronDown, ChevronUp, Clock } from "lucide-react";

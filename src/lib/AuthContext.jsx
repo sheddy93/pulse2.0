@@ -1,4 +1,27 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+/**
+ * AuthContext.jsx
+ * ---------------
+ * Context React globale per l'autenticazione.
+ * Wrappa tutta l'app in App.jsx tramite <AuthProvider>.
+ * Espone lo stato auth e i metodi tramite hook useAuth().
+ *
+ * Valori esposti via useAuth():
+ *  - user               → oggetto utente Base44 (null se non autenticato)
+ *  - isAuthenticated    → boolean
+ *  - isLoadingAuth      → boolean (true durante il check iniziale)
+ *  - isLoadingPublicSettings → boolean (true mentre carica settings app)
+ *  - authError          → { type, message } | null
+ *  - logout()           → esegue logout e redirect
+ *  - navigateToLogin()  → redirect al login con return URL
+ *  - checkUserAuth()    → ri-verifica autenticazione
+ *
+ * Flusso:
+ *  1. checkAppState() → verifica settings app pubblica
+ *  2. Se token presente → checkUserAuth() → carica user
+ *  3. Se 403 auth_required → mostra login
+ *  4. Se 403 user_not_registered → mostra UserNotRegisteredError
+ */
 import { base44 } from '@/api/base44Client';
 import { appParams } from '@/lib/app-params';
 import { createAxiosClient } from '@base44/sdk/dist/utils/axios-client';

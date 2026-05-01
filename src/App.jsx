@@ -1,3 +1,20 @@
+/**
+ * App.jsx
+ * -------
+ * Entry point dell'applicazione React. Definisce:
+ *  - Provider globali: AuthProvider, QueryClientProvider, Router
+ *  - Tutte le Route dell'app organizzate per ruolo
+ *  - AuthenticatedApp: gestisce stati di caricamento, errori auth, force password change
+ *
+ * ⚠️  Per aggiungere una nuova pagina:
+ *  1. Importa il componente in cima (sezione "Add page imports here")
+ *  2. Aggiungi un <Route path="..." element={<Componente />} /> dentro <Routes>
+ *  3. Rispetta la convenzione delle path per ruolo:
+ *     - Super Admin: /dashboard/admin/*
+ *     - Consulente:  /dashboard/consultant/*
+ *     - Azienda:     /dashboard/company/*
+ *     - Dipendente:  /dashboard/employee/*
+ */
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
