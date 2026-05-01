@@ -1,0 +1,52 @@
+{
+  "name": "CalendarEvent",
+  "type": "object",
+  "properties": {
+    "employee_id": {
+      "type": "string"
+    },
+    "employee_email": {
+      "type": "string"
+    },
+    "external_event_id": {
+      "type": "string",
+      "description": "ID dell'evento nel calendario esterno"
+    },
+    "source_entity_type": {
+      "type": "string",
+      "enum": ["shift", "leave_request", "document"],
+      "description": "Tipo di entità Base44 sorgente"
+    },
+    "source_entity_id": {
+      "type": "string",
+      "description": "ID dell'entità Base44"
+    },
+    "calendar_provider": {
+      "type": "string",
+      "enum": ["google", "outlook"]
+    },
+    "event_title": {
+      "type": "string"
+    },
+    "event_description": {
+      "type": "string"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_synced": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "sync_direction": {
+      "type": "string",
+      "enum": ["base44_to_calendar", "calendar_to_base44", "bidirectional"]
+    }
+  },
+  "required": ["employee_id", "employee_email", "external_event_id", "source_entity_type"]
+}

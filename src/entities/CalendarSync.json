@@ -1,0 +1,49 @@
+{
+  "name": "CalendarSync",
+  "type": "object",
+  "properties": {
+    "employee_id": {
+      "type": "string"
+    },
+    "employee_email": {
+      "type": "string"
+    },
+    "calendar_provider": {
+      "type": "string",
+      "enum": ["google", "outlook"]
+    },
+    "calendar_id": {
+      "type": "string",
+      "description": "ID del calendario esterno"
+    },
+    "calendar_name": {
+      "type": "string"
+    },
+    "sync_direction": {
+      "type": "string",
+      "enum": ["one_way", "two_way"],
+      "default": "two_way"
+    },
+    "sync_types": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["shifts", "leaves", "deadlines"]
+      },
+      "default": ["shifts", "leaves"]
+    },
+    "last_sync": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "sync_token": {
+      "type": "string",
+      "description": "Token per incrementale sync (Google)"
+    }
+  },
+  "required": ["employee_id", "employee_email", "calendar_provider", "calendar_id"]
+}
