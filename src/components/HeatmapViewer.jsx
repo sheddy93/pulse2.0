@@ -8,7 +8,6 @@
  */
 
 import { useEffect, useState } from 'react';
-import type { FC } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { base44 } from '@/api/base44Client';
 import { geolocationService } from '@/services/geolocationService';

@@ -11,7 +11,6 @@
  */
 
 import { useState, useEffect } from 'react';
-import type { FC } from 'react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';

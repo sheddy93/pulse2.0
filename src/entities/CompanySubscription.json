@@ -1,0 +1,90 @@
+{
+  "name": "CompanySubscription",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "company_name": {
+      "type": "string"
+    },
+    "contact_email": {
+      "type": "string"
+    },
+    "plan_tier": {
+      "type": "string",
+      "enum": ["starter", "professional", "enterprise"]
+    },
+    "plan_name": {
+      "type": "string"
+    },
+    "base_price_monthly": {
+      "type": "number",
+      "description": "Prezzo piano base"
+    },
+    "purchased_addons": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "addon_id": {
+            "type": "string"
+          },
+          "addon_name": {
+            "type": "string"
+          },
+          "addon_key": {
+            "type": "string"
+          },
+          "price_monthly": {
+            "type": "number"
+          }
+        }
+      },
+      "default": [],
+      "description": "Add-ons sottoscritti"
+    },
+    "discount_percentage": {
+      "type": "number",
+      "default": 0,
+      "description": "Sconto percentuale applicato (0-100)"
+    },
+    "discount_reason": {
+      "type": "string",
+      "description": "Motivo dello sconto (es: early adopter, partnership)"
+    },
+    "total_monthly": {
+      "type": "number",
+      "description": "Totale mensile dopo sconti"
+    },
+    "billing_cycle": {
+      "type": "string",
+      "enum": ["monthly", "annual"],
+      "default": "monthly"
+    },
+    "renewal_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "stripe_customer_id": {
+      "type": "string"
+    },
+    "stripe_subscription_id": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "trial", "cancelled", "expired"],
+      "default": "active"
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "cancelled_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": ["company_id", "company_name", "contact_email", "plan_tier", "plan_name"]
+}

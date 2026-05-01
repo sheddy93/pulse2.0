@@ -78,6 +78,8 @@ import TrainingDashboard from './pages/employee/TrainingDashboard';
 import CertificationExpiry from './pages/company/CertificationExpiry';
 import SuperAdminSettings from './pages/dashboard/SuperAdminSettings';
 import TemporaryLogins from './pages/dashboard/TemporaryLogins';
+import PricingManagement from './pages/dashboard/PricingManagement';
+import PricingPageNew from './pages/company/PricingPageNew';
 import TrainingPortal from './pages/employee/TrainingPortal';
 import PersonalDocuments from './pages/employee/PersonalDocuments';
 import PerformanceFeedback from './pages/employee/PerformanceFeedback';
@@ -167,6 +169,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/admin/analytics" element={<AdminAnalytics />} />
       <Route path="/dashboard/admin/settings" element={<SuperAdminSettings />} />
       <Route path="/dashboard/admin/temporary-logins" element={<TemporaryLogins />} />
+      <Route path="/dashboard/admin/pricing" element={<PricingManagement />} />
       <Route path="/dashboard/admin/companies" element={<AdminCompanies />} />
       <Route path="/dashboard/admin/users" element={<AdminUsers />} />
       <Route path="/dashboard/admin/system" element={<AdminSystem />} />
@@ -222,6 +225,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/company/subscription" element={<SubscriptionPage />} />
       <Route path="/dashboard/company/checkout" element={<CheckoutPage />} />
       <Route path="/dashboard/company/my-account" element={<MyAccountSubscription />} />
+      <Route path="/dashboard/company/pricing-plans" element={<PricingPageNew />} />
       <Route path="/dashboard/company/payroll-export" element={<PayrollExport />} />
       <Route path="/dashboard/company/report-generator" element={<ReportGenerator />} />
       <Route path="/dashboard/company/workflow-configuration" element={<WorkflowConfiguration />} />

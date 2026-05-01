@@ -11,7 +11,6 @@
  */
 
 import { useState } from 'react';
-import type { FC } from 'react';
 import { base44 } from '@/api/base44Client';
 import { employeeService } from '@/services/employeeService';
 import { Button } from '@/components/ui/button';

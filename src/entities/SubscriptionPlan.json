@@ -1,0 +1,47 @@
+{
+  "name": "SubscriptionPlan",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nome piano (Startup, Professional, Enterprise)"
+    },
+    "tier": {
+      "type": "string",
+      "enum": ["starter", "professional", "enterprise"],
+      "description": "Livello del piano"
+    },
+    "base_price_monthly": {
+      "type": "number",
+      "description": "Prezzo base mensile in EUR"
+    },
+    "max_employees": {
+      "type": "number",
+      "description": "Numero massimo di dipendenti inclusi"
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Feature incluse nel piano base"
+    },
+    "description": {
+      "type": "string"
+    },
+    "popular": {
+      "type": "boolean",
+      "default": false,
+      "description": "Mostra badge 'Popular' nella pricing page"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "display_order": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": ["name", "tier", "base_price_monthly", "max_employees"]
+}

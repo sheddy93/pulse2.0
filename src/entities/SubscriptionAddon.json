@@ -1,0 +1,47 @@
+{
+  "name": "SubscriptionAddon",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nome dell'add-on (Advanced Analytics, API Access, etc)"
+    },
+    "addon_key": {
+      "type": "string",
+      "description": "Identificatore univoco (es: advanced_analytics, api_access)"
+    },
+    "category": {
+      "type": "string",
+      "enum": ["analytics", "integrations", "compliance", "support", "custom"],
+      "description": "Categoria dell'add-on"
+    },
+    "base_price_monthly": {
+      "type": "number",
+      "description": "Prezzo mensile in EUR"
+    },
+    "description": {
+      "type": "string"
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Cosa include l'add-on"
+    },
+    "required_tier": {
+      "type": "string",
+      "enum": ["starter", "professional", "enterprise"],
+      "description": "Piano minimo richiesto per acquistare"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "display_order": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": ["name", "addon_key", "category", "base_price_monthly", "required_tier"]
+}
