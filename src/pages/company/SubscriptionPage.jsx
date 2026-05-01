@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
+import StripeCheckoutModal from "@/components/checkout/StripeCheckoutModal";
 import { Check, CreditCard, Zap, Star, AlertCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -17,6 +18,17 @@ const COLOR_MAP = {
   slate: "border-slate-500 bg-slate-600",
 };
 
+/**
+ * SubscriptionPage.jsx
+ * ====================
+ * Pagina abbonamenti con checkout Stripe inline
+ * 
+ * Features:
+ * - Visualizza piani disponibili
+ * - Mostra subscription attuale
+ * - Checkout modale Stripe con session tracking
+ * - Addons personalizzazione
+ */
 export default function SubscriptionPage() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
@@ -24,6 +36,7 @@ export default function SubscriptionPage() {
   const [currentSub, setCurrentSub] = useState(null);
   const [loading, setLoading] = useState(true);
   const [billing, setBilling] = useState("monthly");
+  const [checkoutModal, setCheckoutModal] = useState({ isOpen: false, plan: null });
 
   useEffect(() => {
     base44.auth.me().then(async (me) => {
@@ -37,11 +50,30 @@ export default function SubscriptionPage() {
     }).finally(() => setLoading(false));
   }, []);
 
+  /**
+   * handleCheckout(plan)
+   * Apri modal checkout inline
+   * (Modal gestisce session_id tracking interno)
+   */
   const handleCheckout = (plan) => {
-    navigate(`/dashboard/company/checkout?plan=${plan.id}&interval=${billing}`);
+    setCheckoutModal({ isOpen: true, plan });
+  };
+
+  const closeCheckout = () => {
+    setCheckoutModal({ isOpen: false, plan: null });
   };
 
   if (loading) return <PageLoader color="blue" />;
+
+  // Arricchisci plan con addons disponibili (demo)
+  const enrichedPlans = plans.map(plan => ({
+    ...plan,
+    available_addons: [
+      { id: 'addon_1', name: 'Storage aggiuntivo', base_price: 5, unit_label: 'per 10GB/mese', max_quantity: 10 },
+      { id: 'addon_2', name: 'Utenti aggiuntivi', base_price: 3, unit_label: 'per utente/mese', max_quantity: 50 },
+      { id: 'addon_3', name: 'API calls illimitati', base_price: 10, unit_label: 'per mese', max_quantity: 1 },
+    ],
+  }));
 
   const STATUS_BADGE = {
     active: "bg-emerald-100 text-emerald-700",
@@ -102,7 +134,7 @@ export default function SubscriptionPage() {
           </div>
         ) : (
           <div className="grid md:grid-cols-3 gap-6">
-            {plans.map(plan => {
+            {enrichedPlans.map(plan => {
               const isCurrentPlan = currentSub?.plan_id === plan.id && currentSub?.status === "active";
               const price = billing === "monthly" ? plan.price_monthly : (plan.price_yearly || plan.price_monthly * 12 * 0.8);
               const colors = COLOR_MAP[plan.color] || COLOR_MAP.blue;
@@ -153,6 +185,15 @@ export default function SubscriptionPage() {
             })}
           </div>
         )}
+
+        {/* Stripe Checkout Modal */}
+        <StripeCheckoutModal
+          plan={checkoutModal.plan}
+          isOpen={checkoutModal.isOpen}
+          onClose={closeCheckout}
+          billingInterval={billing}
+          user={user}
+        />
       </div>
     </AppShell>
   );
