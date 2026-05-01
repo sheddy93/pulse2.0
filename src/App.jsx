@@ -45,6 +45,7 @@ import TrainingManagement from './pages/company/TrainingManagement';
 import PerformanceManagement from './pages/company/PerformanceManagement';
 import GivePerformanceReview from './pages/company/GivePerformanceReview';
 import HRAnalytics from './pages/company/HRAnalytics';
+import AdvancedAnalytics from './pages/company/AdvancedAnalytics';
 import HRCalendarPage from './pages/company/HRCalendarPage';
 import ExpenseManagement from './pages/company/ExpenseManagement';
 import EmployeeExpenses from './pages/employee/EmployeeExpenses';
@@ -164,6 +165,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/company/performance" element={<PerformanceManagement />} />
       <Route path="/dashboard/company/give-feedback" element={<GivePerformanceReview />} />
       <Route path="/dashboard/company/analytics" element={<HRAnalytics />} />
+      <Route path="/dashboard/company/ai-analytics" element={<AdvancedAnalytics />} />
       <Route path="/dashboard/company/calendar" element={<HRCalendarPage />} />
       <Route path="/dashboard/company/expenses" element={<ExpenseManagement />} />
       <Route path="/dashboard/company/leave-requests" element={<ManagerLeaveRequests />} />

@@ -3,7 +3,8 @@ import { base44 } from "@/api/base44Client";
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { TrendingUp, Users, Award, BarChart3 } from "lucide-react";
+import { TrendingUp, Users, Award, BarChart3, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function HRAnalytics() {
   const [user, setUser] = useState(null);
@@ -82,9 +83,18 @@ export default function HRAnalytics() {
   return (
     <AppShell user={user}>
       <div className="p-6 max-w-7xl mx-auto space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-800">HR Analytics</h1>
-          <p className="text-sm text-slate-500">{company?.name}</p>
+        <div className="flex items-start justify-between flex-wrap gap-4 w-full">
+          <div>
+            <h1 className="text-3xl font-bold text-slate-800">HR Analytics</h1>
+            <p className="text-sm text-slate-500">{company?.name}</p>
+          </div>
+          <Link
+            to="/dashboard/company/ai-analytics"
+            className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-violet-600 to-blue-600 text-white rounded-xl font-semibold text-sm hover:opacity-90 transition-all shadow-sm"
+          >
+            <Sparkles className="w-4 h-4" />
+            Analytics Avanzati con IA
+          </Link>
         </div>
 
         {/* KPI Cards */}
