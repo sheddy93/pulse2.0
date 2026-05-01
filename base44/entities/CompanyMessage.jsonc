@@ -1,0 +1,116 @@
+{
+  "name": "CompanyMessage",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "sender_email": {
+      "type": "string"
+    },
+    "sender_name": {
+      "type": "string"
+    },
+    "subject": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string",
+      "description": "Contenuto del messaggio in testo libero"
+    },
+    "message_type": {
+      "type": "string",
+      "enum": [
+        "task",
+        "announcement",
+        "document",
+        "notification",
+        "other"
+      ],
+      "default": "notification"
+    },
+    "recipient_type": {
+      "type": "string",
+      "enum": [
+        "individual",
+        "group",
+        "department",
+        "all"
+      ],
+      "default": "individual"
+    },
+    "recipient_employees": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "ID dei dipendenti destinatari"
+    },
+    "recipient_department": {
+      "type": "string",
+      "description": "Dipartimento destinatario (se recipient_type='department')"
+    },
+    "attachments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "file_url": {
+            "type": "string"
+          },
+          "file_name": {
+            "type": "string"
+          },
+          "file_type": {
+            "type": "string"
+          },
+          "file_size": {
+            "type": "number"
+          }
+        }
+      },
+      "default": []
+    },
+    "read_by": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "employee_id": {
+            "type": "string"
+          },
+          "read_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "default": []
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "normal",
+        "high",
+        "urgent"
+      ],
+      "default": "normal"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data entro cui completare il lavoro (se task)"
+    },
+    "sent_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "company_id",
+    "sender_email",
+    "subject",
+    "content"
+  ]
+}
