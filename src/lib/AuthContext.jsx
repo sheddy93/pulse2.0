@@ -22,6 +22,7 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
  *  3. Se 403 auth_required → mostra login
  *  4. Se 403 user_not_registered → mostra UserNotRegisteredError
  */
+import { createContext, useContext, useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { appParams } from '@/lib/app-params';
 import { createAxiosClient } from '@base44/sdk/dist/utils/axios-client';

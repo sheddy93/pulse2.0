@@ -198,7 +198,6 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/company/employees/new" element={<EmployeeCreateNew />} />
       <Route path="/dashboard/company/employees/:id" element={<EmployeeDetailNew />} />
       <Route path="/dashboard/company/employees/import" element={<EmployeeImport />} />
-      <Route path="/dashboard/company/employees/:id" element={<EmployeeCard />} />
       <Route path="/dashboard/company/admins" element={<AdminsList />} />
       <Route path="/dashboard/company/admins/new" element={<CreateCompanyAdmin />} />
       <Route path="/dashboard/company/consultants" element={<CompanyConsultants />} />
@@ -242,7 +241,6 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/company/team-analytics" element={<TeamAnalyticsPage />} />
       <Route path="/dashboard/company/settings" element={<CompanySettings />} />
       <Route path="/dashboard/company/api" element={<APIManagement />} />
-      <Route path="/dashboard/company/integrations" element={<IntegrationsPage />} />
 
       {/* Employee */}
       <Route path="/dashboard/employee" element={<EmployeeDashboardBasic />} />
