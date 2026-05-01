@@ -50,12 +50,12 @@ export default function AdminSystem() {
   if (loading) return <PageLoader color="red" />;
 
   const systemChecks = [
-    { label: "Database operativo", status: "ok" },
-    { label: "Autenticazione attiva", status: "ok" },
-    { label: "Storage file attivo", status: "ok" },
-    { label: "Backend functions", status: "ok" },
-    { label: "Notifiche email", status: "ok" },
-    { label: "Stripe integration", status: stats.companies > 0 ? "ok" : "warning" },
+    { label: "Database", status: stats.companies > 0 || stats.users > 0 ? "ok" : "warning" },
+    { label: "Autenticazione", status: "ok" },
+    { label: "Backend Functions", status: "ok" },
+    { label: "Notifiche Email", status: "ok" },
+    { label: "Stripe Integration", status: stats.companies > 0 ? "ok" : "warning" },
+    { label: "Storage File", status: "ok" },
   ];
 
   return (
@@ -140,13 +140,14 @@ export default function AdminSystem() {
           <h2 className="font-semibold text-slate-800 mb-4 flex items-center gap-2">
             <Zap className="w-4 h-4 text-slate-600" /> Backend Functions
           </h2>
-          <div className="grid sm:grid-cols-2 gap-2">
+          <div className="grid sm:grid-cols-3 gap-2">
             {[
               "stripeWebhook", "stripeCheckout", "stripePlans",
               "notifyLeaveRequest", "notifyHRApproval", "notifyManagerApproval",
               "notifyPayrollAvailable", "processPayrollZip", "generateReport",
               "importEmployeesFromCSV", "createAuditLog", "sendSignatureReminder",
-              "notifyExpiringDocs", "notifyConsultantLink",
+              "notifyExpiringDocs", "notifyConsultantLink", "authenticateTemporaryLogin",
+              "initiateWorkflow", "processWorkflowApproval", "signDocument",
             ].map(fn => (
               <div key={fn} className="flex items-center justify-between p-2.5 bg-slate-50 rounded-lg">
                 <span className="text-xs font-mono text-slate-700">{fn}</span>

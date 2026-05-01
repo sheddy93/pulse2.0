@@ -34,9 +34,15 @@ export default function AdminCompanies() {
     setCompanies(prev => prev.map(c => c.id === company.id ? { ...c, is_active: !c.is_active } : c));
   };
 
-  const filtered = companies.filter(c =>
-    !search || c.name?.toLowerCase().includes(search.toLowerCase()) || c.email?.toLowerCase().includes(search.toLowerCase())
-  );
+  const [statusFilter, setStatusFilter] = useState("all");
+
+  const filtered = companies.filter(c => {
+    const matchSearch = !search || c.name?.toLowerCase().includes(search.toLowerCase()) || c.email?.toLowerCase().includes(search.toLowerCase());
+    const sub = getSubscription(c.id);
+    const subStatus = sub?.status || "none";
+    const matchStatus = statusFilter === "all" || subStatus === statusFilter;
+    return matchSearch && matchStatus;
+  });
 
   if (loading) return <PageLoader color="red" />;
 
@@ -75,8 +81,8 @@ export default function AdminCompanies() {
           ))}
         </div>
 
-        {/* Search */}
-        <div className="bg-white rounded-xl border border-slate-200 p-4">
+        {/* Search & Filter */}
+        <div className="bg-white rounded-xl border border-slate-200 p-4 space-y-3">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <input
@@ -87,6 +93,18 @@ export default function AdminCompanies() {
               className="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
+          <select
+            value={statusFilter}
+            onChange={e => setStatusFilter(e.target.value)}
+            className="w-full px-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="all">Tutti gli abbonamenti</option>
+            <option value="active">Solo Attivi</option>
+            <option value="trialing">Solo Trial</option>
+            <option value="past_due">Ritardo Pagamento</option>
+            <option value="canceled">Cancellati</option>
+            <option value="none">Senza abbonamento</option>
+          </select>
         </div>
 
         {/* Table */}

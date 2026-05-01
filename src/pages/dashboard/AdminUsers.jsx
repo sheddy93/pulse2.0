@@ -35,7 +35,7 @@ export default function AdminUsers() {
       u.email?.toLowerCase().includes(search.toLowerCase());
     const matchRole = roleFilter === "all" || u.role === roleFilter;
     return matchSearch && matchRole;
-  });
+  }).sort((a, b) => new Date(b.created_date || 0) - new Date(a.created_date || 0));
 
   const roleCounts = users.reduce((acc, u) => {
     acc[u.role] = (acc[u.role] || 0) + 1;
@@ -105,6 +105,7 @@ export default function AdminUsers() {
                   <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500">Email</th>
                   <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500">Ruolo</th>
                   <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500">Registrazione</th>
+                   <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500">Stato</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-50">
@@ -130,7 +131,12 @@ export default function AdminUsers() {
                       <td className="px-5 py-4 text-slate-500 text-xs">
                         {u.created_date ? format(new Date(u.created_date), "d MMM yyyy", { locale: it }) : "—"}
                       </td>
-                    </tr>
+                      <td className="px-5 py-4">
+                        <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${u.is_active !== false ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-600"}`}>
+                          {u.is_active !== false ? "Attivo" : "Inattivo"}
+                        </span>
+                      </td>
+                      </tr>
                   );
                 })}
               </tbody>
