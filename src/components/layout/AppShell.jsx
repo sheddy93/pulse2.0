@@ -96,6 +96,7 @@ const CONSULTANT_NAV = [
 const NAV = {
   super_admin: [
     { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard/admin" },
+    { label: "Configurazioni Piattaforma", icon: Zap, path: "/dashboard/admin/platform-settings" },
     { label: "Feature Management", icon: Zap, path: "/dashboard/admin/features" },
     { label: "Pricing Plans", icon: CreditCard, path: "/dashboard/admin/pricing" },
     { label: "Aziende", icon: Building2, path: "/dashboard/admin/companies" },

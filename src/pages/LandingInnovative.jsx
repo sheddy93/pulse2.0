@@ -75,7 +75,7 @@ const FEATURE_SCREENS = [
   }
 ];
 
-// Dashboard per ruoli
+// Dashboard per ruoli (escluso SuperAdmin - interno)
 const ROLE_DASHBOARDS = [
   {
     role: 'Dipendente',
@@ -104,7 +104,7 @@ const ROLE_DASHBOARDS = [
     ]
   },
   {
-    role: 'Amministratore',
+    role: 'Amministratore Azienda',
     icon: Shield,
     color: 'from-purple-500 to-purple-600',
     features: [
