@@ -1,77 +1,116 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
-import Stripe from 'npm:stripe@14.21.0';
 
-const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY"));
+const stripe = await import('npm:stripe@17.0.0').then(m => new m.default(Deno.env.get('STRIPE_SECRET_KEY')));
 
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
     const user = await base44.auth.me();
-    if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const { price_id, plan_id, plan_name, billing_interval, success_url, cancel_url, selected_addons, company_id } = await req.json();
-
-    if (!price_id) return Response.json({ error: 'price_id is required' }, { status: 400 });
-
-    // Get or create Stripe customer
-    let customerId;
-    const subs = await base44.asServiceRole.entities.CompanySubscription.filter({ company_email: user.email });
-    if (subs[0]?.stripe_customer_id) {
-      customerId = subs[0].stripe_customer_id;
-    } else {
-      const customer = await stripe.customers.create({
-        email: user.email,
-        name: user.full_name,
-        metadata: { base44_user_id: user.id, base44_app_id: Deno.env.get("BASE44_APP_ID") }
-      });
-      customerId = customer.id;
+    if (!user) {
+      return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Costruisci line items con piano base + add-ons
-    const lineItems = [{ price: price_id, quantity: 1 }];
-    
-    // Se ci sono add-ons, crea prodotti ricorrenti per ogni add-on
-    if (selected_addons && selected_addons.length > 0) {
+    const payload = await req.json();
+    const { price_id, plan_id, plan_name, billing_interval, selected_addons, company_id } = payload;
+
+    if (!price_id || !plan_id) {
+      console.error('Missing required fields:', { price_id, plan_id });
+      return Response.json({ error: 'Missing price_id or plan_id' }, { status: 400 });
+    }
+
+    // Calcola add-ons totali
+    const addonsPrice = selected_addons.reduce((sum, addon) => sum + (addon.total_price || 0), 0);
+    const addonsAmount = Math.round(addonsPrice * 100); // Converti a centesimi
+
+    // Crea o trova il cliente Stripe
+    let customerId = null;
+
+    // Prova a trovare un cliente Stripe esistente per questa azienda
+    if (company_id) {
+      const subscriptions = await base44.entities.CompanySubscription.filter({ company_id });
+      if (subscriptions[0]?.stripe_customer_id) {
+        customerId = subscriptions[0].stripe_customer_id;
+      }
+    }
+
+    // Se non esiste, crea un nuovo cliente Stripe
+    if (!customerId) {
+      const customer = await stripe.customers.create({
+        email: user.email,
+        name: user.full_name || 'Unknown',
+        metadata: {
+          company_id: company_id || 'N/A',
+          user_email: user.email,
+          base44_app_id: Deno.env.get('BASE44_APP_ID')
+        }
+      });
+      customerId = customer.id;
+      console.log(`Created Stripe customer: ${customerId}`);
+    }
+
+    // Crea item di checkout per il piano base
+    const lineItems = [
+      {
+        price: price_id,
+        quantity: 1
+      }
+    ];
+
+    // Aggiungi add-ons come line items aggiuntivi se presenti
+    if (selected_addons.length > 0) {
       for (const addon of selected_addons) {
-        lineItems.push({
-          price_data: {
-            currency: 'eur',
-            product_data: {
-              name: `${addon.addon_name} × ${addon.quantity}`,
-            },
-            unit_amount: Math.round(addon.total_price * 100),
-            recurring: {
-              interval: billing_interval === 'yearly' ? 'year' : 'month',
-              interval_count: 1,
-            }
+        // Crea un prezzo dinamico per l'add-on
+        const addonPrice = await stripe.prices.create({
+          unit_amount: Math.round(addon.unit_price * 100), // Converti a centesimi
+          currency: 'eur',
+          recurring: {
+            interval: billing_interval === 'yearly' ? 'year' : 'month'
           },
-          quantity: 1,
+          metadata: {
+            addon_id: addon.addon_id,
+            addon_name: addon.addon_name,
+            base44_app_id: Deno.env.get('BASE44_APP_ID')
+          }
+        });
+
+        lineItems.push({
+          price: addonPrice.id,
+          quantity: addon.quantity
         });
       }
     }
 
+    // Crea la sessione di checkout
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       payment_method_types: ['card'],
-      mode: 'subscription',
       line_items: lineItems,
-      success_url: success_url || `${req.headers.get('origin')}/dashboard/company/subscription?success=true`,
-      cancel_url: cancel_url || `${req.headers.get('origin')}/dashboard/company/subscription?canceled=true`,
+      mode: 'subscription',
+      success_url: `${Deno.env.get('APP_URL') || 'http://localhost:5173'}/dashboard/company/subscription?success=true&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${Deno.env.get('APP_URL') || 'http://localhost:5173'}/dashboard/company/pricing-plans?cancelled=true`,
       metadata: {
-        base44_app_id: Deno.env.get("BASE44_APP_ID"),
-        plan_id,
-        plan_name,
-        billing_interval,
+        base44_app_id: Deno.env.get('BASE44_APP_ID'),
+        company_id: company_id || 'N/A',
+        plan_id: plan_id,
+        plan_name: plan_name,
         user_email: user.email,
-        company_id: company_id || user.company_id || '',
-        selected_addons: JSON.stringify(selected_addons || [])
+        addons_count: selected_addons.length
       }
     });
 
-    console.log(`Checkout session created: ${session.id} for ${user.email}`);
-    return Response.json({ url: session.url, session_id: session.id });
+    console.log(`Checkout session created: ${session.id}`);
+
+    return Response.json({
+      url: session.url,
+      session_id: session.id,
+      customer_id: customerId
+    });
   } catch (error) {
-    console.error('stripeCheckout error:', error.message);
-    return Response.json({ error: error.message }, { status: 500 });
+    console.error('Stripe checkout error:', error.message, error.stack);
+    return Response.json(
+      { error: error.message || 'Checkout failed' },
+      { status: 500 }
+    );
   }
 });

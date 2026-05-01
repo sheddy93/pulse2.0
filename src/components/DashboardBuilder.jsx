@@ -16,26 +16,8 @@ import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Plus, Save, RotateCcw, X } from 'lucide-react';
 
-interface DashboardWidget {
-  id: string;
-  type: 'kpi' | 'chart' | 'table' | 'trend' | 'gauge';
-  title: string;
-  metric: string; // employees_count, leave_pending, overtime_total, etc.
-  size: 'small' | 'medium' | 'large';
-  refreshInterval?: number; // seconds
-  data?: any;
-}
-
-interface DashboardLayout {
-  id: string;
-  company_id: string;
-  user_email: string;
-  widgets: DashboardWidget[];
-  updated_at: Date;
-}
-
 export default function DashboardBuilder({ companyId, userEmail, onLayoutSaved }) {
-  const [layout, setLayout] = useState<DashboardLayout | null>(null);
+  const [layout, setLayout] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -85,7 +67,7 @@ export default function DashboardBuilder({ companyId, userEmail, onLayoutSaved }
     setLayout({ ...layout, widgets: newWidgets });
   };
 
-  const handleRemoveWidget = (id: string) => {
+  const handleRemoveWidget = (id) => {
     if (!layout) return;
     setLayout({
       ...layout,
@@ -93,10 +75,10 @@ export default function DashboardBuilder({ companyId, userEmail, onLayoutSaved }
     });
   };
 
-  const handleAddWidget = (type: DashboardWidget['type']) => {
+  const handleAddWidget = (type) => {
     if (!layout) return;
 
-    const newWidget: DashboardWidget = {
+    const newWidget = {
       id: crypto.randomUUID(),
       type,
       title: `New ${type}`,
@@ -242,7 +224,7 @@ export default function DashboardBuilder({ companyId, userEmail, onLayoutSaved }
 /**
  * Widget Renderer
  */
-function WidgetRenderer({ widget }: { widget: DashboardWidget }) {
+function WidgetRenderer({ widget }) {
   switch (widget.type) {
     case 'kpi':
       return <KPIWidget widget={widget} />;
@@ -262,8 +244,8 @@ function WidgetRenderer({ widget }: { widget: DashboardWidget }) {
 /**
  * KPI Widget - Shows single metric (count, percentage)
  */
-function KPIWidget({ widget }: { widget: DashboardWidget }) {
-  const [value, setValue] = useState<number | null>(null);
+function KPIWidget({ widget }) {
+  const [value, setValue] = useState(null);
 
   useEffect(() => {
     // Fetch metric value
@@ -288,7 +270,7 @@ function KPIWidget({ widget }: { widget: DashboardWidget }) {
 /**
  * Chart Widget - Line, bar, pie charts
  */
-function ChartWidget({ widget }: { widget: DashboardWidget }) {
+function ChartWidget({ widget }) {
   return (
     <div className="h-48 bg-slate-100 rounded flex items-center justify-center text-slate-400">
       Chart data placeholder
@@ -299,7 +281,7 @@ function ChartWidget({ widget }: { widget: DashboardWidget }) {
 /**
  * Table Widget - Data table display
  */
-function TableWidget({ widget }: { widget: DashboardWidget }) {
+function TableWidget({ widget }) {
   return (
     <div className="h-48 bg-slate-100 rounded flex items-center justify-center text-slate-400">
       Table data placeholder
@@ -310,7 +292,7 @@ function TableWidget({ widget }: { widget: DashboardWidget }) {
 /**
  * Trend Widget - Shows trending metrics
  */
-function TrendWidget({ widget }: { widget: DashboardWidget }) {
+function TrendWidget({ widget }) {
   return (
     <div className="h-24 bg-slate-100 rounded flex items-center justify-center text-slate-400">
       Trend indicator
@@ -321,7 +303,7 @@ function TrendWidget({ widget }: { widget: DashboardWidget }) {
 /**
  * Gauge Widget - Circular progress
  */
-function GaugeWidget({ widget }: { widget: DashboardWidget }) {
+function GaugeWidget({ widget }) {
   return (
     <div className="h-32 flex items-center justify-center">
       <div className="text-center">
@@ -336,7 +318,7 @@ function GaugeWidget({ widget }: { widget: DashboardWidget }) {
 /**
  * Default widgets for new dashboard
  */
-function getDefaultWidgets(): DashboardWidget[] {
+function getDefaultWidgets() {
   return [
     {
       id: crypto.randomUUID(),

@@ -15,15 +15,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import 'leaflet/dist/leaflet.css';
 
-interface HeatmapPoint {
-  latitude: number;
-  longitude: number;
-  intensity: number;
-  count: number;
-}
-
-export default function HeatmapViewer({ companyId }: { companyId: string }) {
-  const [heatmapData, setHeatmapData] = useState<HeatmapPoint[]>([]);
+export default function HeatmapViewer({ companyId }) {
+  const [heatmapData, setHeatmapData] = useState([]);
   const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0]);
   const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0]);
   const [loading, setLoading] = useState(false);

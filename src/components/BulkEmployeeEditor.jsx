@@ -19,14 +19,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Input } from '@/components/ui/input';
 import { Users, Save, RotateCcw, Loader2 } from 'lucide-react';
 
-interface BulkEditorProps {
-  companyId: string;
-  employees: any[];
-  onRefresh: () => void;
-}
-
-export default function BulkEmployeeEditor({ companyId, employees, onRefresh }: BulkEditorProps) {
-  const [selected, setSelected] = useState<Set<string>>(new Set());
+export default function BulkEmployeeEditor({ companyId, employees, onRefresh }) {
+  const [selected, setSelected] = useState(new Set());
   const [editData, setEditData] = useState({
     department: '',
     job_title: '',
@@ -43,7 +37,7 @@ export default function BulkEmployeeEditor({ companyId, employees, onRefresh }: 
     }
   };
 
-  const handleSelect = (id: string) => {
+  const handleSelect = (id) => {
     const newSet = new Set(selected);
     if (newSet.has(id)) {
       newSet.delete(id);
