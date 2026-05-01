@@ -162,13 +162,9 @@ export default function AttendancePage() {
             {(["check_in", "check_out", "break_start", "break_end"]).map((type) => {
               const cfg = TYPES[type];
                const Icon = cfg.icon;
-               const enabled = type === "check_in" ? !isClockedIn : type === "check_out" ? isClockedIn : type === "break_start" ? isClockedIn : !isClockedIn;
-               const canStamp = true;
-              return (
-                <button key={type} onClick={() => handleStamp(type)} disabled={!enabled || stamping === type || !canStamp}
-                  className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 font-medium text-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed ${
-                    enabled ? "border-emerald-400 bg-emerald-50 text-emerald-700 hover:bg-emerald-100" : "border-slate-200 text-slate-400"
-                  }`}>
+               return (
+                 <button key={type} onClick={() => handleStamp(type)} disabled={stamping === type}
+                   className="flex flex-col items-center gap-2 p-4 rounded-xl border-2 font-medium text-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed border-emerald-400 bg-emerald-50 text-emerald-700 hover:bg-emerald-100">
                   <Icon className="w-6 h-6" />
                   {stamping === type ? "..." : cfg.label}
                 </button>
