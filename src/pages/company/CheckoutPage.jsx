@@ -20,20 +20,8 @@ export default function CheckoutPage() {
   const billingInterval = searchParams.get("interval") || "monthly";
 
   useEffect(() => {
-    base44.auth.me().then(async (me) => {
-      setUser(me);
-      
-      // Carica il piano selezionato
-      if (planId) {
-        // TODO: Replace with service.SubscriptionPlan.filter({ id: planId })
-        const plans = [];
-        if (plans[0]) setPlan(plans[0]);
-      }
-
-      // TODO: Replace with service.SubscriptionAddon.filter({ is_active: true })
-      const addons = [];
-      setAllAddons(addons.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0)));
-    }).finally(() => setLoading(false));
+    // TODO: Replace with authService.me() and service calls
+    setLoading(false);
   }, [planId]);
 
   // Calcola prezzo totale
@@ -88,14 +76,8 @@ export default function CheckoutPage() {
         return;
       }
 
-      const response = await base44.functions.invoke("stripeCheckout", {
-        price_id: priceId,
-        plan_id: plan.id,
-        plan_name: plan.name,
-        billing_interval: billingInterval,
-        selected_addons: selectedAddons,
-        company_id: user?.company_id
-      });
+      // TODO: Replace with service call to stripeCheckout backend function
+      const response = { data: { url: null } };
 
       if (response.data.url) {
         window.location.href = response.data.url;

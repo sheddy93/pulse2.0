@@ -41,14 +41,8 @@ export default function AnnouncementBoard() {
   );
 
   useEffect(() => {
-    base44.auth.me().then(async (me) => {
-      setUser(me);
-      if (!me.company_id) { setLoading(false); return; }
-      const companies = cachedCompany ? [cachedCompany] : [];
-      const announces = [];  // TODO: Replace with service calls
-      setCompany(companies[0]);
-      setAnnouncements(announces);
-    }).finally(() => setLoading(false));
+    // TODO: Replace with authService.me() and service calls
+    setLoading(false);
   }, [page, cachedCompany]);
 
   const handleSubmit = async (e) => {

@@ -57,15 +57,9 @@ export default function DocumentsPage() {
   );
 
   useEffect(() => {
-    // TODO: Replace with authService.me().then(async (me) => {
-      setUser(me);
-      if (!me.company_id) { setLoading(false); return; }
-      // TODO: Replace with service calls
-      setCompany(null);
-      setEmployees(cachedEmployees || []);
-      await loadDocs(me.company_id);
-      }).finally(() => setLoading(false));
-      }, [page, cachedEmployees]);
+    // TODO: Replace with authService.me() and service calls
+    setLoading(false);
+  }, [page, cachedEmployees]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

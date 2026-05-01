@@ -33,26 +33,14 @@ export default function AttendancePage() {
   const [pendingCount, setPendingCount] = useState(0);
 
   const loadEntries = async (me) => {
-    const all = await base44.entities.TimeEntry.filter({ user_email: me.email });
-    setEntries([...all].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)));
+    // TODO: Replace with service.TimeEntry.filter({ user_email: me.email })
+    setEntries([]);
   };
 
   useEffect(() => {
     const init = async () => {
-      base44.auth.me().then(async (me) => {
-        setUser(me);
-        const emps = await base44.entities.EmployeeProfile.filter({ user_email: me.email });
-        setEmployee(emps[0] || null);
-        await loadEntries(me);
-        
-        // Carica la sede primaria se esiste
-        if (emps[0]) {
-          const locs = await base44.entities.CompanyLocation.filter({
-            company_id: emps[0].company_id,
-            is_primary: true
-          });
-          setLocation(locs[0] || null);
-        }
+      // TODO: Replace with authService.me() and service calls for employee/location
+      setLoading(false);
 
         // Carica timbrature in sospeso offline
         const pending = await getPendingTimeEntries();
@@ -95,7 +83,8 @@ export default function AttendancePage() {
 
   const syncEntries = async (me) => {
     setIsSyncing(true);
-    const result = await syncOfflineTimeEntries(base44);
+    // TODO: Replace with service call to sync offline entries
+    const result = { synced: 0 };
     if (result.synced > 0) {
       await cleanupSyncedEntries();
       await loadEntries(me);
@@ -130,24 +119,15 @@ export default function AttendancePage() {
 
     try {
        if (isOnline) {
-         // Online: salva direttamente al server
-         await base44.entities.TimeEntry.create(entry);
-         // Piccolo delay per assicurare che il DB ha registrato
-         await new Promise(r => setTimeout(r, 500));
+         // TODO: Replace with service.TimeEntry.create()
        } else {
-         // Offline: salva in IndexedDB
-         await saveTimeEntryOffline(entry);
-         setPendingCount(prev => prev + 1);
-       }
+          // Offline: salva in IndexedDB
+          await saveTimeEntryOffline(entry);
+          setPendingCount(prev => prev + 1);
+        }
 
-       // Aggiungi entry alla lista locale per UI istantanea
-       setEntries(prev => [entry, ...prev]);
-       
-       // Ricarica le timbrature dal server (solo se online)
-       if (isOnline) {
-         const all = await base44.entities.TimeEntry.filter({ user_email: user.email });
-         setEntries([...all].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)));
-       }
+        // Aggiungi entry alla lista locale per UI istantanea
+        setEntries(prev => [entry, ...prev]);
        setGpsPosition(null);
      } catch (err) {
        console.error('Errore salvataggio timbratura:', err);
@@ -183,7 +163,8 @@ export default function AttendancePage() {
         <BiometricButton
           onSuccess={async (biometricData) => {
             try {
-              await base44.functions.invoke('verifyBiometric', {
+              // TODO: Replace with service call to verifyBiometric
+             // await base44.functions.invoke('verifyBiometric', {
                 ...biometricData,
                 attendanceType: 'check_in'
               });
