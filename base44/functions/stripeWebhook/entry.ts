@@ -28,6 +28,16 @@ Deno.serve(async (req) => {
         
         // Find existing subscription record
         const existing = await base44.asServiceRole.entities.CompanySubscription.filter({ company_email: meta.user_email });
+        // Estrai gli add-ons dal metadato
+        let selectedAddons = [];
+        if (meta.selected_addons) {
+          try {
+            selectedAddons = JSON.parse(meta.selected_addons);
+          } catch (e) {
+            console.log('Could not parse selected_addons from metadata');
+          }
+        }
+
         const subData = {
           company_email: meta.user_email,
           company_id: meta.company_id || '',
@@ -41,6 +51,7 @@ Deno.serve(async (req) => {
           amount: subscription.items.data[0]?.price.unit_amount / 100,
           current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
           current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+          selected_addons: selectedAddons
         };
 
         if (existing[0]) {

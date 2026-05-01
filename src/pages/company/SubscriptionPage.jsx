@@ -3,6 +3,7 @@ import { base44 } from "@/api/base44Client";
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import { Check, CreditCard, Zap, Star, AlertCircle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { it } from "date-fns/locale";
@@ -17,12 +18,12 @@ const COLOR_MAP = {
 };
 
 export default function SubscriptionPage() {
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [plans, setPlans] = useState([]);
   const [currentSub, setCurrentSub] = useState(null);
   const [loading, setLoading] = useState(true);
   const [billing, setBilling] = useState("monthly");
-  const [checkingOut, setCheckingOut] = useState(null);
 
   useEffect(() => {
     base44.auth.me().then(async (me) => {
@@ -36,33 +37,8 @@ export default function SubscriptionPage() {
     }).finally(() => setLoading(false));
   }, []);
 
-  const handleCheckout = async (plan) => {
-    // Check if in iframe (published app check)
-    if (window.self !== window.top) {
-      alert("Il checkout Stripe funziona solo dall'app pubblicata, non dall'anteprima.");
-      return;
-    }
-
-    const priceId = billing === "monthly" ? plan.stripe_price_monthly_id : plan.stripe_price_yearly_id;
-    if (!priceId) {
-      toast.error("Piano non ancora sincronizzato con Stripe. Contatta l'amministratore.");
-      return;
-    }
-
-    setCheckingOut(plan.id);
-    const res = await base44.functions.invoke("stripeCheckout", {
-      price_id: priceId,
-      plan_id: plan.id,
-      plan_name: plan.name,
-      billing_interval: billing,
-    });
-
-    if (res.data?.url) {
-      window.location.href = res.data.url;
-    } else {
-      toast.error(res.data?.error || "Errore durante il checkout");
-      setCheckingOut(null);
-    }
+  const handleCheckout = (plan) => {
+    navigate(`/dashboard/company/checkout?plan=${plan.id}&interval=${billing}`);
   };
 
   if (loading) return <PageLoader color="blue" />;
@@ -165,11 +141,10 @@ export default function SubscriptionPage() {
                     ) : (
                       <button
                         onClick={() => handleCheckout(plan)}
-                        disabled={checkingOut === plan.id}
-                        className={`w-full py-3 rounded-xl font-semibold text-sm text-white transition-all hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2 ${btnBg}`}
+                        className={`w-full py-3 rounded-xl font-semibold text-sm text-white transition-all hover:opacity-90 flex items-center justify-center gap-2 ${btnBg}`}
                       >
                         <Zap className="w-4 h-4" />
-                        {checkingOut === plan.id ? "Reindirizzando..." : "Inizia ora"}
+                        Inizia ora
                       </button>
                     )}
                   </div>
