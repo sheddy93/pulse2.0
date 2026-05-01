@@ -72,6 +72,7 @@ import EmployeeExpenses from './pages/employee/EmployeeExpenses';
 import LeaveBalance from './pages/employee/LeaveBalance';
 import ManagerLeaveRequests from './pages/company/ManagerLeaveRequests';
 import AdminAnalytics from './pages/dashboard/AdminAnalytics';
+import AdminAnalyticsDashboard from './pages/dashboard/AdminAnalyticsDashboard';
 import OnboardingWizard from './pages/employee/OnboardingWizard';
 import OnboardingTracking from './pages/company/OnboardingTracking';
 import TrainingPlanManagement from './pages/company/TrainingPlanManagement';
@@ -174,6 +175,7 @@ const AuthenticatedApp = () => {
       {/* Super Admin */}
       <Route path="/dashboard/admin" element={<SuperAdminDashboard />} />
       <Route path="/dashboard/admin/analytics" element={<AdminAnalytics />} />
+      <Route path="/dashboard/admin/analytics-advanced" element={<AdminAnalyticsDashboard />} />
       <Route path="/dashboard/admin/settings" element={<SuperAdminSettings />} />
       <Route path="/dashboard/admin/tier2" element={<Tier2Dashboard />} />
       <Route path="/dashboard/admin/temporary-logins" element={<TemporaryLogins />} />

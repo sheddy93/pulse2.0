@@ -1,0 +1,145 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  # Lint & Format
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run type-check
+      - run: npm run format -- --check
+
+  # Tests
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - run: npm ci
+      - run: npm run test -- --run
+      - run: npm run test:coverage
+      
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage/coverage-final.json
+
+  # Build
+  build:
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - run: npm ci
+      - run: npm run build
+      
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: dist/
+
+  # Security Scan
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - run: npm ci
+      - run: npm audit --audit-level=moderate
+
+  # Deploy to Staging
+  deploy-staging:
+    needs: build
+    if: github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+        with:
+          name: build
+          path: dist/
+      
+      - name: Deploy to staging
+        env:
+          DEPLOY_KEY: ${{ secrets.STAGING_DEPLOY_KEY }}
+          DEPLOY_HOST: ${{ secrets.STAGING_HOST }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$DEPLOY_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            deployer@$DEPLOY_HOST "cd /app && ./scripts/deploy-staging.sh"
+
+  # Deploy to Production
+  deploy-production:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://pulsehr.app
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+        with:
+          name: build
+          path: dist/
+      
+      - name: Deploy to production
+        env:
+          DEPLOY_KEY: ${{ secrets.PROD_DEPLOY_KEY }}
+          DEPLOY_HOST: ${{ secrets.PROD_HOST }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$DEPLOY_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            deployer@$DEPLOY_HOST "cd /app && ./scripts/deploy-prod.sh"
+      
+      - name: Health check
+        run: |
+          for i in {1..30}; do
+            if curl -s https://pulsehr.app/health | grep -q "healthy"; then
+              echo "✅ Health check passed"
+              exit 0
+            fi
+            echo "⏳ Waiting... ($i/30)"
+            sleep 5
+          done
+          echo "❌ Health check failed"
+          exit 1
+      
+      - name: Notify team
+        if: always()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const status = '${{ job.status }}' === 'success' ? '✅' : '❌';
+            console.log(`${status} Production deployment ${status === '✅' ? 'successful' : 'failed'}`);
