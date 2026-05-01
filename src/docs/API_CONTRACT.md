@@ -1,274 +1,499 @@
-# API Contract - AldevionHR NestJS Backend
+# AldevionHR REST API Contract
 
-**Target API Version**: 1.0  
-**Format**: REST/JSON  
-**Authentication**: JWT Bearer Token + HttpOnly Cookie  
-**Base URL**: `https://api.aldevionhr.com/api`
+**Status**: Blueprint (Endpoints defined, implementations in progress)  
+**Base URL**: `http://localhost:3000/api` (development) | `https://api.aldevionhr.com` (production)  
+**Auth**: JWT Bearer token in `Authorization` header  
+**Response Format**: JSON with `{ data, status, headers }`
 
 ---
 
-## Authentication Endpoints
+## 🔐 Authentication Endpoints
 
 ### POST /auth/login
-Login con email/password
+Login with email and password.
 
 **Request**:
 ```json
 {
-  "email": "user@company.com",
-  "password": "password123"
+  "email": "user@example.com",
+  "password": "securePassword123"
 }
 ```
 
-**Response (200)**:
+**Response** (200):
 ```json
 {
-  "access_token": "eyJ0eXAiOiJKV1QiLCJhbGc...",
-  "refresh_token": "eyJ0eXAiOiJKV1QiLCJhbGc...",
-  "user": {
-    "id": "usr_123",
-    "email": "user@company.com",
-    "full_name": "John Doe",
-    "role": "employee",
-    "company_id": "cmp_123"
+  "data": {
+    "token": "eyJhbGc...",
+    "user": {
+      "id": "user_123",
+      "email": "user@example.com",
+      "full_name": "John Doe",
+      "role": "employee",
+      "company_id": "company_456"
+    }
   }
 }
 ```
 
+---
+
 ### POST /auth/logout
-Logout (revoca token)
+Logout (clears session cookie).
 
-**Request**: Empty body
-
-**Response (200)**: `{ "success": true }`
-
-### GET /auth/me
-Profilo utente corrente
-
-**Response (200)**:
+**Response** (200):
 ```json
-{
-  "id": "usr_123",
-  "email": "user@company.com",
-  "full_name": "John Doe",
-  "role": "employee",
-  "company_id": "cmp_123",
-  "employee_id": "emp_123",
-  "permissions": ["view_dashboard", "create_attendance", ...]
-}
-```
-
-### POST /auth/refresh
-Refresh token scaduto
-
-**Request**:
-```json
-{ "refresh_token": "..." }
-```
-
-### POST /auth/password-reset
-Richiesta reset password
-
-**Request**:
-```json
-{ "email": "user@company.com" }
+{ "data": { "success": true } }
 ```
 
 ---
 
-## Companies Endpoints
+### GET /auth/me
+Get current authenticated user.
+
+**Headers**: `Authorization: Bearer <token>`
+
+**Response** (200):
+```json
+{
+  "data": {
+    "id": "user_123",
+    "email": "user@example.com",
+    "full_name": "John Doe",
+    "role": "employee",
+    "company_id": "company_456"
+  }
+}
+```
+
+---
+
+### POST /auth/refresh
+Refresh JWT token.
+
+**Response** (200):
+```json
+{
+  "data": { "token": "eyJhbGc..." }
+}
+```
+
+---
+
+### POST /auth/password-reset
+Request password reset email.
+
+**Request**:
+```json
+{
+  "email": "user@example.com"
+}
+```
+
+**Response** (200):
+```json
+{
+  "data": { "message": "Password reset email sent" }
+}
+```
+
+---
+
+### POST /auth/change-password
+Change password (requires auth).
+
+**Request**:
+```json
+{
+  "oldPassword": "current123",
+  "newPassword": "newSecure456"
+}
+```
+
+**Response** (200):
+```json
+{
+  "data": { "message": "Password changed successfully" }
+}
+```
+
+---
+
+## 🏢 Companies Endpoints
 
 ### GET /companies
-Lista aziende
+List companies (admin only).
 
 **Query Params**:
-- `skip`: numero di record da saltare
-- `take`: numero di record da restituire (max 100)
-- `search`: search per nome
+- `skip`: 0
+- `limit`: 50
+- `search`: string
 
-**Response (200)**:
+**Response** (200):
 ```json
 {
   "data": [
     {
-      "id": "cmp_123",
+      "id": "company_123",
       "name": "Acme Corp",
       "email": "info@acme.com",
-      "phone": "+39 02 1234 5678",
-      "website": "https://acme.com",
-      "employees_count": 150,
-      "status": "active",
       "subscription_status": "active",
-      "created_at": "2024-01-15T10:30:00Z"
+      "plan": "professional",
+      "created_at": "2026-01-01T00:00:00Z"
     }
-  ],
-  "total": 50,
-  "skip": 0,
-  "take": 10
+  ]
 }
 ```
 
+---
+
+### GET /companies/:id
+Get company details.
+
+**Response** (200):
+```json
+{
+  "data": {
+    "id": "company_123",
+    "name": "Acme Corp",
+    ...
+  }
+}
+```
+
+---
+
 ### POST /companies
-Crea nuova azienda (admin only)
+Create company (admin only).
 
 **Request**:
 ```json
 {
   "name": "New Company",
-  "email": "info@newcompany.com",
-  "phone": "+39 02 1234 5678",
-  "website": "https://newcompany.com",
+  "email": "contact@newco.com",
+  "phone": "+39123456789",
   "industry": "Technology"
 }
 ```
 
-### GET /companies/:id
-Dettagli azienda
-
-### PATCH /companies/:id
-Aggiorna azienda
-
-### DELETE /companies/:id
-Cancella azienda (archive)
+**Response** (201):
+```json
+{
+  "data": {
+    "id": "company_789",
+    "name": "New Company",
+    ...
+  }
+}
+```
 
 ---
 
-## Employees Endpoints
+### PATCH /companies/:id
+Update company.
+
+**Request**:
+```json
+{
+  "name": "Updated Name",
+  "phone": "+39987654321"
+}
+```
+
+**Response** (200):
+```json
+{
+  "data": {
+    "id": "company_123",
+    "name": "Updated Name",
+    ...
+  }
+}
+```
+
+---
+
+### DELETE /companies/:id
+Delete company (soft delete).
+
+**Response** (200):
+```json
+{
+  "data": { "success": true }
+}
+```
+
+---
+
+## 👥 Employees Endpoints
 
 ### GET /employees
-Lista dipendenti (filtrato per tenant corrente)
+List employees with filters.
 
 **Query Params**:
-- `department_id`: filtra per dipartimento
-- `status`: active, inactive, terminated
-- `search`: search per nome/email
+- `company_id`: string (required)
+- `status`: active|inactive|onboarding
+- `department_id`: string
+- `search`: string
+- `skip`: 0
+- `limit`: 50
 
-**Response (200)**:
+**Response** (200):
 ```json
 {
   "data": [
     {
       "id": "emp_123",
-      "full_name": "Mario Rossi",
-      "email": "mario@company.com",
-      "phone": "+39 334 1234 567",
-      "position": "Engineer",
-      "department_id": "dept_456",
-      "department_name": "Engineering",
-      "employment_type": "full_time",
+      "company_id": "company_456",
+      "first_name": "John",
+      "last_name": "Smith",
+      "email": "john@acme.com",
+      "job_title": "Software Engineer",
+      "hire_date": "2025-01-15",
       "status": "active",
-      "start_date": "2023-01-15",
-      "end_date": null,
-      "avatar_url": "https://...",
-      "created_at": "2023-01-15T10:00:00Z"
+      "department_id": "dept_789",
+      "created_at": "2026-01-01T00:00:00Z"
     }
-  ],
-  "total": 150,
-  "skip": 0,
-  "take": 20
+  ]
 }
 ```
-
-### POST /employees
-Crea dipendente
-
-**Request**:
-```json
-{
-  "full_name": "Mario Rossi",
-  "email": "mario@company.com",
-  "phone": "+39 334 1234 567",
-  "position": "Engineer",
-  "department_id": "dept_456",
-  "employment_type": "full_time",
-  "start_date": "2024-06-01"
-}
-```
-
-### GET /employees/:id
-Dettagli dipendente
-
-### PATCH /employees/:id
-Aggiorna dipendente
-
-### DELETE /employees/:id
-Cancella/archive dipendente
-
-### POST /employees/import-csv
-Importa dipendenti da CSV
-
-**Request**: multipart/form-data con file CSV
-
-**CSV Format**:
-```
-full_name,email,phone,position,department_id,employment_type,start_date
-Mario Rossi,mario@company.com,+39 334 1234 567,Engineer,dept_456,full_time,2024-06-01
-```
-
-### GET /employees/export
-Esporta dipendenti in CSV/Excel
-
-**Query Params**:
-- `format`: csv, excel, pdf
-- `filters`: JSON string con filtri
 
 ---
 
-## Attendance Endpoints
+### GET /employees/:id
+Get employee details.
 
-### POST /attendance/check-in
-Timbratura entrata
+**Response** (200):
+```json
+{
+  "data": {
+    "id": "emp_123",
+    ...
+  }
+}
+```
+
+---
+
+### POST /employees
+Create employee.
 
 **Request**:
 ```json
 {
-  "latitude": 45.5017,
-  "longitude": 9.1603,
-  "notes": "office"
+  "first_name": "Jane",
+  "last_name": "Doe",
+  "email": "jane@acme.com",
+  "job_title": "Designer",
+  "hire_date": "2026-05-01",
+  "department_id": "dept_789",
+  "employment_type": "full-time"
 }
 ```
 
-**Response (201)**:
+**Response** (201):
 ```json
 {
-  "id": "att_123",
-  "employee_id": "emp_123",
-  "entry_type": "check_in",
-  "timestamp": "2024-05-01T08:30:00Z",
-  "latitude": 45.5017,
-  "longitude": 9.1603,
-  "geofence_valid": true,
-  "ip_address": "203.0.113.45"
+  "data": {
+    "id": "emp_999",
+    "first_name": "Jane",
+    ...
+  }
 }
 ```
 
-### POST /attendance/check-out
-Timbratura uscita
+---
 
-### GET /attendance/entries
-Lista presenze per dipendente
+### PATCH /employees/:id
+Update employee.
+
+**Request**:
+```json
+{
+  "job_title": "Senior Designer",
+  "status": "inactive"
+}
+```
+
+**Response** (200):
+```json
+{
+  "data": {
+    "id": "emp_123",
+    ...
+  }
+}
+```
+
+---
+
+### DELETE /employees/:id
+Delete employee (soft delete).
+
+**Response** (200):
+```json
+{
+  "data": { "success": true }
+}
+```
+
+---
+
+### POST /employees/import
+Import employees from CSV.
+
+**Request**: multipart/form-data
+- `file`: CSV file
+
+**Response** (200):
+```json
+{
+  "data": {
+    "imported": 50,
+    "errors": []
+  }
+}
+```
+
+---
+
+### GET /employees/export
+Export employees as CSV.
 
 **Query Params**:
-- `start_date`: ISO 8601
-- `end_date`: ISO 8601
-- `employee_id`: (admin only per altri utenti)
+- `company_id`: string
+- `filters`: JSON string
+
+**Response** (200): CSV file download
+
+---
+
+## ⏰ Attendance Endpoints
+
+### POST /attendance/check-in
+Clock in.
+
+**Request**:
+```json
+{
+  "latitude": 40.7128,
+  "longitude": -74.0060,
+  "timestamp": "2026-05-01T09:00:00Z"
+}
+```
+
+**Response** (201):
+```json
+{
+  "data": {
+    "id": "entry_123",
+    "employee_id": "emp_456",
+    "type": "check_in",
+    "timestamp": "2026-05-01T09:00:00Z",
+    "location_name": "Office - Main Floor",
+    "status": "pending"
+  }
+}
+```
+
+---
+
+### POST /attendance/check-out
+Clock out.
+
+**Response** (201): Similar to check-in with type: "check_out"
+
+---
+
+### POST /attendance/break-start
+Start break.
+
+**Response** (201): Similar to check-in with type: "break_start"
+
+---
+
+### POST /attendance/break-end
+End break.
+
+**Response** (201): Similar to check-in with type: "break_end"
+
+---
 
 ### GET /attendance/today
-Presenze di oggi per utente corrente
+Get today's entries for current employee.
 
-### GET /attendance/summary
-Riepilogo presenze (weekly/monthly)
+**Response** (200):
+```json
+{
+  "data": [
+    {
+      "id": "entry_123",
+      "type": "check_in",
+      "timestamp": "2026-05-01T09:00:00Z",
+      ...
+    },
+    {
+      "id": "entry_124",
+      "type": "check_out",
+      "timestamp": "2026-05-01T17:30:00Z",
+      ...
+    }
+  ]
+}
+```
+
+---
+
+### GET /attendance/entries
+Get attendance entries in date range.
 
 **Query Params**:
-- `period`: week, month, custom
-- `start_date`: per custom
-- `end_date`: per custom
+- `employee_id`: string
+- `start_date`: YYYY-MM-DD
+- `end_date`: YYYY-MM-DD
+
+**Response** (200): Array of entries
+
+---
+
+### GET /attendance/summary
+Get daily summary (hours worked, breaks, etc).
+
+**Query Params**:
+- `employee_id`: string
+- `date`: YYYY-MM-DD
+
+**Response** (200):
+```json
+{
+  "data": {
+    "date": "2026-05-01",
+    "employee_id": "emp_123",
+    "check_in": "2026-05-01T09:00:00Z",
+    "check_out": "2026-05-01T17:30:00Z",
+    "total_hours": 8.5,
+    "breaks_duration": 0.5,
+    "location_name": "Office - Main Floor",
+    "status": "pending"
+  }
+}
+```
+
+---
 
 ### GET /attendance/day-reviews
-Liste approvazioni presenze (manager view)
+Get pending day reviews (admin).
+
+**Query Params**:
+- `company_id`: string
+- `status`: pending|approved|rejected
+
+**Response** (200): Array of reviews
+
+---
 
 ### PATCH /attendance/day-reviews/:id/approve
-Approva giornata di lavoro
+Approve day review.
 
 **Request**:
 ```json
@@ -277,272 +502,441 @@ Approva giornata di lavoro
 }
 ```
 
+**Response** (200): Updated review
+
+---
+
 ### PATCH /attendance/day-reviews/:id/reject
-Rifiuta giornata
+Reject day review.
 
 **Request**:
 ```json
 {
-  "rejection_reason": "Inconsistency detected"
+  "reason": "GPS discrepancy"
 }
 ```
 
+**Response** (200): Updated review
+
 ---
 
-## Leave Endpoints
+## 🏖️ Leave Endpoints
 
 ### GET /leave/requests
-Lista richieste ferie
+List leave requests.
 
 **Query Params**:
-- `status`: pending, approved, rejected
-- `employee_id`: (admin/manager only)
+- `company_id`: string
+- `status`: pending|approved|rejected|cancelled
+- `employee_id`: string
 
-### POST /leave/requests
-Crea richiesta ferie
-
-**Request**:
+**Response** (200):
 ```json
 {
-  "leave_type": "vacation",
-  "start_date": "2024-06-10",
-  "end_date": "2024-06-15",
-  "reason": "Summer vacation"
-}
-```
-
-### GET /leave/requests/:id
-Dettagli richiesta
-
-### PATCH /leave/requests/:id/approve
-Approva richiesta (manager/admin)
-
-### PATCH /leave/requests/:id/reject
-Rifiuta richiesta
-
-**Request**:
-```json
-{
-  "rejection_reason": "Budget constraints"
-}
-```
-
-### GET /leave/balances
-Saldi ferie per dipendente
-
-**Query Params**:
-- `year`: anno (default: current)
-
-**Response (200)**:
-```json
-{
-  "id": "bal_123",
-  "employee_id": "emp_123",
-  "year": 2024,
-  "vacation_available": 20,
-  "vacation_used": 5,
-  "vacation_balance": 15,
-  "permissions_available": 8,
-  "permissions_used": 2,
-  "permissions_balance": 6
-}
-```
-
-### GET /leave/calendar
-Calendario ferie (company wide)
-
----
-
-## Documents Endpoints
-
-### GET /documents
-Lista documenti
-
-**Query Params**:
-- `category`: contract, payslip, certificate, etc
-- `employee_id`: (admin only)
-- `search`: search per titolo
-
-### POST /documents
-Upload documento
-
-**Request**: multipart/form-data
-```
-file: [binary]
-title: "Employment Contract"
-category: "contract"
-employee_id: "emp_123"
-expiry_date: "2025-12-31"
-```
-
-### GET /documents/:id
-Dettagli documento
-
-### PATCH /documents/:id
-Aggiorna metadati documento
-
-### DELETE /documents/:id
-Cancella documento
-
-### POST /documents/request-upload-url
-Richiedi URL firmato per upload (R2/S3)
-
-**Request**:
-```json
-{
-  "file_name": "contract.pdf",
-  "file_type": "application/pdf",
-  "file_size": 1024000
-}
-```
-
-**Response (200)**:
-```json
-{
-  "upload_url": "https://r2.example.com/...",
-  "storage_key": "documents/emp_123/contract.pdf"
-}
-```
-
-### GET /documents/:id/download-url
-Richiedi URL firmato per download
-
-**Response (200)**:
-```json
-{
-  "download_url": "https://r2.example.com/...",
-  "expires_in": 3600
-}
-```
-
----
-
-## Billing Endpoints
-
-### GET /billing/status
-Status abbonamento azienda
-
-**Response (200)**:
-```json
-{
-  "plan": "professional",
-  "status": "active",
-  "current_period_start": "2024-05-01",
-  "current_period_end": "2024-06-01",
-  "amount": 99.00,
-  "interval": "monthly",
-  "next_billing_date": "2024-06-01",
-  "stripe_customer_id": "cus_...",
-  "stripe_subscription_id": "sub_..."
-}
-```
-
-### GET /billing/plans
-Lista piani disponibili
-
-### POST /billing/create-checkout-session
-Crea sessione Stripe Checkout
-
-**Request**:
-```json
-{
-  "plan_id": "plan_123",
-  "billing_interval": "monthly",
-  "addons": [
-    { "addon_id": "addon_1", "quantity": 5 }
+  "data": [
+    {
+      "id": "leave_123",
+      "employee_id": "emp_456",
+      "start_date": "2026-06-01",
+      "end_date": "2026-06-05",
+      "leave_type": "vacation",
+      "reason": "Summer vacation",
+      "status": "pending",
+      "created_at": "2026-05-01T00:00:00Z"
+    }
   ]
 }
 ```
 
-**Response (201)**:
+---
+
+### POST /leave/requests
+Create leave request.
+
+**Request**:
 ```json
 {
-  "session_id": "cs_...",
-  "url": "https://checkout.stripe.com/pay/..."
+  "start_date": "2026-06-01",
+  "end_date": "2026-06-05",
+  "leave_type": "vacation",
+  "reason": "Summer vacation"
 }
 ```
 
-### GET /billing/customer-portal
-URL portale cliente Stripe
-
-### POST /billing/cancel-subscription
-Cancella abbonamento
+**Response** (201): Created leave request
 
 ---
 
-## Webhooks
+### PATCH /leave/requests/:id
+Update leave request.
 
-### POST /webhooks/stripe
-Webhook Stripe per pagamenti/fatturazione
-
-**Headers**:
+**Request**:
+```json
+{
+  "start_date": "2026-06-02",
+  "leave_type": "sick"
+}
 ```
-Stripe-Signature: t=...,v1=...
-```
 
-**Events**:
-- `checkout.session.completed`
-- `customer.subscription.created`
-- `customer.subscription.updated`
-- `customer.subscription.deleted`
-- `invoice.paid`
-- `invoice.payment_failed`
+**Response** (200): Updated request
 
 ---
 
-## Admin Endpoints
+### DELETE /leave/requests/:id
+Cancel leave request.
 
-### GET /admin/companies
-(admin only) Lista tutte aziende
+**Response** (200): `{ "data": { "success": true } }`
 
-### GET /admin/users
-(admin only) Lista utenti
+---
 
-### GET /admin/subscriptions
-(admin only) Lista abbonamenti
+### PATCH /leave/requests/:id/approve
+Approve leave request (manager).
 
-### GET /admin/audit-logs
-(admin only) Audit log
+**Request**:
+```json
+{
+  "notes": "Approved"
+}
+```
+
+**Response** (200): Updated request with status: "approved"
+
+---
+
+### PATCH /leave/requests/:id/reject
+Reject leave request (manager).
+
+**Request**:
+```json
+{
+  "reason": "Coverage issue"
+}
+```
+
+**Response** (200): Updated request with status: "rejected"
+
+---
+
+### GET /leave/balances
+Get leave balance for employee.
 
 **Query Params**:
-- `entity_type`: company, employee, attendance, etc
-- `action`: create, update, delete
-- `start_date`: ISO 8601
-- `end_date`: ISO 8601
+- `employee_id`: string
+- `year`: number (optional, defaults to current)
+
+**Response** (200):
+```json
+{
+  "data": {
+    "id": "balance_123",
+    "employee_id": "emp_456",
+    "year": 2026,
+    "available_leave": 20,
+    "used_leave": 5,
+    "available_permissions": 8,
+    "used_permissions": 1
+  }
+}
+```
+
+---
+
+### GET /leave/calendar
+Get leave calendar for month.
+
+**Query Params**:
+- `company_id`: string
+- `month`: YYYY-MM
+
+**Response** (200):
+```json
+{
+  "data": [
+    {
+      "date": "2026-06-01",
+      "employee_id": "emp_123",
+      "leave_type": "vacation",
+      "status": "approved"
+    }
+  ]
+}
+```
+
+---
+
+## 💳 Billing Endpoints
+
+### GET /billing/status
+Get company subscription status.
+
+**Query Params**:
+- `company_id`: string
+
+**Response** (200):
+```json
+{
+  "data": {
+    "company_id": "company_123",
+    "plan": "professional",
+    "status": "active",
+    "current_period_end": "2026-06-01T00:00:00Z",
+    "amount": 99.99,
+    "billing_interval": "monthly"
+  }
+}
+```
+
+---
+
+### GET /billing/plans
+List available plans.
+
+**Response** (200):
+```json
+{
+  "data": [
+    {
+      "id": "plan_starter",
+      "name": "Starter",
+      "price_monthly": 29.99,
+      "price_yearly": 299.99,
+      "max_employees": 10,
+      "features": ["basic_attendance", "leave_requests"]
+    },
+    {
+      "id": "plan_pro",
+      "name": "Professional",
+      "price_monthly": 99.99,
+      "price_yearly": 999.99,
+      "max_employees": 100,
+      "features": ["all_features"]
+    }
+  ]
+}
+```
+
+---
+
+### POST /billing/checkout
+Create Stripe checkout session.
+
+**Request**:
+```json
+{
+  "plan_id": "plan_pro",
+  "billing_interval": "monthly",
+  "addons": [
+    {
+      "addon_id": "addon_storage",
+      "quantity": 5
+    }
+  ]
+}
+```
+
+**Response** (201):
+```json
+{
+  "data": {
+    "session_id": "cs_test_123...",
+    "url": "https://checkout.stripe.com/..."
+  }
+}
+```
+
+---
+
+### POST /billing/customer-portal
+Create Stripe customer portal.
+
+**Request**:
+```json
+{
+  "company_id": "company_123",
+  "return_url": "https://app.aldevionhr.com/billing"
+}
+```
+
+**Response** (201):
+```json
+{
+  "data": {
+    "url": "https://billing.stripe.com/..."
+  }
+}
+```
+
+---
+
+### POST /billing/cancel
+Cancel subscription.
+
+**Request**:
+```json
+{
+  "company_id": "company_123",
+  "reason": "Too expensive"
+}
+```
+
+**Response** (200):
+```json
+{
+  "data": { "success": true }
+}
+```
+
+---
+
+## 🔔 Notifications Endpoints
+
+### GET /notifications
+Get notifications.
+
+**Query Params**:
+- `read`: boolean
+- `limit`: 50
+
+**Response** (200):
+```json
+{
+  "data": [
+    {
+      "id": "notif_123",
+      "title": "Leave Request",
+      "message": "Your leave request was approved",
+      "type": "success",
+      "read": false,
+      "created_at": "2026-05-01T10:00:00Z"
+    }
+  ]
+}
+```
+
+---
+
+### PATCH /notifications/:id/read
+Mark notification as read.
+
+**Response** (200): Updated notification
+
+---
+
+### PATCH /notifications/mark-all-read
+Mark all as read.
+
+**Response** (200):
+```json
+{
+  "data": { "success": true }
+}
+```
+
+---
+
+### GET /notifications/unread-count
+Get unread count.
+
+**Response** (200):
+```json
+{
+  "data": { "count": 3 }
+}
+```
+
+---
+
+## 📄 Documents Endpoints
+
+### GET /documents
+List documents.
+
+**Query Params**:
+- `company_id`: string
+- `status`: active|archived
+- `document_type`: contract|invoice|certificate
+
+**Response** (200): Array of documents
+
+---
+
+### POST /documents/request-upload-url
+Get pre-signed upload URL (R2/S3).
+
+**Request**:
+```json
+{
+  "bucket": "documents",
+  "fileName": "contract_123.pdf"
+}
+```
+
+**Response** (201):
+```json
+{
+  "data": {
+    "uploadUrl": "https://..."
+  }
+}
+```
+
+---
+
+### GET /documents/:id/download-url
+Get download URL.
+
+**Response** (200):
+```json
+{
+  "data": {
+    "downloadUrl": "https://..."
+  }
+}
+```
 
 ---
 
 ## Error Responses
 
-Tutti gli errori ritornano lo stesso formato:
+All errors follow this format:
 
 ```json
 {
-  "status_code": 400,
-  "message": "Validation failed",
-  "errors": [
-    { "field": "email", "message": "Invalid email format" }
-  ],
-  "timestamp": "2024-05-01T10:30:00Z",
-  "path": "/api/employees"
+  "error": {
+    "status": 400,
+    "message": "Bad request",
+    "code": "VALIDATION_ERROR",
+    "details": [
+      {
+        "field": "email",
+        "message": "Invalid email format"
+      }
+    ]
+  }
 }
 ```
 
-**HTTP Status Codes**:
-- `200`: OK
-- `201`: Created
-- `204`: No Content
-- `400`: Bad Request
-- `401`: Unauthorized
-- `403`: Forbidden
-- `404`: Not Found
-- `409`: Conflict
-- `422`: Unprocessable Entity
-- `429`: Too Many Requests
-- `500`: Internal Server Error
+### Common Error Codes
+
+- `401_UNAUTHORIZED` - Missing or invalid token
+- `403_FORBIDDEN` - Insufficient permissions
+- `404_NOT_FOUND` - Resource not found
+- `409_CONFLICT` - Resource already exists
+- `422_UNPROCESSABLE_ENTITY` - Validation failed
+- `500_INTERNAL_SERVER_ERROR` - Server error
 
 ---
 
-**Version**: 1.0  
+## 📝 Notes
+
+- All timestamps are ISO 8601 format (UTC)
+- All IDs are CUID format (unique, sortable)
+- Pagination: `skip` and `limit` query params
+- All endpoints require authentication except `/auth/login` and `/auth/password-reset`
+- Rate limiting: 100 requests/minute per user
+
+---
+
 **Last Updated**: 2026-05-01  
-**Next Review**: 2026-06-01
+**Version**: 1.0 (Blueprint)  
+**Status**: All endpoints defined, implementations pending

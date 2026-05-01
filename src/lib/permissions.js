@@ -50,7 +50,7 @@ export const PERMISSIONS = {
 };
 
 // Matrice ruoli → permessi
-const ROLE_PERMISSIONS_MAP = {
+export const ROLE_PERMISSIONS = {
   [ROLES.SUPER_ADMIN]: [
     // Tutto
     ...Object.values(PERMISSIONS),
@@ -154,7 +154,7 @@ const ROLE_PERMISSIONS_MAP = {
 export const can = (user, permission) => {
   if (!user) return false;
   
-  const userPermissions = ROLE_PERMISSIONS_MAP[user.role] || [];
+  const userPermissions = ROLE_PERMISSIONS[user.role] || [];
   return userPermissions.includes(permission);
 };
 
@@ -178,5 +178,5 @@ export const canAll = (user, permissionList) => {
  * Get lista permessi utente
  */
 export const getUserPermissions = (user) => {
-  return ROLE_PERMISSIONS_MAP[user?.role] || [];
+  return ROLE_PERMISSIONS[user?.role] || [];
 };
