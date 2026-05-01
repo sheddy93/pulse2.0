@@ -7,7 +7,7 @@ import {
   LineChart, Line, BarChart, Bar, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from "recharts";
-import { Sparkles, Send, Download, Loader2, TrendingUp, ChevronRight, RotateCcw, FileText } from "lucide-react";
+import { Sparkles, Send, Download, Loader2, TrendingUp, ChevronRight, RotateCcw, FileText, AlertCircle, CheckCircle2, Zap } from "lucide-react";
 
 const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#ec4899", "#14b8a6", "#f97316"];
 
@@ -329,6 +329,24 @@ export default function AdvancedAnalytics() {
                 Nuova analisi
               </button>
             </div>
+
+            {/* Proactive Recommendations */}
+            {result.recommendations && result.recommendations.length > 0 && (
+              <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl p-5 space-y-3">
+                <div className="flex items-center gap-2">
+                  <Zap className="w-5 h-5 text-amber-600" />
+                  <h3 className="font-semibold text-amber-900">Azioni Suggerite dall'IA</h3>
+                </div>
+                <div className="space-y-2">
+                  {result.recommendations.map((rec, i) => (
+                    <div key={i} className="flex items-start gap-3 bg-white rounded-lg p-3 border border-amber-100">
+                      <CheckCircle2 className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
+                      <p className="text-sm text-amber-900">{rec}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Query echoed */}
             <div className="bg-slate-50 rounded-xl px-4 py-3 border border-slate-100">
