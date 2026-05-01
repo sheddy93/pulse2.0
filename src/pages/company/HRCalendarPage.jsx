@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { authService } from '@/services/authService';
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import HRCalendar from "@/components/calendar/HRCalendar";
@@ -11,19 +11,18 @@ export default function HRCalendarPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    base44.auth.me().then(async (me) => {
+    const init = async () => {
+      const me = await authService.me();
       setUser(me);
-      if (me.company_id) {
+      if (me?.company_id) {
         setCompanyId(me.company_id);
-      } else if (me.role === "consultant") {
-        // Consultant: get first linked approved company
-        const links = await base44.entities.ConsultantCompanyLink.filter({
-          consultant_email: me.email,
-          status: "approved",
-        });
-        if (links.length > 0) setCompanyId(links[0].company_id);
+      } else if (me?.role === "consultant") {
+        // TODO: Replace with service call for consultant company links
+        setCompanyId(null);
       }
-    }).finally(() => setLoading(false));
+      setLoading(false);
+    };
+    init();
   }, []);
 
   if (loading) return <PageLoader color="blue" />;

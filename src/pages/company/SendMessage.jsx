@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { authService } from '@/services/authService';
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import { Send, Upload, X, Loader, Check } from "lucide-react";
@@ -41,20 +41,17 @@ export default function SendMessage() {
   const [pendingFiles, setPendingFiles] = useState([]);
 
   useEffect(() => {
-    base44.auth.me().then(async (me) => {
+    const init = async () => {
+      const me = await authService.me();
       setUser(me);
-      if (me.company_id) {
-        const [emps, depts] = await Promise.all([
-          // TODO: Replace with service.EmployeeProfile.filter({ company_id: me.company_id }),
-          // TODO: Replace with service.EmployeeProfile.filter({ company_id: me.company_id })
-        ]);
-        setEmployees(emps);
-        
-        // Extract unique departments
-        const uniqueDepts = [...new Set(emps.map(e => e.department).filter(Boolean))];
-        setDepartments(uniqueDepts);
+      if (me?.company_id) {
+        // TODO: Replace with employee service
+        setEmployees([]);
+        setDepartments([]);
       }
-    }).finally(() => setLoading(false));
+      setLoading(false);
+    };
+    init();
   }, []);
 
   const handleAddFile = async (e) => {
@@ -65,14 +62,11 @@ export default function SendMessage() {
 
     for (let file of files) {
       try {
-        const result = await base44.integrations.Core.UploadFile({
-          file: file
-        });
-
+        // TODO: Replace with integration.UploadFile
         setPendingFiles(prev => 
           prev.map(f => 
             f.file.name === file.name 
-              ? { ...f, uploading: false, url: result.file_url }
+              ? { ...f, uploading: false, url: `mock_url_${Date.now()}` }
               : f
           )
         );

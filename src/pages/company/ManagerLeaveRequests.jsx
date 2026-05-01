@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-// Migration: removed base44 dependency
+import { authService } from '@/services/authService';
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import ManagerLeaveApprovalPanel from "@/components/company/ManagerLeaveApprovalPanel";
@@ -9,9 +9,12 @@ export default function ManagerLeaveRequests() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    base44.auth.me().then(me => {
+    const init = async () => {
+      const me = await authService.me();
       setUser(me);
-    }).finally(() => setLoading(false));
+      setLoading(false);
+    };
+    init();
   }, []);
 
   if (loading) return <PageLoader color="blue" />;

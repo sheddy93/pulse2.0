@@ -39,7 +39,8 @@ export default function AdminSystem() {
       if (me?.role !== "super_admin") { window.location.href = "/"; return; }
       setUser(me);
       await loadStats();
-    }).finally(() => setLoading(false));
+      setLoading(false);
+    };
   }, []);
 
   const handleRefresh = async () => {

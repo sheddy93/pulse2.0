@@ -37,7 +37,8 @@ export default function LeaveRequestPage() {
       const emp = emps[0] || null;
       setEmployee(emp);
       if (emp) await loadLeaves(emp);
-    }).finally(() => setLoading(false));
+      setLoading(false);
+    };
   }, []);
 
   const handleSubmit = async (e) => {

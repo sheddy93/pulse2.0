@@ -54,7 +54,8 @@ export default function IntegrationSettings() {
       setCompany(companies[0]);
       setWebhooks(webhooks);
       setApiKeys(apiKeys);
-    }).finally(() => setLoading(false));
+      setLoading(false);
+    };
   }, []);
 
   const handleAddWebhook = async (e) => {

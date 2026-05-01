@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { authService } from '@/services/authService';
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import DocumentReview from "@/components/company/DocumentReview";
@@ -11,37 +11,19 @@ export default function DocumentReviewPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    base44.auth.me().then(async (me) => {
+    const init = async () => {
+      const me = await authService.me();
       setUser(me);
-      // Get all companies linked to this consultant
-      const links = await base44.entities.ConsultantCompanyLink.filter({
-        consultant_email: me.email,
-        status: "approved",
-      });
-
-      if (links.length > 0) {
-        const companyIds = links.map(l => l.company_id);
-        const allDocs = await base44.entities.Document.list();
-        // Filter docs from linked companies
-        const consultantDocs = allDocs.filter(d => companyIds.includes(d.company_id));
-        setDocuments(consultantDocs);
-      }
-    }).finally(() => setLoading(false));
+      // TODO: Replace with service call for consultant company links and documents
+      setDocuments([]);
+      setLoading(false);
+    };
+    init();
   }, []);
 
   const handleDocumentUpdate = async () => {
-    const user = await base44.auth.me();
-    const links = await base44.entities.ConsultantCompanyLink.filter({
-      consultant_email: user.email,
-      status: "approved",
-    });
-
-    if (links.length > 0) {
-      const companyIds = links.map(l => l.company_id);
-      const allDocs = await base44.entities.Document.list();
-      const consultantDocs = allDocs.filter(d => companyIds.includes(d.company_id));
-      setDocuments(consultantDocs);
-    }
+    // TODO: Replace with service call for consultant company links and documents
+    setDocuments([]);
   };
 
   if (loading) return <PageLoader color="violet" />;

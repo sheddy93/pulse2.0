@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-// Migration: removed base44 dependency
+import { authService } from '@/services/authService';
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import LazyImage from "@/components/LazyImage";
@@ -40,25 +40,24 @@ export default function DocumentsPage() {
   const [form, setForm] = useState({ title: "", doc_type: "contratto", employee_id: "", visibility: "all", expiry_date: "", notes: "", file: null, signature_required: false });
 
   const loadDocs = async (companyId) => {
-    const d = // TODO: Replace with service.Document.filter({ company_id: companyId }, { skip: page * ITEMS_PER_PAGE, limit: ITEMS_PER_PAGE });
-    setDocs([...d].sort((a, b) => {
-      if (a.expiry_date && b.expiry_date) return new Date(a.expiry_date) - new Date(b.expiry_date);
-      if (a.expiry_date) return -1;
-      if (b.expiry_date) return 1;
-      return new Date(b.created_date) - new Date(a.created_date);
-    }));
+    // TODO: Replace with service.Document.filter({ company_id: companyId }, { skip: page * ITEMS_PER_PAGE, limit: ITEMS_PER_PAGE });
+    setDocs([]);
   };
 
   // Cache employees (30 min TTL)
   const { data: cachedEmployees } = useApiCache(
     'employees',
-    async () => // TODO: Replace with service.EmployeeProfile.filter({ company_id: '' }),
+    async () => [],
     30 * 60 * 1000
   );
 
   useEffect(() => {
-    // TODO: Replace with authService.me() and service calls
-    setLoading(false);
+    const init = async () => {
+      const me = await authService.me();
+      // TODO: Replace with service.Company.filter() and service.EmployeeProfile.filter()
+      setLoading(false);
+    };
+    init();
   }, [page, cachedEmployees]);
 
   const handleSubmit = async (e) => {
@@ -66,7 +65,6 @@ export default function DocumentsPage() {
     if (!company || !form.file) return;
     setUploading(true);
     // TODO: Replace with service calls for UploadFile and Document.create
-    const file_url = null;
     setForm({ title: "", doc_type: "contratto", employee_id: "", visibility: "all", expiry_date: "", notes: "", file: null, signature_required: false });
     setShowForm(false);
     await loadDocs(company.id);

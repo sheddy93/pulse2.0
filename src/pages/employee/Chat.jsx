@@ -41,7 +41,8 @@ export default function Chat() {
       setConversations(convs.sort((a, b) => new Date(b.last_message_at || 0) - new Date(a.last_message_at || 0)));
       setEmployees(allEmps);
       if (convs.length > 0) setSelectedConv(convs[0]);
-    }).finally(() => setLoading(false));
+      setLoading(false);
+    };
   }, []);
 
   const handleCreateChat = async (e) => {

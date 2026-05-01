@@ -22,12 +22,14 @@ export default function AdminUsers() {
 
   useEffect(() => {
     const init = async () => {
-    const me = await authService.me();
+      const me = await authService.me();
       if (me?.role !== "super_admin") { window.location.href = "/"; return; }
       setUser(me);
-      const allUsers = await // TODO: Replace with service.User.list();
-      setUsers(allUsers);
-    }).finally(() => setLoading(false));
+      // TODO: Replace with service.User.list()
+      setUsers([]);
+      setLoading(false);
+    };
+    init();
   }, []);
 
   const filtered = users.filter(u => {

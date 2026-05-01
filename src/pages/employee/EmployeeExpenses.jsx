@@ -53,7 +53,8 @@ export default function EmployeeExpenses() {
         const exps = await base44.entities.ExpenseReimbursement.filter({ employee_id: emp.id });
         setExpenses(exps.sort((a, b) => new Date(b.created_date) - new Date(a.created_date)));
       }
-    }).finally(() => setLoading(false));
+      setLoading(false);
+    };
   }, []);
 
   const handleReceiptUpload = async (e) => {
