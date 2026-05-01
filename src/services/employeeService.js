@@ -1,43 +1,30 @@
 /**
  * src/services/employeeService.js
  * ===============================
- * Business logic per employee management
+ * Business logic per employee management - REST-based
  */
 
-import { employeesApi } from '@/api/employeesApi';
+import { apiClient } from '@/api/client';
 
 export const employeeService = {
-  async listEmployees(companyId, query) {
-    const result = await employeesApi.list({
-      company_id: companyId,
-      ...query,
-    });
-    return result.status === 200 ? result.data : [];
+  async listEmployees(companyId, query = {}) {
+    return apiClient.listEmployees(companyId, query);
   },
 
   async getEmployee(id) {
-    const result = await employeesApi.get(id);
-    return result.status === 200 ? result.data : null;
+    return apiClient.getEmployee(id);
   },
 
   async createEmployee(data) {
-    return employeesApi.create(data);
+    return apiClient.createEmployee(data);
   },
 
   async updateEmployee(id, data) {
-    return employeesApi.update(id, data);
+    return apiClient.updateEmployee(id, data);
   },
 
   async deleteEmployee(id) {
-    return employeesApi.delete(id);
-  },
-
-  async importEmployees(file) {
-    return employeesApi.import(file);
-  },
-
-  async exportEmployees(format = 'csv') {
-    return employeesApi.export(format);
+    return apiClient.deleteEmployee(id);
   },
 
   async createNewEmployee(companyId, data) {
@@ -48,8 +35,11 @@ export const employeeService = {
   },
 
   async fetchDepartments(companyId) {
-    // TODO: Implement via API when backend has departments endpoint
-    // For now, return empty array
     return [];
   },
 };
+
+// Legacy function aliases for backward compatibility
+export const fetchEmployee = (id) => employeeService.getEmployee(id);
+export const updateEmployeeData = (id, data) => employeeService.updateEmployee(id, data);
+export const deleteEmployeeData = (id) => employeeService.deleteEmployee(id);

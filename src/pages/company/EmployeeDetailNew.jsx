@@ -6,16 +6,16 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { base44 } from '@/api/base44Client';
+import { useAuth } from '@/lib/AuthContextDecoupled';
 import AppShell from '@/components/layout/AppShell';
 import PageLoader from '@/components/layout/PageLoader';
-import { fetchEmployee, updateEmployeeData, deleteEmployeeData } from '@/services/employeeService';
+import { employeeService } from '@/services/employeeService';
 import { ArrowLeft, Edit2, Trash2, Save, X } from 'lucide-react';
 
 export default function EmployeeDetailNew() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const { user, isLoadingAuth } = useAuth();
   const [employee, setEmployee] = useState(null);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
@@ -23,32 +23,34 @@ export default function EmployeeDetailNew() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    base44.auth.me().then(async (me) => {
-      if (!me?.company_id) {
-        window.location.href = '/';
-        return;
-      }
-      setUser(me);
+    if (!isLoadingAuth && user?.company_id) {
+      loadEmployee();
+    } else if (!isLoadingAuth && !user?.company_id) {
+      window.location.href = '/';
+    }
+  }, [id, user, isLoadingAuth]);
 
-      try {
-        const emp = await fetchEmployee(id);
-        if (emp && emp.company_id === me.company_id) {
-          setEmployee(emp);
-          setFormData(emp);
-        } else {
-          navigate('/dashboard/company/employees');
-        }
-      } catch (err) {
-        console.error('Error loading employee:', err);
+  const loadEmployee = async () => {
+    try {
+      const emp = await employeeService.getEmployee(id);
+      if (emp && emp.company_id === user.company_id) {
+        setEmployee(emp);
+        setFormData(emp);
+      } else {
         navigate('/dashboard/company/employees');
       }
-    }).finally(() => setLoading(false));
-  }, [id, navigate]);
+    } catch (err) {
+      console.error('Error loading employee:', err);
+      navigate('/dashboard/company/employees');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSave = async () => {
     setSaving(true);
     try {
-      await updateEmployeeData(id, formData);
+      await employeeService.updateEmployee(id, formData);
       setEmployee(formData);
       setEditing(false);
       alert('Dipendente aggiornato');
@@ -63,7 +65,7 @@ export default function EmployeeDetailNew() {
   const handleDelete = async () => {
     if (!confirm('Sei sicuro? Questa azione è irreversibile.')) return;
     try {
-      await deleteEmployeeData(id);
+      await employeeService.deleteEmployee(id);
       navigate('/dashboard/company/employees');
     } catch (err) {
       console.error('Error deleting:', err);
