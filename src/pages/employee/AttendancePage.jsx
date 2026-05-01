@@ -39,9 +39,10 @@ export default function AttendancePage() {
 
   useEffect(() => {
     const init = async () => {
-      // TODO: Replace with authService.me() and service calls for employee/location
-      setLoading(false);
-
+      try {
+        // TODO: Replace with authService.me() and service calls for employee/location
+        const me = { email: 'user@example.com' }; // Placeholder
+        
         // Carica timbrature in sospeso offline
         const pending = await getPendingTimeEntries();
         setPendingCount(pending.length);
@@ -56,7 +57,9 @@ export default function AttendancePage() {
         if (navigator.onLine) {
           await syncEntries(me);
         }
-      }).finally(() => setLoading(false));
+      } finally {
+        setLoading(false);
+      }
     };
     init();
   }, []);
@@ -164,10 +167,7 @@ export default function AttendancePage() {
           onSuccess={async (biometricData) => {
             try {
               // TODO: Replace with service call to verifyBiometric
-             // await base44.functions.invoke('verifyBiometric', {
-                ...biometricData,
-                attendanceType: 'check_in'
-              });
+              // await biometricService.verify(biometricData, 'check_in');
               await handleStamp('check_in');
               toast.success('Timbrato con successo! ✅');
             } catch (error) {

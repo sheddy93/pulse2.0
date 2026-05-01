@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { // TODO: Service integration } from "@/api/// TODO: Service integrationClient";
+// TODO: Service integration (replace with apiClient when REST API ready)
 import { ChevronLeft, ChevronRight, Plus, X, Bell, FileText, Calendar, Loader2, Trash2 } from "lucide-react";
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, getDay, isSameMonth, isToday, isSameDay, addMonths, subMonths, parseISO, isPast, differenceInDays } from "date-fns";
 import { it } from "date-fns/locale";
@@ -38,13 +38,8 @@ export default function HRCalendar({ companyId, userRole, userEmail }) {
   const loadAll = async () => {
     setLoading(true);
     try {
-      const [docs, contracts, certifications, leaves, calNotes] = await Promise.all([
-        // TODO: Service integration.entities.Document.filter({ company_id: companyId }),
-        // TODO: Service integration.entities.EmployeeContract.filter({ company_id: companyId }),
-        // TODO: Service integration.entities.EmployeeSkill.filter({ company_id: companyId }),
-        // TODO: Service integration.entities.LeaveRequest.filter({ company_id: companyId, status: "approved" }),
-        // TODO: Service integration.entities.CalendarNote.filter({ company_id: companyId }),
-      ]);
+      // TODO: Replace with service calls for REST API
+      const [docs, contracts, certifications, leaves, calNotes] = [[], [], [], [], []];
 
       const allEvents = [];
 
@@ -133,16 +128,7 @@ export default function HRCalendar({ companyId, userRole, userEmail }) {
   const handleSaveNote = async () => {
     if (!noteForm.title.trim() || !selectedDay) return;
     setSaving(true);
-    await // TODO: Service integration.entities.CalendarNote.create({
-      company_id: companyId,
-      author_email: userEmail,
-      date: format(selectedDay, "yyyy-MM-dd"),
-      title: noteForm.title,
-      content: noteForm.content,
-      color: noteForm.color,
-      visibility: noteForm.visibility,
-      reminder_date: noteForm.reminder_date || null,
-    });
+    // TODO: Replace with service.CalendarNote.create()
     setNoteForm({ title: "", content: "", color: "blue", visibility: "both", reminder_date: "" });
     setShowNoteForm(false);
     setSaving(false);
@@ -150,7 +136,7 @@ export default function HRCalendar({ companyId, userRole, userEmail }) {
   };
 
   const handleDeleteNote = async (noteId) => {
-    await // TODO: Service integration.entities.CalendarNote.delete(noteId);
+    // TODO: Replace with service.CalendarNote.delete()
     await loadAll();
   };
 

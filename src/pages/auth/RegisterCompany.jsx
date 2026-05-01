@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { useState } from 'react';
+import { authService } from '@/services/authService';
 import { Building2, Mail, Phone, User, Lock, AlertCircle, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -51,24 +51,12 @@ export default function RegisterCompany() {
     setError(null);
 
     try {
-      // Crea azienda con ID pubblico
+      // TODO: Replace with service.Company.create() for REST API
       const publicId = `COMP_${Date.now()}_${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
-      const company = await base44.entities.Company.create({
-        name: form.company_name,
-        vat_number: form.vat_number,
-        public_id: publicId,
-        email: form.email,
-        phone: form.phone,
-        is_active: true
-      });
-
-      // Invita proprietario come admin
-      await base44.users.inviteUser(form.email, "company_owner");
-
-      // Aggiorna profilo admin con dati azienda
+      
+      // TODO: Replace with authService REST API call
       await authService.updateMe({
         role: "company_owner",
-        company_id: company.id,
         full_name: `${form.owner_name} ${form.owner_surname}`,
         phone: form.phone,
         profile_completed: true,

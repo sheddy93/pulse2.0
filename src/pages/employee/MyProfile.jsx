@@ -25,10 +25,17 @@ export default function MyProfile() {
   });
 
   useEffect(() => {
-    // TODO: Replace with authService.me().then(async (me) => {
-      setUser(me);
-      // TODO: Replace with service calls to fetch employee profile, payroll, balance, leave requests
-    setLoading(false);
+    const loadData = async () => {
+      try {
+        // TODO: Replace with authService.me()
+        const me = { email: 'user@example.com' };
+        setUser(me);
+        // TODO: Replace with service calls to fetch employee profile, payroll, balance, leave requests
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
   }, []);
 
   const handleSubmitLeaveRequest = async () => {

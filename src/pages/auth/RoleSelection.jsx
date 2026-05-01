@@ -1,10 +1,9 @@
-import { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { useState } from 'react';
+import { authService } from '@/services/authService';
 import { Building2, Briefcase, ArrowRight } from "lucide-react";
 
 export default function RoleSelection() {
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState(null);
 
   const selectRole = async (role) => {
     setLoading(true);

@@ -1,12 +1,12 @@
-import { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { useState } from 'react';
+import { authService } from '@/services/authService';
 import { Briefcase, Mail, Phone, User, Lock, AlertCircle, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const CONSULTANT_TYPES = [
   { id: "labor", label: "Consulente del Lavoro", desc: "Contratti, ferie, normative" },
   { id: "external", label: "Consulente Esterno", desc: "Specialista esterno per progetti" },
-  { id: "safety", label: "Consulente Sicurezza", label: "RSPP e sicurezza sul lavoro" }
+  { id: "safety", label: "Consulente Sicurezza", desc: "RSPP e sicurezza sul lavoro" }
 ];
 
 export default function RegisterConsultant() {
@@ -55,16 +55,12 @@ export default function RegisterConsultant() {
     setError(null);
 
     try {
-      // Crea ID pubblico consulente
+      // TODO: Replace with authService REST API call
       const publicId = `CONS_${form.consultant_type.toUpperCase()}_${Date.now()}_${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
 
-      // TODO: Replace with authService.inviteUser(form.email, "labor_consultant")
-
-      // Aggiorna profilo
       await authService.updateMe({
         role: "labor_consultant",
         consultant_type: form.consultant_type,
-        consultant_public_id: publicId,
         full_name: `${form.name} ${form.surname}`,
         phone: form.phone,
         profile_completed: true,

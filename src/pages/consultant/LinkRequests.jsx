@@ -10,23 +10,21 @@ export default function LinkRequests() {
   const [loading, setLoading] = useState(true);
 
   const loadLinks = async (email) => {
-    const l = await base44.entities.ConsultantCompanyLink.filter({ consultant_email: email });
-    setLinks(l);
+    // TODO: Replace with service.ConsultantCompanyLink.filter({ consultant_email: email })
+    setLinks([]);
   };
 
   useEffect(() => {
-    authService.me().then(async (me) => {
+    // TODO: Replace with service calls for REST API
+    const loadData = async () => {
+      // const me = await authService.me();
       setUser(me);
       await loadLinks(me.email);
     }).finally(() => setLoading(false));
   }, []);
 
   const handleDecision = async (link, status) => {
-    await base44.entities.ConsultantCompanyLink.update(link.id, {
-      status,
-      approved_at: status === "approved" ? new Date().toISOString() : undefined,
-      rejected_at: status === "rejected" ? new Date().toISOString() : undefined,
-    });
+    // TODO: Replace with service.ConsultantCompanyLink.update()
     await loadLinks(user.email);
   };
 

@@ -43,20 +43,29 @@ export default function EmployeeCard() {
   const backPath = location.pathname.includes("/consultant") ? "/dashboard/consultant/employees" : "/dashboard/company/employees";
 
   useEffect(() => {
-    base44.auth.me().then(async (me) => {
-      setUser(me);
-      const emps = // TODO: Replace with service.EmployeeProfile.filter({ id });
-      const emp = emps[0];
-      setEmployee(emp);
-      if (emp) {
-        // TODO: Replace with service calls to fetch all employee data
-        setTimeEntries([]);
-        setContracts([]);
-        setDocuments([]);
-        setLeaves([]);
-        setNote(emp.internal_notes || "");
+    const loadData = async () => {
+      try {
+        // TODO: Replace with authService.me()
+        const me = { email: 'user@example.com' };
+        setUser(me);
+        
+        // TODO: Replace with service.EmployeeProfile.filter({ id })
+        const emps = [];
+        const emp = emps[0];
+        setEmployee(emp);
+        if (emp) {
+          // TODO: Replace with service calls to fetch all employee data
+          setTimeEntries([]);
+          setContracts([]);
+          setDocuments([]);
+          setLeaves([]);
+          setNote(emp.internal_notes || "");
+        }
+      } finally {
+        setLoading(false);
       }
-    }).finally(() => setLoading(false));
+    };
+    loadData();
   }, [id]);
 
   const saveNote = async () => {
