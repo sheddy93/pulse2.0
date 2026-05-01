@@ -40,6 +40,7 @@ import ConsultantDashboardBasic from './pages/dashboard/ConsultantDashboardBasic
 import CompanyOwnerDashboard from './pages/dashboard/CompanyOwnerDashboard';
 import ManagerDashboard from './pages/dashboard/ManagerDashboard';
 import EmployeeDashboardBasic from './pages/dashboard/EmployeeDashboardBasic';
+import DashboardBuilder from './pages/company/DashboardBuilder';
 
 // Company
 import EmployeeListNew from './pages/company/EmployeeListNew';
@@ -239,6 +240,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/company/geofence" element={<GeofenceManagement />} />
       <Route path="/dashboard/company/document-templates" element={<DocumentTemplatePage />} />
       <Route path="/dashboard/company/team-analytics" element={<TeamAnalyticsPage />} />
+      <Route path="/dashboard/company/dashboard-builder" element={<DashboardBuilder />} />
       <Route path="/dashboard/company/settings" element={<CompanySettings />} />
       <Route path="/dashboard/company/api" element={<APIManagement />} />
 

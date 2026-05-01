@@ -85,4 +85,13 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Dark mode transitions smooth */
+  * {
+    @apply transition-colors duration-200;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
 }
