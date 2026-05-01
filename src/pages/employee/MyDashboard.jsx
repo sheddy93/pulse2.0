@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { employeeService } from '@/services/employeeService';
+import { attendanceService } from '@/services/attendanceService';
+import { leaveService } from '@/services/leaveService';
+import { useAuth } from '@/hooks/useAuth';
 import AppShell from '@/components/layout/AppShell';
 import PageLoader from '@/components/layout/PageLoader';
 import AttendanceSummaryCard from '@/components/employee/AttendanceSummaryCard';
@@ -16,52 +19,56 @@ export default function MyDashboard() {
   const [leaveBalance, setLeaveBalance] = useState(null);
   const [showLeaveForm, setShowLeaveForm] = useState(false);
 
-  useEffect(() => {
-    base44.auth.me().then(async (me) => {
-      if (!me?.company_id) {
-        window.location.href = '/';
-        return;
-      }
-      setUser(me);
+  const { user: authUser, isLoadingAuth } = useAuth();
 
+  useEffect(() => {
+    if (!authUser?.company_id) {
+      window.location.href = '/';
+      return;
+    }
+    setUser(authUser);
+
+    const loadData = async () => {
       try {
         // Fetch employee profile
-        const employees = await base44.entities.EmployeeProfile.filter({
-          company_id: me.company_id,
-          email: me.email,
-        });
+        const employees = await employeeService.listEmployees(
+          authUser.company_id,
+          { email: authUser.email }
+        );
+        
         if (employees?.length > 0) {
           setEmployee(employees[0]);
 
           // Fetch this month's attendance
           const now = new Date();
           const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-          const attendanceData = await base44.entities.AttendanceEntry.filter({
-            employee_id: employees[0].id,
-          });
+          const attendanceData = await attendanceService.getTodayEntries(
+            employees[0].id
+          );
           setAttendance(
-            attendanceData?.filter(a => new Date(a.date) >= monthStart) || []
+            attendanceData?.filter(a => new Date(a.timestamp) >= monthStart) || []
           );
 
-          // Fetch payroll documents
-          const payroll = await base44.entities.PayrollDocument.filter({
-            employee_id: employees[0].id,
-          }, '-month', 6);
-          setPayrollDocs(payroll || []);
+          // Fetch payroll documents (stub)
+          setPayrollDocs([]);
 
           // Fetch leave balance
-          const balance = await base44.entities.LeaveBalance.filter({
-            employee_id: employees[0].id,
-          });
-          if (balance?.length > 0) {
-            setLeaveBalance(balance[0]);
+          const balance = await leaveService.getLeaveBalance(employees[0].id);
+          if (balance) {
+            setLeaveBalance(balance);
           }
         }
       } catch (err) {
         console.error('Error loading employee data:', err);
+      } finally {
+        setLoading(false);
       }
-    }).finally(() => setLoading(false));
-  }, []);
+    };
+
+    if (!isLoadingAuth) {
+      loadData();
+    }
+  }, [authUser, isLoadingAuth]);
 
   if (loading) return <PageLoader />;
   if (!user || !employee) return null;

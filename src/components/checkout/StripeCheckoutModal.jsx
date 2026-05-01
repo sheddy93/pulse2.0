@@ -12,7 +12,7 @@
  */
 
 import { useState } from 'react';
-import { base44 } from '@/api/base44Client';
+import { billingService } from '@/services/billingService';
 import { X, CreditCard, Loader, AlertCircle, Check } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -83,26 +83,24 @@ export default function StripeCheckoutModal({
 
     setProcessing(true);
     try {
-      const response = await base44.functions.invoke('stripeCheckoutSession', {
-        price_id: plan.stripe_price_id,
-        plan_id: plan.id,
-        plan_name: plan.name,
-        billing_interval: billingInterval,
-        selected_addons: selectedAddons,
-        company_id: user?.company_id,
-        total_amount: Math.round(totalPrice * 100), // In cents for Stripe
-      });
+      const sessionId = await billingService.createCheckoutSession(
+        plan.id,
+        selectedAddons,
+        billingInterval,
+        user
+      );
 
-      if (response.data?.session_id) {
+      if (sessionId) {
         // Salva session_id in metadata per tracking
-        localStorage.setItem('stripe_session_id', response.data.session_id);
+        localStorage.setItem('stripe_session_id', sessionId);
         localStorage.setItem('stripe_checkout_time', new Date().toISOString());
         
-        console.log('[Stripe] Session created:', response.data.session_id);
+        console.log('[Stripe] Session created:', sessionId);
         
-        // Redirect a Stripe Checkout
-        if (response.data.url) {
-          window.location.href = response.data.url;
+        // Redirect a Stripe Checkout via API
+        const checkoutUrl = await billingService.getCheckoutUrl(sessionId);
+        if (checkoutUrl) {
+          window.location.href = checkoutUrl;
         }
       } else {
         toast.error('Errore nella creazione della sessione di checkout');

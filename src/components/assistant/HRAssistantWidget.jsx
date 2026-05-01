@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { base44 } from "@/api/base44Client";
+import { aiService } from "@/services/aiService";
 import { MessageSquare, X, Send, Minimize2, Maximize2, Bot, Loader2, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
@@ -36,23 +36,24 @@ export default function HRAssistantWidget({ user }) {
 
   const initConversation = async () => {
     try {
-      const conv = await base44.agents.createConversation({
-        agent_name: "hr_assistant",
-        metadata: { name: `Sessione HR - ${user.full_name || user.email}` }
-      });
-      setConversation(conv);
-
-      // Subscribe to real-time updates
-      base44.agents.subscribeToConversation(conv.id, (data) => {
-        setMessages([...data.messages]);
-        setSending(false);
-      });
-
-      // Welcome message
-      await base44.agents.addMessage(conv, {
-        role: "user",
-        content: `Ciao! Sono ${user.full_name || user.email}, ruolo: ${user.role}. Fammi una breve presentazione di cosa puoi fare per me.`
-      });
+      // Initialize conversation with AI service
+      setMessages([]);
+      
+      // Welcome message from AI
+      const welcomeMsg = await aiService.askQuestion(
+        `Ciao! Sono ${user.full_name || user.email}, ruolo: ${user.role}. Fammi una breve presentazione di cosa puoi fare per me come Assistente HR.`,
+        undefined,
+        user
+      );
+      
+      if (welcomeMsg) {
+        setMessages([
+          { role: "assistant", content: welcomeMsg }
+        ]);
+      }
+      
+      // Store conversation ref (for tracking)
+      setConversation({ id: `conv_${Date.now()}`, user_id: user.id });
     } catch (e) {
       console.error("Errore init assistente:", e);
     }
@@ -62,7 +63,21 @@ export default function HRAssistantWidget({ user }) {
     if (!text?.trim() || !conversation || sending) return;
     setSending(true);
     setInput("");
-    await base44.agents.addMessage(conversation, { role: "user", content: text });
+    
+    try {
+      // Add user message to UI
+      setMessages(prev => [...prev, { role: "user", content: text }]);
+      
+      // Get AI response
+      const response = await aiService.askQuestion(text, undefined, user);
+      
+      // Add assistant response
+      setMessages(prev => [...prev, { role: "assistant", content: response }]);
+    } catch (e) {
+      console.error("Errore invio messaggio:", e);
+    } finally {
+      setSending(false);
+    }
   };
 
   const handleOpen = () => {

@@ -5,21 +5,19 @@
  */
 
 import { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { employeeService } from '@/services/employeeService';
+import { useAuth } from '@/hooks/useAuth';
 import AppShell from '@/components/layout/AppShell';
 import PageLoader from '@/components/layout/PageLoader';
 import LazyImage from '@/components/LazyImage';
-import { fetchEmployees, fetchDepartments, filterAndSort } from '@/services/employeeService';
-import { useApiCache, clearApiCache } from '@/hooks/useApiCache';
 import { Users, Plus, Search, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const ITEMS_PER_PAGE = 20;
 
 export default function EmployeeListNew() {
-  const [user, setUser] = useState(null);
+  const { user, isLoadingAuth } = useAuth();
   const [employees, setEmployees] = useState([]);
-  const [departments, setDepartments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
   const [filters, setFilters] = useState({
@@ -29,38 +27,41 @@ export default function EmployeeListNew() {
     sort: 'name-asc',
   });
 
-  // Use caching for departments (1 hour TTL)
-  const { data: cachedDepts, loading: deptsLoading } = useApiCache(
-    'departments',
-    async () => fetchDepartments(''), // Placeholder, replace in actual impl
-    60 * 60 * 1000
-  );
-
   useEffect(() => {
-    base44.auth.me().then(async (me) => {
-      if (!me?.company_id) {
-        window.location.href = '/';
-        return;
-      }
-      setUser(me);
+    if (!user?.company_id) {
+      window.location.href = '/';
+      return;
+    }
 
+    const loadData = async () => {
       try {
-        const [emps, depts] = await Promise.all([
-          fetchEmployees(me.company_id, { status: 'active', limit: ITEMS_PER_PAGE, skip: page * ITEMS_PER_PAGE }),
-          cachedDepts || fetchDepartments(me.company_id),
-        ]);
+        const emps = await employeeService.listEmployees(user.company_id, {
+          status: 'active',
+          limit: ITEMS_PER_PAGE,
+          skip: page * ITEMS_PER_PAGE,
+        });
         setEmployees(emps || []);
-        setDepartments(depts || cachedDepts || []);
       } catch (err) {
         console.error('Error loading employees:', err);
+      } finally {
+        setLoading(false);
       }
-    }).finally(() => setLoading(false));
-  }, [page, cachedDepts]);
+    };
 
-  if (loading) return <PageLoader color="blue" />;
+    if (!isLoadingAuth) {
+      loadData();
+    }
+  }, [user?.company_id, isLoadingAuth, page]);
+
+  if (loading || isLoadingAuth) return <PageLoader color="blue" />;
   if (!user) return null;
 
-  const filtered = filterAndSort(employees, filters);
+  // Simple client-side filter (can be moved to backend for large datasets)
+  const filtered = employees.filter(emp => {
+    if (filters.search && !emp.full_name?.toLowerCase().includes(filters.search.toLowerCase())) return false;
+    if (filters.status !== 'all' && emp.status !== filters.status) return false;
+    return true;
+  });
 
   return (
     <AppShell user={user}>
@@ -94,19 +95,7 @@ export default function EmployeeListNew() {
               </div>
             </div>
 
-            {/* Department Filter */}
-            <select
-              value={filters.department}
-              onChange={(e) => setFilters({ ...filters, department: e.target.value })}
-              className="px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="all">Tutti i reparti</option>
-              {departments.map((d) => (
-                <option key={d.id} value={d.id}>
-                  {d.name}
-                </option>
-              ))}
-            </select>
+
 
             {/* Status Filter */}
             <select
