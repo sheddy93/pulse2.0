@@ -113,7 +113,7 @@ const AuthenticatedApp = () => {
       <Route path="/error/unknown-role" element={<UnknownRole />} />
 
       {/* Super Admin */}
-      <Route path="/dashboard/admin" element={<AdminAnalytics />} />
+      <Route path="/dashboard/admin" element={<AdminDashboard />} />
       <Route path="/dashboard/admin/analytics" element={<AdminAnalytics />} />
       <Route path="/dashboard/admin/settings" element={<SuperAdminSettings />} />
       <Route path="/dashboard/admin/companies" element={<ComingSoon title="Gestione Aziende" dashboardPath="/dashboard/admin" />} />
