@@ -1,17 +1,22 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { base44 } from "@/api/base44Client";
-import { getDashboardPath, isCompanyRole, isConsultantRole } from "@/lib/roles";
+import { useAuth } from "@/lib/AuthContextDecoupled";
+import { getDashboardPath } from "@/lib/roles";
 
 export default function RoleRedirect() {
   const navigate = useNavigate();
+  const { user, isLoadingAuth } = useAuth();
+
   useEffect(() => {
-    base44.auth.me().then((user) => {
-      if (!user) { base44.auth.redirectToLogin(); return; }
+    if (!isLoadingAuth) {
+      if (!user) {
+        window.location.href = '/';
+        return;
+      }
       const path = getDashboardPath(user.role);
       navigate(path || "/error/unknown-role", { replace: true });
-    }).catch(() => base44.auth.redirectToLogin());
-  }, []);
+    }
+  }, [user, isLoadingAuth, navigate]);
 
   return (
     <div className="flex h-screen items-center justify-center">

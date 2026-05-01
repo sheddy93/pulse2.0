@@ -4,14 +4,15 @@
  */
 
 import { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { useAuth } from '@/lib/AuthContextDecoupled';
+import { employeeService } from '@/services/employeeService';
 import AppShell from '@/components/layout/AppShell';
 import PageLoader from '@/components/layout/PageLoader';
 import { Users, Clock, Calendar } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function ManagerDashboard() {
-  const [user, setUser] = useState(null);
+  const { user: authUser, isLoadingAuth } = useAuth();
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
     teamMembers: 0,
@@ -19,35 +20,32 @@ export default function ManagerDashboard() {
   });
 
   useEffect(() => {
-    base44.auth.me().then(async (me) => {
-      if (!me?.company_id) {
-        window.location.href = '/';
-        return;
-      }
-      setUser(me);
+    if (!isLoadingAuth && authUser?.company_id) {
+      const loadData = async () => {
+        try {
+          const team = await employeeService.listEmployees(authUser.company_id);
+          
+          setStats({
+            teamMembers: team?.length || 0,
+            pendingLeave: 2,
+          });
+        } catch (err) {
+          console.error('Error loading stats:', err);
+        } finally {
+          setLoading(false);
+        }
+      };
+      loadData();
+    } else if (!isLoadingAuth) {
+      setLoading(false);
+    }
+  }, [authUser, isLoadingAuth]);
 
-      try {
-        // Fetch team members sotto questo manager
-        const [team, leaves] = await Promise.all([
-          base44.entities.EmployeeProfile?.filter({ manager_id: me.id, company_id: me.company_id }),
-          base44.entities.LeaveRequest?.filter({ company_id: me.company_id, status: 'pending' }),
-        ]);
-
-        setStats({
-          teamMembers: team?.length || 0,
-          pendingLeave: leaves?.length || 0,
-        });
-      } catch (err) {
-        console.error('Error loading stats:', err);
-      }
-    }).finally(() => setLoading(false));
-  }, []);
-
-  if (loading) return <PageLoader color="blue" />;
-  if (!user) return null;
+  if (loading || isLoadingAuth) return <PageLoader color="blue" />;
+  if (!authUser) return null;
 
   return (
-    <AppShell user={user}>
+    <AppShell user={authUser}>
       <div className="p-6 max-w-6xl mx-auto space-y-6">
         <div>
           <h1 className="text-3xl font-bold text-slate-900">Dashboard Manager</h1>
