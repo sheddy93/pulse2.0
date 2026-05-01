@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: aldevion_postgres
+    environment:
+      POSTGRES_USER: aldevion
+      POSTGRES_PASSWORD: aldevion_dev_password
+      POSTGRES_DB: aldevion_hr
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aldevion"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # NestJS Backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: aldevion_backend
+    environment:
+      DATABASE_URL: "postgresql://aldevion:aldevion_dev_password@postgres:5432/aldevion_hr"
+      JWT_SECRET: "dev-secret-key-change-in-production-must-be-32-chars"
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
+      FRONTEND_URL: "http://localhost:5173"
+      PORT: 3000
+      NODE_ENV: "development"
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./backend/src:/app/src
+      - ./backend/prisma:/app/prisma
+    command: npm run start:dev
+
+  # pgAdmin (Optional - for database management)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: aldevion_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@aldevion.local
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
+    driver: local

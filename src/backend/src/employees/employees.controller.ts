@@ -1,44 +1,50 @@
-import { Controller, Get, Post, Body, Patch, Delete, Param, UseGuards, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Param,
+  Body,
+  UseGuards,
+  Request,
+  Query,
+} from '@nestjs/common';
 import { EmployeesService } from './employees.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
-@Controller('employees')
+@Controller('api/employees')
+@UseGuards(JwtAuthGuard)
 export class EmployeesController {
   constructor(private employeesService: EmployeesService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
-  async create(@Body() createEmployeeDto: any) {
-    return this.employeesService.create(createEmployeeDto);
+  async create(@Body() body: any, @Request() req: any) {
+    return this.employeesService.create(req.user.companyId, body);
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
-  async findAll(@Query('company_id') companyId: string) {
-    return this.employeesService.findAll(companyId);
+  async findByCompany(@Request() req: any, @Query('skip') skip = 0, @Query('take') take = 50) {
+    return this.employeesService.findByCompany(req.user.companyId, skip, take);
+  }
+
+  @Get('search')
+  async search(@Query('q') query: string, @Request() req: any) {
+    return this.employeesService.search(req.user.companyId, query);
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
-  async findOne(@Param('id') id: string) {
-    return this.employeesService.findOne(id);
+  async findById(@Param('id') id: string) {
+    return this.employeesService.findById(id);
   }
 
-  @Patch(':id')
-  @UseGuards(JwtAuthGuard)
-  async update(@Param('id') id: string, @Body() updateEmployeeDto: any) {
-    return this.employeesService.update(id, updateEmployeeDto);
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() body: any) {
+    return this.employeesService.update(id, body);
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
   async delete(@Param('id') id: string) {
     return this.employeesService.delete(id);
-  }
-
-  @Get('company/:companyId')
-  @UseGuards(JwtAuthGuard)
-  async filterByCompany(@Param('companyId') companyId: string) {
-    return this.employeesService.filterByCompany(companyId);
   }
 }

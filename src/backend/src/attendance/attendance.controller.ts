@@ -1,52 +1,60 @@
-import { Controller, Get, Post, Body, Delete, Param, UseGuards, Query } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Body,
+  UseGuards,
+  Request,
+  Query,
+  Param,
+} from '@nestjs/common';
 import { AttendanceService } from './attendance.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
-@Controller('attendance')
+@Controller('api/attendance')
+@UseGuards(JwtAuthGuard)
 export class AttendanceController {
   constructor(private attendanceService: AttendanceService) {}
 
-  @Post('check-in')
-  @UseGuards(JwtAuthGuard)
-  async checkIn(@Body() checkInDto: any) {
-    return this.attendanceService.createEntry({
-      ...checkInDto,
-      type: 'check_in',
-      timestamp: new Date(),
-    });
+  @Post('clock-in')
+  async clockIn(@Body() body: any, @Request() req: any) {
+    return this.attendanceService.clockIn(
+      body.employeeId,
+      req.user.companyId,
+      body,
+    );
   }
 
-  @Post('check-out')
-  @UseGuards(JwtAuthGuard)
-  async checkOut(@Body() checkOutDto: any) {
-    return this.attendanceService.createEntry({
-      ...checkOutDto,
-      type: 'check_out',
-      timestamp: new Date(),
-    });
+  @Post('clock-out')
+  async clockOut(@Body() body: any, @Request() req: any) {
+    return this.attendanceService.clockOut(
+      body.employeeId,
+      req.user.companyId,
+      body,
+    );
   }
 
-  @Get('entries')
-  @UseGuards(JwtAuthGuard)
-  async findAll(@Query('company_id') companyId: string) {
-    return this.attendanceService.findAllEntries(companyId);
+  @Get('today/:employeeId')
+  async getTodayAttendance(@Param('employeeId') employeeId: string) {
+    return this.attendanceService.getTodayAttendance(employeeId);
   }
 
   @Get('employee/:employeeId')
-  @UseGuards(JwtAuthGuard)
-  async findByEmployee(@Param('employeeId') employeeId: string) {
-    return this.attendanceService.findEntriesByEmployee(employeeId);
+  async getEmployeeAttendance(
+    @Param('employeeId') employeeId: string,
+    @Query('daysBack') daysBack = 30,
+  ) {
+    return this.attendanceService.getEmployeeAttendance(employeeId, daysBack);
   }
 
-  @Get('date')
-  @UseGuards(JwtAuthGuard)
-  async findByDate(@Query('company_id') companyId: string, @Query('date') date: string) {
-    return this.attendanceService.findEntriesByDate(companyId, date);
-  }
-
-  @Delete(':id')
-  @UseGuards(JwtAuthGuard)
-  async deleteEntry(@Param('id') id: string) {
-    return this.attendanceService.deleteEntry(id);
+  @Get('company/date/:date')
+  async getCompanyAttendance(
+    @Param('date') date: string,
+    @Request() req: any,
+  ) {
+    return this.attendanceService.getCompanyAttendance(
+      req.user.companyId,
+      new Date(date),
+    );
   }
 }

@@ -5,41 +5,72 @@ import { PrismaService } from '../prisma/prisma.service';
 export class LeaveService {
   constructor(private prisma: PrismaService) {}
 
-  async createRequest(data: any) {
-    return this.prisma.leaveRequest.create({ data });
-  }
+  async createRequest(companyId: string, employeeId: string, data: any) {
+    const durationDays = Math.ceil(
+      (new Date(data.endDate).getTime() - new Date(data.startDate).getTime()) /
+        (1000 * 60 * 60 * 24),
+    ) + 1;
 
-  async findAllRequests(companyId: string) {
-    return this.prisma.leaveRequest.findMany({
-      where: { company_id: companyId },
+    return this.prisma.leaveRequest.create({
+      data: {
+        companyId,
+        employeeId,
+        durationDays,
+        ...data,
+      },
     });
   }
 
-  async findRequestById(id: string) {
-    return this.prisma.leaveRequest.findUnique({ where: { id } });
+  async getEmployeeRequests(employeeId: string) {
+    return this.prisma.leaveRequest.findMany({
+      where: { employeeId },
+      orderBy: { createdAt: 'desc' },
+    });
   }
 
-  async updateRequest(id: string, data: any) {
+  async getPendingRequests(companyId: string) {
+    return this.prisma.leaveRequest.findMany({
+      where: { companyId, status: 'pending' },
+      include: { employee: true },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
+  async approveRequest(id: string, approvedBy: string) {
     return this.prisma.leaveRequest.update({
       where: { id },
-      data,
+      data: {
+        status: 'approved',
+        approvedBy,
+        approvedAt: new Date(),
+      },
     });
   }
 
-  async deleteRequest(id: string) {
-    return this.prisma.leaveRequest.delete({ where: { id } });
+  async rejectRequest(id: string, rejectedReason: string) {
+    return this.prisma.leaveRequest.update({
+      where: { id },
+      data: {
+        status: 'rejected',
+        rejectedReason,
+      },
+    });
   }
 
-  async getLeaveBalance(employeeId: string) {
+  async getLeaveBalance(employeeId: string, year: number) {
     return this.prisma.leaveBalance.findFirst({
-      where: { employee_id: employeeId },
+      where: { employeeId, year },
     });
   }
 
-  async updateLeaveBalance(employeeId: string, data: any) {
-    return this.prisma.leaveBalance.update({
-      where: { employee_id: employeeId },
-      data,
+  async initializeLeaveBalance(employeeId: string, companyId: string) {
+    const year = new Date().getFullYear();
+    return this.prisma.leaveBalance.create({
+      data: {
+        employeeId,
+        companyId,
+        year,
+      },
     });
   }
 }

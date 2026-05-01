@@ -24,8 +24,8 @@ export default function AddonManagement() {
   }, []);
 
   const loadAddons = async () => {
-    const result = await base44.entities.SubscriptionAddon.filter({});
-    setAddons(result.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0)));
+    // TODO: Replace with API call to backend
+    setAddons([]);
     setLoading(false);
   };
 
@@ -55,16 +55,9 @@ export default function AddonManagement() {
 
     setSaving(true);
     try {
-      if (addon.id && addon.id !== "new") {
-        await base44.entities.SubscriptionAddon.update(addon.id, addon);
-        toast.success("Add-on aggiornato");
-      } else {
-        const { id, ...rest } = addon;
-        await base44.entities.SubscriptionAddon.create(rest);
-        toast.success("Add-on creato");
-      }
+      // TODO: Replace with API call to backend
       setEditingId(null);
-      await loadAddons();
+      toast.success("Add-on salvato");
     } catch (e) {
       toast.error(e.message);
     } finally {
@@ -82,9 +75,8 @@ export default function AddonManagement() {
     
     setSaving(true);
     try {
-      await base44.entities.SubscriptionAddon.delete(id);
+      // TODO: Replace with API call to backend
       toast.success("Add-on eliminato");
-      await loadAddons();
     } catch (e) {
       toast.error(e.message);
     } finally {

@@ -9,28 +9,22 @@ export class CompaniesService {
     return this.prisma.company.create({ data });
   }
 
-  async findAll() {
-    return this.prisma.company.findMany();
+  async findAll(skip = 0, take = 50) {
+    return this.prisma.company.findMany({ skip, take });
   }
 
-  async findOne(id: string) {
-    return this.prisma.company.findUnique({ where: { id } });
+  async findById(id: string) {
+    return this.prisma.company.findUnique({
+      where: { id },
+      include: { users: true, employees: true },
+    });
   }
 
   async update(id: string, data: any) {
-    return this.prisma.company.update({
-      where: { id },
-      data,
-    });
+    return this.prisma.company.update({ where: { id }, data });
   }
 
   async delete(id: string) {
     return this.prisma.company.delete({ where: { id } });
-  }
-
-  async findByOwnerId(ownerId: string) {
-    return this.prisma.company.findMany({
-      where: { owner_id: ownerId },
-    });
   }
 }

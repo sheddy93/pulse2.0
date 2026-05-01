@@ -1,33 +1,10 @@
-import { restClient } from './restClient';
+import apiClient from './api';
 
 export const employeesService = {
-  async list(companyId: string) {
-    const { data } = await restClient.get('/employees', { params: { company_id: companyId } });
-    return data;
-  },
-
-  async get(id: string) {
-    const { data } = await restClient.get(`/employees/${id}`);
-    return data;
-  },
-
-  async create(payload: any) {
-    const { data } = await restClient.post('/employees', payload);
-    return data;
-  },
-
-  async update(id: string, payload: any) {
-    const { data } = await restClient.patch(`/employees/${id}`, payload);
-    return data;
-  },
-
-  async delete(id: string) {
-    const { data } = await restClient.delete(`/employees/${id}`);
-    return data;
-  },
-
-  async filter(companyId: string, filters?: any) {
-    const { data } = await restClient.get(`/employees/company/${companyId}`, { params: filters });
-    return data;
-  },
+  create: (data: any) => apiClient.post('/employees', data),
+  getAll: (skip = 0, take = 50) => apiClient.get('/employees', { params: { skip, take } }),
+  getById: (id: string) => apiClient.get(`/employees/${id}`),
+  update: (id: string, data: any) => apiClient.put(`/employees/${id}`, data),
+  delete: (id: string) => apiClient.delete(`/employees/${id}`),
+  search: (query: string) => apiClient.get('/employees/search', { params: { q: query } }),
 };

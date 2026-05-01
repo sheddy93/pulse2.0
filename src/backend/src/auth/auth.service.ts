@@ -1,7 +1,7 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcryptjs';
 import { PrismaService } from '../prisma/prisma.service';
-import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -10,87 +10,66 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async register(registerDto: any) {
-    const hashedPassword = await bcrypt.hash(registerDto.password, 10);
+  async register(email: string, password: string, fullName: string) {
+    const existing = await this.prisma.user.findUnique({ where: { email } });
+    if (existing) {
+      throw new BadRequestException('Email already registered');
+    }
+
+    const passwordHash = await bcrypt.hash(password, 10);
     const user = await this.prisma.user.create({
       data: {
-        email: registerDto.email,
-        full_name: registerDto.full_name,
-        password_hash: hashedPassword,
-        role: registerDto.role || 'user',
+        email,
+        fullName,
+        passwordHash,
+        role: 'employee',
       },
     });
 
-    const token = this.jwtService.sign({
-      id: user.id,
-      email: user.email,
-      role: user.role,
-    });
-
-    return {
-      user: { id: user.id, email: user.email, full_name: user.full_name, role: user.role },
-      access_token: token,
-    };
+    return this.signToken(user);
   }
 
-  async login(loginDto: any) {
-    const user = await this.prisma.user.findUnique({
-      where: { email: loginDto.email },
-    });
-
+  async login(email: string, password: string) {
+    const user = await this.prisma.user.findUnique({ where: { email } });
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const isPasswordValid = await bcrypt.compare(loginDto.password, user.password_hash);
-    if (!isPasswordValid) {
+    const valid = await bcrypt.compare(password, user.passwordHash);
+    if (!valid) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const token = this.jwtService.sign({
-      id: user.id,
-      email: user.email,
-      role: user.role,
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: { lastLogin: new Date() },
     });
 
+    return this.signToken(user);
+  }
+
+  async validateUser(id: string) {
+    return this.prisma.user.findUnique({ where: { id } });
+  }
+
+  async me(userId: string) {
+    return this.prisma.user.findUnique({
+      where: { id: userId },
+      include: { profile: true, company: true },
+    });
+  }
+
+  private signToken(user: any) {
+    const payload = { sub: user.id, email: user.email, role: user.role };
     return {
-      user: { id: user.id, email: user.email, full_name: user.full_name, role: user.role },
-      access_token: token,
+      access_token: this.jwtService.sign(payload),
+      user: {
+        id: user.id,
+        email: user.email,
+        fullName: user.fullName,
+        role: user.role,
+        companyId: user.companyId,
+      },
     };
-  }
-
-  async getProfile(userId: string) {
-    return this.prisma.user.findUnique({
-      where: { id: userId },
-      select: { id: true, email: true, full_name: true, role: true },
-    });
-  }
-
-  async updateProfile(userId: string, updateDto: any) {
-    return this.prisma.user.update({
-      where: { id: userId },
-      data: updateDto,
-      select: { id: true, email: true, full_name: true, role: true },
-    });
-  }
-
-  async refreshToken(refreshToken: string) {
-    try {
-      const decoded = this.jwtService.verify(refreshToken);
-      const token = this.jwtService.sign({
-        id: decoded.id,
-        email: decoded.email,
-        role: decoded.role,
-      });
-      return { access_token: token };
-    } catch (error) {
-      throw new UnauthorizedException('Invalid refresh token');
-    }
-  }
-
-  async validateUser(id: string, email: string) {
-    return this.prisma.user.findUnique({
-      where: { id },
-    });
   }
 }

@@ -1,50 +1,58 @@
-import { Controller, Get, Post, Body, Patch, Delete, Param, UseGuards, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Body,
+  Param,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { LeaveService } from './leave.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
-@Controller('leave')
+@Controller('api/leave')
+@UseGuards(JwtAuthGuard)
 export class LeaveController {
   constructor(private leaveService: LeaveService) {}
 
-  @Post('requests')
-  @UseGuards(JwtAuthGuard)
-  async createRequest(@Body() createLeaveDto: any) {
-    return this.leaveService.createRequest(createLeaveDto);
+  @Post('request')
+  async createRequest(@Body() body: any, @Request() req: any) {
+    return this.leaveService.createRequest(
+      req.user.companyId,
+      body.employeeId,
+      body,
+    );
   }
 
-  @Get('requests')
-  @UseGuards(JwtAuthGuard)
-  async findAllRequests(@Query('company_id') companyId: string) {
-    return this.leaveService.findAllRequests(companyId);
+  @Get('employee/:employeeId')
+  async getEmployeeRequests(@Param('employeeId') employeeId: string) {
+    return this.leaveService.getEmployeeRequests(employeeId);
   }
 
-  @Get('requests/:id')
-  @UseGuards(JwtAuthGuard)
-  async findRequestById(@Param('id') id: string) {
-    return this.leaveService.findRequestById(id);
+  @Get('pending')
+  async getPendingRequests(@Request() req: any) {
+    return this.leaveService.getPendingRequests(req.user.companyId);
   }
 
-  @Patch('requests/:id')
-  @UseGuards(JwtAuthGuard)
-  async updateRequest(@Param('id') id: string, @Body() updateLeaveDto: any) {
-    return this.leaveService.updateRequest(id, updateLeaveDto);
+  @Put(':id/approve')
+  async approveRequest(@Param('id') id: string, @Request() req: any) {
+    return this.leaveService.approveRequest(id, req.user.email);
   }
 
-  @Delete('requests/:id')
-  @UseGuards(JwtAuthGuard)
-  async deleteRequest(@Param('id') id: string) {
-    return this.leaveService.deleteRequest(id);
+  @Put(':id/reject')
+  async rejectRequest(
+    @Param('id') id: string,
+    @Body() body: { rejectedReason: string },
+  ) {
+    return this.leaveService.rejectRequest(id, body.rejectedReason);
   }
 
   @Get('balance/:employeeId')
-  @UseGuards(JwtAuthGuard)
-  async getLeaveBalance(@Param('employeeId') employeeId: string) {
-    return this.leaveService.getLeaveBalance(employeeId);
-  }
-
-  @Patch('balance/:employeeId')
-  @UseGuards(JwtAuthGuard)
-  async updateLeaveBalance(@Param('employeeId') employeeId: string, @Body() data: any) {
-    return this.leaveService.updateLeaveBalance(employeeId, data);
+  async getLeaveBalance(
+    @Param('employeeId') employeeId: string,
+  ) {
+    const year = new Date().getFullYear();
+    return this.leaveService.getLeaveBalance(employeeId, year);
   }
 }
