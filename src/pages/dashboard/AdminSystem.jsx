@@ -34,7 +34,7 @@ export default function AdminSystem() {
   };
 
   useEffect(() => {
-    base44.auth.me().then(async (me) => {
+    authService.me().then(async (me) => {
       if (me?.role !== "super_admin") { window.location.href = "/"; return; }
       setUser(me);
       await loadStats();

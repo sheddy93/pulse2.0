@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
-// Migration: removed base44 dependency
+import { authService } from '@/services/authService';
+import employeeService from '@/services/employees.service';
+import attendanceService from '@/services/attendance.service';
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import { Clock, LogIn, LogOut, Users, Calendar, Download } from "lucide-react";

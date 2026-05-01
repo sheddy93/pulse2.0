@@ -42,7 +42,7 @@ export default function IntegrationSettings() {
   });
 
   useEffect(() => {
-    base44.auth.me().then(async (me) => {
+    authService.me().then(async (me) => {
       setUser(me);
       if (!me.company_id) { setLoading(false); return; }
       const [companies, webhooks, apiKeys] = await Promise.all([
