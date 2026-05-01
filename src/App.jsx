@@ -35,14 +35,16 @@ import RegisterCompany from './pages/auth/RegisterCompany';
 import RegisterConsultant from './pages/auth/RegisterConsultant';
 
 // Dashboards
-import AdminDashboard from './pages/dashboard/AdminDashboard';
-import ConsultantDashboard from './pages/dashboard/ConsultantDashboard';
-import CompanyDashboard from './pages/dashboard/CompanyDashboard';
-import EmployeeDashboard from './pages/dashboard/EmployeeDashboard';
+import SuperAdminDashboard from './pages/dashboard/SuperAdminDashboard';
+import ConsultantDashboardBasic from './pages/dashboard/ConsultantDashboardBasic';
+import CompanyOwnerDashboard from './pages/dashboard/CompanyOwnerDashboard';
+import ManagerDashboard from './pages/dashboard/ManagerDashboard';
+import EmployeeDashboardBasic from './pages/dashboard/EmployeeDashboardBasic';
 
 // Company
-import EmployeeList from './pages/company/EmployeeList';
-import NewEmployee from './pages/company/NewEmployee';
+import EmployeeListNew from './pages/company/EmployeeListNew';
+import EmployeeCreateNew from './pages/company/EmployeeCreateNew';
+import EmployeeDetailNew from './pages/company/EmployeeDetailNew';
 import EmployeeImport from './pages/company/EmployeeImport';
 import CompanyConsultants from './pages/company/CompanyConsultants';
 import DocumentsPage from './pages/company/DocumentsPage';
@@ -161,7 +163,7 @@ const AuthenticatedApp = () => {
       <Route path="/error/unknown-role" element={<UnknownRole />} />
 
       {/* Super Admin */}
-      <Route path="/dashboard/admin" element={<AdminDashboard />} />
+      <Route path="/dashboard/admin" element={<SuperAdminDashboard />} />
       <Route path="/dashboard/admin/analytics" element={<AdminAnalytics />} />
       <Route path="/dashboard/admin/settings" element={<SuperAdminSettings />} />
       <Route path="/dashboard/admin/temporary-logins" element={<TemporaryLogins />} />
@@ -170,9 +172,9 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/admin/system" element={<AdminSystem />} />
 
       {/* Consultant */}
-      <Route path="/dashboard/consultant" element={<ConsultantDashboard />} />
-      <Route path="/dashboard/consultant/companies" element={<EmployeeList />} />
-      <Route path="/dashboard/consultant/employees" element={<EmployeeList />} />
+      <Route path="/dashboard/consultant" element={<ConsultantDashboardBasic />} />
+      <Route path="/dashboard/consultant/companies" element={<EmployeeListNew />} />
+      <Route path="/dashboard/consultant/employees" element={<EmployeeListNew />} />
       <Route path="/dashboard/consultant/link-requests" element={<LinkRequests />} />
       <Route path="/dashboard/consultant/document-review" element={<DocumentReviewPage />} />
       <Route path="/dashboard/consultant/calendar" element={<HRCalendarPage />} />
@@ -181,9 +183,10 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/consultant/employees/:id" element={<EmployeeCard />} />
 
       {/* Company */}
-      <Route path="/dashboard/company" element={<CompanyDashboard />} />
-      <Route path="/dashboard/company/employees" element={<EmployeeList />} />
-      <Route path="/dashboard/company/employees/new" element={<NewEmployee />} />
+      <Route path="/dashboard/company" element={<CompanyOwnerDashboard />} />
+      <Route path="/dashboard/company/employees" element={<EmployeeListNew />} />
+      <Route path="/dashboard/company/employees/new" element={<EmployeeCreateNew />} />
+      <Route path="/dashboard/company/employees/:id" element={<EmployeeDetailNew />} />
       <Route path="/dashboard/company/employees/import" element={<EmployeeImport />} />
       <Route path="/dashboard/company/employees/:id" element={<EmployeeCard />} />
       <Route path="/dashboard/company/admins" element={<AdminsList />} />
@@ -226,7 +229,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/company/settings" element={<CompanySettings />} />
 
       {/* Employee */}
-      <Route path="/dashboard/employee" element={<EmployeeDashboard />} />
+      <Route path="/dashboard/employee" element={<EmployeeDashboardBasic />} />
       <Route path="/dashboard/employee/attendance" element={<AttendancePage />} />
       <Route path="/dashboard/employee/calendar" element={<AttendanceCalendarPage />} />
       <Route path="/dashboard/employee/history" element={<AttendancePage />} />

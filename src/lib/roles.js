@@ -65,6 +65,24 @@ export const isSuperAdmin = (role) => {
  * Mappa ruolo → dashboard path
  * TODO MIGRATION: Logica di routing deve restare nel frontend anche dopo migrazione
  */
+/**
+ * Ritorna il label leggibile del ruolo
+ */
+export const getRoleLabel = (role) => {
+  return ROLE_LABELS[role] || 'Utente';
+};
+
+/**
+ * Ritorna le classi Tailwind per il colore del ruolo
+ */
+export const getRoleColor = (role) => {
+  return ROLE_COLORS[role] || 'bg-slate-100 text-slate-800';
+};
+
+/**
+ * Mappa ruolo → dashboard path
+ * TODO MIGRATION: Logica di routing deve restare nel frontend anche dopo migrazione
+ */
 export const getDashboardPath = (role) => {
   const paths = {
     [ROLES.SUPER_ADMIN]: '/dashboard/admin',
