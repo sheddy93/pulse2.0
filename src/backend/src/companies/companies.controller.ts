@@ -1,34 +1,42 @@
-import { Controller, Get, Post, Body, Param, Patch, Delete, UseGuards, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Delete, Param, UseGuards, Query } from '@nestjs/common';
 import { CompaniesService } from './companies.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('companies')
-@UseGuards(JwtAuthGuard)
 export class CompaniesController {
   constructor(private companiesService: CompaniesService) {}
 
+  @Post()
+  @UseGuards(JwtAuthGuard)
+  async create(@Body() createCompanyDto: any) {
+    return this.companiesService.create(createCompanyDto);
+  }
+
   @Get()
-  list(@Query() query: any) {
-    return this.companiesService.list(query);
+  async findAll() {
+    return this.companiesService.findAll();
   }
 
   @Get(':id')
-  get(@Param('id') id: string) {
-    return this.companiesService.get(id);
-  }
-
-  @Post()
-  create(@Body() data: any) {
-    return this.companiesService.create(data);
+  async findOne(@Param('id') id: string) {
+    return this.companiesService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() data: any) {
-    return this.companiesService.update(id, data);
+  @UseGuards(JwtAuthGuard)
+  async update(@Param('id') id: string, @Body() updateCompanyDto: any) {
+    return this.companiesService.update(id, updateCompanyDto);
   }
 
   @Delete(':id')
-  delete(@Param('id') id: string) {
+  @UseGuards(JwtAuthGuard)
+  async delete(@Param('id') id: string) {
     return this.companiesService.delete(id);
+  }
+
+  @Get('owner/:ownerId')
+  @UseGuards(JwtAuthGuard)
+  async findByOwner(@Param('ownerId') ownerId: string) {
+    return this.companiesService.findByOwnerId(ownerId);
   }
 }

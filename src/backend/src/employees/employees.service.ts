@@ -5,33 +5,37 @@ import { PrismaService } from '../prisma/prisma.service';
 export class EmployeesService {
   constructor(private prisma: PrismaService) {}
 
-  list(query: any) {
-    return this.prisma.employee.findMany({
-      where: {
-        company_id: query.company_id,
-        status: query.status || 'active',
-      },
-      skip: query.skip ? parseInt(query.skip) : 0,
-      take: query.limit ? parseInt(query.limit) : 50,
-    });
-  }
-
-  get(id: string) {
-    return this.prisma.employee.findUnique({ where: { id } });
-  }
-
-  create(data: any) {
+  async create(data: any) {
     return this.prisma.employee.create({ data });
   }
 
-  update(id: string, data: any) {
-    return this.prisma.employee.update({ where: { id }, data });
+  async findAll(companyId: string) {
+    return this.prisma.employee.findMany({
+      where: { company_id: companyId },
+    });
   }
 
-  delete(id: string) {
+  async findOne(id: string) {
+    return this.prisma.employee.findUnique({ where: { id } });
+  }
+
+  async update(id: string, data: any) {
     return this.prisma.employee.update({
       where: { id },
-      data: { status: 'inactive' },
+      data,
+    });
+  }
+
+  async delete(id: string) {
+    return this.prisma.employee.delete({ where: { id } });
+  }
+
+  async filterByCompany(companyId: string, filters: any = {}) {
+    return this.prisma.employee.findMany({
+      where: {
+        company_id: companyId,
+        ...filters,
+      },
     });
   }
 }

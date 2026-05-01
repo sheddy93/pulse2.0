@@ -5,29 +5,32 @@ import { PrismaService } from '../prisma/prisma.service';
 export class CompaniesService {
   constructor(private prisma: PrismaService) {}
 
-  list(query: any) {
-    return this.prisma.company.findMany({
-      skip: query.skip ? parseInt(query.skip) : 0,
-      take: query.limit ? parseInt(query.limit) : 50,
-    });
-  }
-
-  get(id: string) {
-    return this.prisma.company.findUnique({ where: { id } });
-  }
-
-  create(data: any) {
+  async create(data: any) {
     return this.prisma.company.create({ data });
   }
 
-  update(id: string, data: any) {
-    return this.prisma.company.update({ where: { id }, data });
+  async findAll() {
+    return this.prisma.company.findMany();
   }
 
-  delete(id: string) {
+  async findOne(id: string) {
+    return this.prisma.company.findUnique({ where: { id } });
+  }
+
+  async update(id: string, data: any) {
     return this.prisma.company.update({
       where: { id },
-      data: { deleted_at: new Date() },
+      data,
+    });
+  }
+
+  async delete(id: string) {
+    return this.prisma.company.delete({ where: { id } });
+  }
+
+  async findByOwnerId(ownerId: string) {
+    return this.prisma.company.findMany({
+      where: { owner_id: ownerId },
     });
   }
 }

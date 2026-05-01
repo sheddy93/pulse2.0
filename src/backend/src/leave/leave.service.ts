@@ -5,49 +5,41 @@ import { PrismaService } from '../prisma/prisma.service';
 export class LeaveService {
   constructor(private prisma: PrismaService) {}
 
-  getRequests(query: any) {
+  async createRequest(data: any) {
+    return this.prisma.leaveRequest.create({ data });
+  }
+
+  async findAllRequests(companyId: string) {
     return this.prisma.leaveRequest.findMany({
-      where: {
-        company_id: query.company_id,
-        status: query.status || 'pending',
-      },
-      orderBy: { created_at: 'desc' },
+      where: { company_id: companyId },
     });
   }
 
-  createRequest(userId: string, data: any) {
-    return this.prisma.leaveRequest.create({
-      data: {
-        employee_id: userId,
-        start_date: new Date(data.start_date),
-        end_date: new Date(data.end_date),
-        leave_type: data.leave_type,
-        reason: data.reason,
-        status: 'pending',
-      },
+  async findRequestById(id: string) {
+    return this.prisma.leaveRequest.findUnique({ where: { id } });
+  }
+
+  async updateRequest(id: string, data: any) {
+    return this.prisma.leaveRequest.update({
+      where: { id },
+      data,
     });
   }
 
-  getBalance(query: any) {
+  async deleteRequest(id: string) {
+    return this.prisma.leaveRequest.delete({ where: { id } });
+  }
+
+  async getLeaveBalance(employeeId: string) {
     return this.prisma.leaveBalance.findFirst({
-      where: {
-        employee_id: query.employee_id,
-        year: query.year || new Date().getFullYear(),
-      },
+      where: { employee_id: employeeId },
     });
   }
 
-  approve(id: string, data: any) {
-    return this.prisma.leaveRequest.update({
-      where: { id },
-      data: { status: 'approved', notes: data.notes },
-    });
-  }
-
-  reject(id: string, data: any) {
-    return this.prisma.leaveRequest.update({
-      where: { id },
-      data: { status: 'rejected', notes: data.reason },
+  async updateLeaveBalance(employeeId: string, data: any) {
+    return this.prisma.leaveBalance.update({
+      where: { employee_id: employeeId },
+      data,
     });
   }
 }

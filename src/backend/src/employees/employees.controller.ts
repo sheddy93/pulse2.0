@@ -1,34 +1,44 @@
-import { Controller, Get, Post, Body, Param, Patch, Delete, UseGuards, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Delete, Param, UseGuards, Query } from '@nestjs/common';
 import { EmployeesService } from './employees.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('employees')
-@UseGuards(JwtAuthGuard)
 export class EmployeesController {
   constructor(private employeesService: EmployeesService) {}
 
+  @Post()
+  @UseGuards(JwtAuthGuard)
+  async create(@Body() createEmployeeDto: any) {
+    return this.employeesService.create(createEmployeeDto);
+  }
+
   @Get()
-  list(@Query() query: any) {
-    return this.employeesService.list(query);
+  @UseGuards(JwtAuthGuard)
+  async findAll(@Query('company_id') companyId: string) {
+    return this.employeesService.findAll(companyId);
   }
 
   @Get(':id')
-  get(@Param('id') id: string) {
-    return this.employeesService.get(id);
-  }
-
-  @Post()
-  create(@Body() data: any) {
-    return this.employeesService.create(data);
+  @UseGuards(JwtAuthGuard)
+  async findOne(@Param('id') id: string) {
+    return this.employeesService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() data: any) {
-    return this.employeesService.update(id, data);
+  @UseGuards(JwtAuthGuard)
+  async update(@Param('id') id: string, @Body() updateEmployeeDto: any) {
+    return this.employeesService.update(id, updateEmployeeDto);
   }
 
   @Delete(':id')
-  delete(@Param('id') id: string) {
+  @UseGuards(JwtAuthGuard)
+  async delete(@Param('id') id: string) {
     return this.employeesService.delete(id);
+  }
+
+  @Get('company/:companyId')
+  @UseGuards(JwtAuthGuard)
+  async filterByCompany(@Param('companyId') companyId: string) {
+    return this.employeesService.filterByCompany(companyId);
   }
 }
