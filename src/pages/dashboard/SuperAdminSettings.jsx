@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
-import { Settings, Globe, Megaphone, DollarSign, Share2, Save } from "lucide-react";
+import { Settings, Globe, Megaphone, DollarSign, Share2, Save, CreditCard } from "lucide-react";
+import StripeAdminPanel from "@/components/admin/StripeAdminPanel";
 import { toast } from "sonner";
 
 const PLATFORMS = ["linkedin", "twitter", "facebook", "instagram", "github", "youtube"];
@@ -114,7 +115,8 @@ export default function SuperAdminSettings() {
             { id: "hero", label: "Hero", icon: Globe },
             { id: "pricing", label: "Pricing", icon: DollarSign },
             { id: "announcements", label: "Annunci", icon: Megaphone },
-            { id: "social", label: "Social Links", icon: Share2 }
+            { id: "social", label: "Social Links", icon: Share2 },
+            { id: "stripe", label: "Stripe & Piani", icon: CreditCard }
           ].map(tab => {
             const Icon = tab.icon;
             return (
@@ -237,6 +239,11 @@ export default function SuperAdminSettings() {
               + Nuovo Annuncio
             </button>
           </div>
+        )}
+
+        {/* Stripe */}
+        {activeTab === "stripe" && (
+          <StripeAdminPanel />
         )}
 
         {/* Social Links */}

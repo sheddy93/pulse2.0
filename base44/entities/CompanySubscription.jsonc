@@ -1,0 +1,65 @@
+{
+  "name": "CompanySubscription",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "company_email": {
+      "type": "string"
+    },
+    "plan_id": {
+      "type": "string"
+    },
+    "plan_name": {
+      "type": "string"
+    },
+    "stripe_customer_id": {
+      "type": "string"
+    },
+    "stripe_subscription_id": {
+      "type": "string"
+    },
+    "stripe_price_id": {
+      "type": "string"
+    },
+    "billing_interval": {
+      "type": "string",
+      "enum": [
+        "monthly",
+        "yearly"
+      ],
+      "default": "monthly"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "trialing",
+        "past_due",
+        "canceled",
+        "incomplete"
+      ],
+      "default": "trialing"
+    },
+    "trial_end": {
+      "type": "string"
+    },
+    "current_period_start": {
+      "type": "string"
+    },
+    "current_period_end": {
+      "type": "string"
+    },
+    "canceled_at": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "company_id",
+    "plan_id"
+  ]
+}

@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import {
   LayoutDashboard, Users, Building2, FileText, Clock, LogOut,
   Menu, X, ChevronRight, UserCog, Link2, Shield, Settings as SettingsIcon,
-  ClipboardList, Briefcase, CalendarDays, FileBadge, Activity, Monitor, BookOpen, Award, Heart, GraduationCap, BarChart3, MessageCircle, TrendingUp, MessageSquare, Receipt, Calendar, Bell
+  ClipboardList, Briefcase, CalendarDays, FileBadge, Activity, Monitor, BookOpen, Award, Heart, GraduationCap, BarChart3, MessageCircle, TrendingUp, MessageSquare, Receipt, Calendar, Bell, CreditCard
 } from "lucide-react";
 import NotificationBell from "./NotificationBell";
 
@@ -53,6 +53,7 @@ const NAV = {
     { label: "Rimborsi Spese", icon: Receipt, path: "/dashboard/company/expenses" },
     { label: "Approvazione Ferie", icon: CalendarDays, path: "/dashboard/company/leave-requests" },
     { label: "Onboarding Dipendenti", icon: Users, path: "/dashboard/company/onboarding-tracking" },
+    { label: "Abbonamento", icon: CreditCard, path: "/dashboard/company/subscription" },
     { label: "Integrazioni API", icon: SettingsIcon, path: "/dashboard/company/integrations" },
     { label: "Impostazioni", icon: SettingsIcon, path: "/dashboard/company/settings" },
   ],

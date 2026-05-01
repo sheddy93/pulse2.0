@@ -57,6 +57,7 @@ import TrainingPlanManagement from './pages/company/TrainingPlanManagement';
 import TrainingDashboard from './pages/employee/TrainingDashboard';
 import CertificationExpiry from './pages/company/CertificationExpiry';
 import SuperAdminSettings from './pages/dashboard/SuperAdminSettings';
+import SubscriptionPage from './pages/company/SubscriptionPage';
 import TrainingPortal from './pages/employee/TrainingPortal';
 import PersonalDocuments from './pages/employee/PersonalDocuments';
 import PerformanceFeedback from './pages/employee/PerformanceFeedback';
@@ -162,6 +163,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/company/onboarding-tracking" element={<OnboardingTracking />} />
       <Route path="/dashboard/company/training-plans" element={<TrainingPlanManagement />} />
       <Route path="/dashboard/company/certification-expiry" element={<CertificationExpiry />} />
+      <Route path="/dashboard/company/subscription" element={<SubscriptionPage />} />
       <Route path="/dashboard/company/settings" element={<ComingSoon title="Impostazioni azienda" dashboardPath="/dashboard/company" />} />
 
       {/* Employee */}
