@@ -1,89 +1,107 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 /**
- * Notifica HR team su alert geofence con workflow
+ * Notify HR Geofence Alert - IMPROVED ERROR HANDLING
+ * Alerts HR team when employee clocks in outside geofence
  */
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
-    const { alert_id, employee_name, location_name, distance_meters, severity, workflow_approval_id } = await req.json();
+    const body = await req.json();
+    const { employee_id, employee_name, employee_email, location_name, distance_km } = body;
 
-    // Ottieni alert per company_id
-    const alerts = await base44.asServiceRole.entities.OutOfGeofenceAlert.filter({
-      id: alert_id
-    });
-
-    if (!alerts[0]) {
-      return Response.json({ error: 'Alert not found' }, { status: 404 });
+    if (!employee_id || !location_name) {
+      console.error('[GEOFENCE] Missing required alert data');
+      return Response.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    const alert = alerts[0];
-    const company_id = alert.company_id;
+    console.log(`[GEOFENCE] Alert for ${employee_name} at ${location_name} (${distance_km}km away)`);
 
-    // Ottieni HR managers
-    const admins = await base44.asServiceRole.entities.User.filter({
-      company_id,
-      role: { $in: ['company_admin', 'hr_manager'] }
+    // Create alert record
+    const alert = await base44.asServiceRole.entities.OutOfGeofenceAlert.create({
+      employee_id,
+      employee_name,
+      employee_email,
+      location_name,
+      distance_km,
+      alert_type: distance_km > 10 ? 'critical' : 'warning',
+      status: 'pending',
+      created_at: new Date().toISOString()
     });
 
-    if (admins.length === 0) {
-      console.log('No HR managers found');
-      return Response.json({ notified: 0 });
+    // Find HR managers for this company
+    const company = await base44.asServiceRole.entities.Company.filter({ id: body.company_id });
+    if (!company.length) {
+      console.warn('[GEOFENCE] Company not found');
+      return Response.json({ success: false, error: 'Company not found' }, { status: 404 });
     }
 
-    const severityEmojis = { high: '🔴', medium: '🟡', low: '🟢' };
-    const emoji = severityEmojis[severity] || '🟡';
-
-    const emailBody = `
-${emoji} GEOFENCE ALERT - Clock-in fuori dal perimetro
-
-Dipendente: ${employee_name}
-Sede: ${location_name}
-Distanza: ${distance_meters}m
-Severità: ${severity.toUpperCase()}
-Timestamp: ${new Date().toISOString()}
-
-${workflow_approval_id ? `
-📋 Workflow di approvazione ID: ${workflow_approval_id}
-Azione richiesta: Revisione e approvazione
-` : ''}
-
-Accedi alla dashboard per maggiori dettagli.
-    `.trim();
-
-    const hrEmails = admins.map(a => a.email);
-
-    // Invia email notifica
-    await base44.asServiceRole.integrations.Core.SendEmail({
-      to: hrEmails.join(','),
-      subject: `${emoji} [Geofence Alert] ${employee_name} - Clock-in fuori sede`,
-      body: emailBody,
-      from_name: 'PulseHR System'
+    const hrManagers = await base44.asServiceRole.entities.User.filter({
+      role: { $in: ['hr_manager', 'company_admin'] },
+      company_id: body.company_id
     });
 
-    // Registra notifiche
-    const sentToEmails = admins.map(a => a.email);
-    await base44.asServiceRole.entities.OutOfGeofenceAlert.update(alert_id, {
-      alert_sent_to: sentToEmails
-    });
+    // Send notifications
+    const notificationResults = [];
+    for (const manager of hrManagers) {
+      try {
+        const severity = distance_km > 10 ? '🔴 CRITICA' : '🟡 AVVISO';
+        
+        await base44.integrations.Core.SendEmail({
+          to: manager.email,
+          subject: `${severity} Anomalia geofence: ${employee_name}`,
+          body: `
+L'employee ${employee_name} ha registrato un check-in a ${distance_km}km di distanza da ${location_name}.
+Verificare se è un errore GPS o un'assenza autorizzata.
+          `
+        });
 
-    // Crea audit log
-    await base44.asServiceRole.functions.invoke('createAuditLog', {
-      company_id,
-      action: 'geofence_alert_notification_sent',
-      details: {
-        alert_id,
-        employee_name,
-        distance_meters,
-        notified_count: hrEmails.length
+        notificationResults.push({
+          manager: manager.email,
+          status: 'sent'
+        });
+
+        console.log(`[GEOFENCE] Notified ${manager.email}`);
+      } catch (emailErr) {
+        console.warn(`[GEOFENCE] Email to ${manager.email} failed:`, emailErr.message);
+        notificationResults.push({
+          manager: manager.email,
+          status: 'failed',
+          error: emailErr.message
+        });
       }
+    }
+
+    // Log alert
+    await base44.asServiceRole.entities.AuditLog.create({
+      action: 'geofence_alert',
+      entity_name: 'OutOfGeofenceAlert',
+      entity_id: alert.id,
+      details: {
+        employee_name,
+        location_name,
+        distance_km,
+        notifications_sent: notificationResults.filter(r => r.status === 'sent').length
+      },
+      timestamp: new Date().toISOString()
     });
 
-    console.log(`✉️ Notified ${hrEmails.length} HR managers about geofence alert`);
-    return Response.json({ notified: hrEmails.length, emails: hrEmails });
-
+    return Response.json({
+      success: true,
+      alert_id: alert.id,
+      notifications_sent: notificationResults.filter(r => r.status === 'sent').length,
+      results: notificationResults
+    });
   } catch (error) {
-    console.error('❌ Error in notifyHRGeofenceAlert:', error);
-    return Response.json({ error: error.message }, { status: 500 });
+    console.error('[GEOFENCE ALERT ERROR]:', {
+      message: error.message,
+      stack: error.stack,
+      timestamp: new Date().toISOString()
+    });
+
+    return Response.json(
+      { error: error.message, code: 'GEOFENCE_ALERT_FAILED' },
+      { status: 500 }
+    );
   }
 });

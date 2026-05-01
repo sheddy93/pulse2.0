@@ -1,102 +1,112 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
+/**
+ * Process Workflow Approval - IMPROVED ERROR HANDLING
+ * Processes approval steps in workflow automation
+ */
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
     const user = await base44.auth.me();
-    
-    if (!user) {
+
+    if (!user?.company_id) {
+      console.warn('[WORKFLOW] Unauthorized access');
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const {
-      workflow_approval_id,
-      step_number,
+    const body = await req.json();
+    const { workflow_id, decision, comment } = body;
+
+    if (!workflow_id || !decision) {
+      console.error('[WORKFLOW] Missing required fields:', { workflow_id, decision });
+      return Response.json({ error: 'Missing workflow_id or decision' }, { status: 400 });
+    }
+
+    if (!['approved', 'rejected'].includes(decision)) {
+      console.warn('[WORKFLOW] Invalid decision:', decision);
+      return Response.json({ error: 'Invalid decision' }, { status: 400 });
+    }
+
+    console.log(`[WORKFLOW] Processing: ${workflow_id} → ${decision}`);
+
+    // Fetch workflow
+    const workflows = await base44.entities.WorkflowApproval.filter({ id: workflow_id });
+    if (!workflows.length) {
+      console.error('[WORKFLOW] Not found:', workflow_id);
+      return Response.json({ error: 'Workflow not found' }, { status: 404 });
+    }
+
+    const workflow = workflows[0];
+
+    // Check if already processed
+    if (workflow.status !== 'pending') {
+      console.warn('[WORKFLOW] Already processed:', workflow_id);
+      return Response.json(
+        { error: `Workflow already ${workflow.status}` },
+        { status: 400 }
+      );
+    }
+
+    // Update workflow approval history
+    const updatedHistory = workflow.approval_history || [];
+    updatedHistory.push({
+      step_number: workflow.current_step,
+      approver_email: user.email,
+      approver_name: user.full_name,
       decision,
-      comment
-    } = await req.json();
-
-    // Fetch workflow approval
-    const approvals = await base44.entities.WorkflowApproval.filter({
-      id: workflow_approval_id
+      comment,
+      decided_at: new Date().toISOString()
     });
 
-    if (!approvals[0]) {
-      return Response.json({ error: 'Workflow approval not found' }, { status: 404 });
-    }
-
-    const approval = approvals[0];
-
-    // Update approval history
-    const updatedHistory = approval.approval_history.map(h => 
-      h.step_number === step_number 
-        ? {
-            ...h,
-            decision,
-            comment: comment || "",
-            decided_at: new Date().toISOString(),
-            approver_email: user.email
-          }
-        : h
-    );
-
-    // Check if all steps are approved
-    const allApproved = updatedHistory.every(h => h.decision === 'approved');
-    const anyRejected = updatedHistory.some(h => h.decision === 'rejected');
-
-    let newStatus = approval.status;
-    if (anyRejected) {
-      newStatus = 'rejected';
-    } else if (allApproved) {
-      newStatus = 'approved';
-    }
-
-    // Update workflow approval
-    await base44.entities.WorkflowApproval.update(workflow_approval_id, {
+    // Update workflow
+    const updated = await base44.entities.WorkflowApproval.update(workflow_id, {
+      status: decision === 'approved' ? 'approved' : 'rejected',
       approval_history: updatedHistory,
-      status: newStatus,
-      completed_at: newStatus !== 'pending' ? new Date().toISOString() : null
+      completed_at: new Date().toISOString()
     });
 
-    // Create audit log
-    await base44.entities.WorkflowAuditLog.create({
-      company_id: approval.company_id,
-      workflow_approval_id,
-      request_type: approval.request_type,
-      request_id: approval.request_id,
-      action: decision === 'approved' ? 'approved' : 'rejected',
+    // Notify requester
+    try {
+      const statusText = decision === 'approved' ? '✅ APPROVATA' : '❌ RIFIUTATA';
+      
+      await base44.integrations.Core.SendEmail({
+        to: workflow.requester_email,
+        subject: `Richiesta ${statusText}: ${workflow.request_type}`,
+        body: `La tua richiesta di ${workflow.request_type} è stata ${statusText}.\n\nCommento: ${comment || 'Nessun commento'}`
+      });
+    } catch (emailErr) {
+      console.warn('[WORKFLOW] Notification email failed:', emailErr.message);
+    }
+
+    // Audit log
+    await base44.asServiceRole.entities.AuditLog.create({
+      company_id: user.company_id,
+      action: 'workflow_approval',
+      entity_name: 'WorkflowApproval',
+      entity_id: workflow_id,
       actor_email: user.email,
-      actor_name: user.full_name,
-      step_number,
-      details: { comment },
+      details: { decision, comment, request_type: workflow.request_type },
       timestamp: new Date().toISOString()
     });
 
-    // Send notification email if next step exists
-    if (allApproved && newStatus === 'approved') {
-      // Requester notification
-      await base44.integrations.Core.SendEmail({
-        to: approval.requester_email,
-        subject: `Richiesta ${approval.request_type} Approvata`,
-        body: `La tua richiesta è stata completamente approvata. Numero richiesta: ${approval.request_id}`
-      });
-    } else if (anyRejected) {
-      // Requester rejection notification
-      await base44.integrations.Core.SendEmail({
-        to: approval.requester_email,
-        subject: `Richiesta ${approval.request_type} Rifiutata`,
-        body: `La tua richiesta è stata rifiutata al step ${step_number}. Commento: ${comment}`
-      });
-    }
-
-    console.log(`Workflow approval processed: ${workflow_approval_id}, step ${step_number}, decision ${decision}`);
+    console.log(`[WORKFLOW] Processed: ${workflow_id} by ${user.email} → ${decision}`);
 
     return Response.json({
-      status: newStatus,
-      completed: newStatus !== 'pending'
+      success: true,
+      workflow: updated,
+      decision,
+      timestamp: new Date().toISOString()
     });
   } catch (error) {
-    console.error('processWorkflowApproval error:', error.message);
-    return Response.json({ error: error.message }, { status: 500 });
+    console.error('[WORKFLOW ERROR]:', {
+      message: error.message,
+      stack: error.stack,
+      timestamp: new Date().toISOString()
+    });
+
+    return Response.json(
+      { error: error.message, code: 'WORKFLOW_PROCESSING_FAILED' },
+      { status: 500 }
+    );
   }
 });

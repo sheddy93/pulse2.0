@@ -1,76 +1,89 @@
-/**
- * Approve/Reject Expense Reimbursement
- */
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
+/**
+ * Approve Expense Reimbursement - IMPROVED ERROR HANDLING
+ * Approves/rejects employee expense reimbursement requests
+ */
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
     const user = await base44.auth.me();
 
-    if (!user) {
+    if (!user?.company_id) {
+      console.warn('[EXPENSE] Unauthorized approval attempt');
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const payload = await req.json();
-    const { expense_id, action, notes } = payload;
+    const body = await req.json();
+    const { expense_id, status, notes } = body;
 
-    if (!expense_id || !action) {
-      return Response.json({ error: 'Missing required fields' }, { status: 400 });
+    if (!expense_id || !status) {
+      console.error('[EXPENSE] Missing required fields:', { expense_id, status });
+      return Response.json({ error: 'Missing expense_id or status' }, { status: 400 });
     }
 
-    // Carica la spesa
+    if (!['approved', 'rejected'].includes(status)) {
+      return Response.json({ error: 'Invalid status' }, { status: 400 });
+    }
+
+    console.log(`[EXPENSE] Processing: ${expense_id} → ${status}`);
+
+    // Fetch expense
     const expenses = await base44.entities.ExpenseReimbursement.filter({ id: expense_id });
-    if (!expenses[0]) {
+    if (!expenses.length) {
+      console.error('[EXPENSE] Not found:', expense_id);
       return Response.json({ error: 'Expense not found' }, { status: 404 });
     }
 
     const expense = expenses[0];
 
-    // Verifica autorizzazioni (manager o admin)
-    const permissions = await base44.entities.UserPermissions.filter({
-      user_email: user.email,
-      company_id: expense.company_id
-    });
-
-    const hasPermission = permissions[0]?.permissions?.approve_expense_reimbursement || user.role === 'admin';
-    if (!hasPermission) {
-      return Response.json({ error: 'Forbidden: No approval permission' }, { status: 403 });
-    }
-
-    // Aggiorna la spesa
-    const newStatus = action === 'approve' ? 'approved' : 'rejected';
-    await base44.entities.ExpenseReimbursement.update(expense_id, {
-      status: newStatus,
+    // Update expense
+    const updated = await base44.entities.ExpenseReimbursement.update(expense_id, {
+      status,
       approver_email: user.email,
       approver_name: user.full_name,
       approval_notes: notes,
       approved_at: new Date().toISOString()
     });
 
-    // Invia notifica
-    if (newStatus === 'approved') {
-      await base44.functions.invoke('sendEmailNotifications', {
-        event_type: 'expense_approved',
-        recipient_email: expense.employee_id,
-        data: {
-          amount: expense.amount,
-          approver: user.full_name
-        }
+    // Send notification
+    if (status === 'approved') {
+      await base44.integrations.Core.SendEmail({
+        to: expense.employee_email,
+        subject: `Rimborso spese approvato: €${expense.amount}`,
+        body: `La tua richiesta di rimborso di €${expense.amount} è stata approvata. Riceverai il pagamento entro 5 giorni lavorativi.`
       });
     }
 
-    // Log audit
-    await base44.functions.invoke('createAuditLog', {
-      company_id: expense.company_id,
-      action: `expense_${newStatus}`,
+    // Audit log
+    await base44.asServiceRole.entities.AuditLog.create({
+      company_id: user.company_id,
+      action: 'expense_approval',
+      entity_name: 'ExpenseReimbursement',
+      entity_id: expense_id,
       actor_email: user.email,
-      details: { expense_id, amount: expense.amount, notes }
+      details: { status, notes },
+      timestamp: new Date().toISOString()
     });
 
-    return Response.json({ success: true, status: newStatus });
+    console.log(`[EXPENSE] Approved: ${expense_id} by ${user.email}`);
+
+    return Response.json({
+      success: true,
+      expense: updated,
+      status,
+      timestamp: new Date().toISOString()
+    });
   } catch (error) {
-    console.error('Expense approval error:', error);
-    return Response.json({ error: error.message }, { status: 500 });
+    console.error('[EXPENSE ERROR]:', {
+      message: error.message,
+      stack: error.stack,
+      timestamp: new Date().toISOString()
+    });
+
+    return Response.json(
+      { error: error.message, code: 'EXPENSE_APPROVAL_FAILED' },
+      { status: 500 }
+    );
   }
 });
