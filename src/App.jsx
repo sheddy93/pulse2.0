@@ -85,6 +85,7 @@ import TrainingDashboard from './pages/employee/TrainingDashboard';
 import CertificationExpiry from './pages/company/CertificationExpiry';
 import SuperAdminSettings from './pages/dashboard/SuperAdminSettings';
 import Tier2Dashboard from './pages/dashboard/Tier2Dashboard';
+import FeatureManagement from './pages/dashboard/FeatureManagement';
 import TemporaryLogins from './pages/dashboard/TemporaryLogins';
 import PricingManagement from './pages/dashboard/PricingManagement';
 import PricingPageNew from './pages/company/PricingPageNew';
@@ -181,6 +182,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/admin/tier2" element={<Tier2Dashboard />} />
       <Route path="/dashboard/admin/temporary-logins" element={<TemporaryLogins />} />
       <Route path="/dashboard/admin/pricing" element={<PricingManagement />} />
+      <Route path="/dashboard/admin/features" element={<FeatureManagement />} />
       <Route path="/dashboard/admin/companies" element={<AdminCompanies />} />
       <Route path="/dashboard/admin/users" element={<AdminUsers />} />
       <Route path="/dashboard/admin/system" element={<AdminSystem />} />

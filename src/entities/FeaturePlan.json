@@ -1,0 +1,55 @@
+{
+  "name": "FeaturePlan",
+  "type": "object",
+  "properties": {
+    "feature_key": {
+      "type": "string",
+      "description": "Identificatore univoco feature (es. 'geofence_management', 'training_module')",
+      "unique": true
+    },
+    "feature_name": {
+      "type": "string",
+      "description": "Nome leggibile della feature"
+    },
+    "description": {
+      "type": "string",
+      "description": "Descrizione dettagliata della feature"
+    },
+    "category": {
+      "type": "string",
+      "enum": ["attendance", "documents", "payroll", "training", "performance", "shifts", "analytics", "integrations", "custom"],
+      "description": "Categoria feature"
+    },
+    "available_for_roles": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["super_admin", "company_owner", "company_admin", "hr_manager", "manager", "consultant", "employee"]
+      },
+      "description": "Ruoli che possono accedere alla feature"
+    },
+    "tier_requirements": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["startup", "professional", "enterprise"]
+      },
+      "description": "Piano di sottoscrizione required"
+    },
+    "monthly_cost": {
+      "type": "number",
+      "default": 0,
+      "description": "Costo mensile aggiuntivo (0 se incluso)"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Feature abilitata globalmente"
+    },
+    "sort_order": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": ["feature_key", "feature_name", "category"]
+}

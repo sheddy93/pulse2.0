@@ -96,11 +96,11 @@ const CONSULTANT_NAV = [
 const NAV = {
   super_admin: [
     { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard/admin" },
-    { label: "TIER 2 Status", icon: TrendingUp, path: "/dashboard/admin/tier2" },
-    { label: "Analytics", icon: Activity, path: "/dashboard/admin/analytics" },
+    { label: "Feature Management", icon: Zap, path: "/dashboard/admin/features" },
+    { label: "Pricing Plans", icon: CreditCard, path: "/dashboard/admin/pricing" },
     { label: "Aziende", icon: Building2, path: "/dashboard/admin/companies" },
-    { label: "Login Temporanei", icon: Users, path: "/dashboard/admin/temporary-logins" },
     { label: "Utenti", icon: Users, path: "/dashboard/admin/users" },
+    { label: "Analytics", icon: Activity, path: "/dashboard/admin/analytics" },
     { label: "Settings", icon: SettingsIcon, path: "/dashboard/admin/settings" },
   ],
   consultant: CONSULTANT_NAV,

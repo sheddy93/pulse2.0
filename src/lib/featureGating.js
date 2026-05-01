@@ -1,105 +1,137 @@
-/**
- * Feature Gating System
- * Controlla quali feature sono disponibili in base al piano e agli add-ons acquistati
- */
-import React from 'react';
 import { base44 } from '@/api/base44Client';
 
-export const FEATURES = {
-  // Base features per piano
-  core_hr: { tier: 'startup', addon: null },
-  attendance: { tier: 'startup', addon: null },
-  leave_management: { tier: 'startup', addon: null },
-  basic_analytics: { tier: 'startup', addon: null },
-  
-  // Professional features
-  performance_reviews: { tier: 'professional', addon: null },
-  advanced_analytics: { tier: 'professional', addon: null },
-  workflow_automation: { tier: 'professional', addon: null },
-  
-  // Enterprise features
-  custom_reports: { tier: 'enterprise', addon: 'custom_reports' },
-  sso: { tier: 'enterprise', addon: 'sso' },
-  white_label: { tier: 'enterprise', addon: 'white_label' },
-  api_access: { tier: 'enterprise', addon: null },
-  
-  // Add-on features
-  extra_employees: { tier: null, addon: 'extra_employees' },
-  storage_gb: { tier: null, addon: 'storage_gb' },
-  api_calls: { tier: null, addon: 'api_calls' },
-};
+let featuresCache = null;
+let cacheTime = 0;
+const CACHE_DURATION = 5 * 60 * 1000; // 5 min
 
 /**
- * Controlla se una feature è disponibile per l'azienda
+ * Ottiene tutte le feature disponibili
  */
-export async function hasFeature(base44, companyId, featureName) {
-  const feature = FEATURES[featureName];
-  if (!feature) return false;
+export async function getAllFeatures() {
+  const now = Date.now();
+  
+  // Usa cache se valido
+  if (featuresCache && (now - cacheTime) < CACHE_DURATION) {
+    return featuresCache;
+  }
 
   try {
-    const subscriptions = await base44.entities.CompanySubscription.filter({ 
-      company_id: companyId,
-      status: 'active'
-    });
-
-    if (!subscriptions[0]) return false;
-
-    const subscription = subscriptions[0];
-
-    // Check tier
-    if (feature.tier) {
-      const tierHierarchy = { startup: 1, professional: 2, enterprise: 3 };
-      const requiredTier = tierHierarchy[feature.tier] || 0;
-      const currentTier = tierHierarchy[subscription.plan_tier] || 0;
-      if (currentTier < requiredTier) return false;
-    }
-
-    // Check add-on
-    if (feature.addon) {
-      const hasAddon = subscription.selected_addons?.some(a => a.addon_type === feature.addon);
-      if (!hasAddon) return false;
-    }
-
-    return true;
+    const features = await base44.entities.FeaturePlan.list();
+    featuresCache = features;
+    cacheTime = now;
+    return features;
   } catch (error) {
-    console.error(`Feature gate error for ${featureName}:`, error);
-    return false;
+    console.warn('Error loading features:', error);
+    return [];
   }
 }
 
 /**
- * Ottieni tutte le feature disponibili per un'azienda
+ * Verifica se una feature è abilitata per un utente
  */
-export async function getAvailableFeatures(base44, companyId) {
-  const available = {};
-  
-  for (const featureName of Object.keys(FEATURES)) {
-    available[featureName] = await hasFeature(base44, companyId, featureName);
+export async function isFeatureEnabled(featureKey, user, subscription) {
+  const features = await getAllFeatures();
+  const feature = features.find(f => f.feature_key === featureKey);
+
+  if (!feature || !feature.is_active) {
+    return false;
   }
-  
+
+  // Verifica ruolo
+  if (feature.available_for_roles && !feature.available_for_roles.includes(user?.role)) {
+    return false;
+  }
+
+  // Verifica tier di sottoscrizione
+  if (feature.tier_requirements && feature.tier_requirements.length > 0) {
+    if (!subscription || !feature.tier_requirements.includes(subscription.plan)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+/**
+ * Ottiene features disponibili per un utente
+ */
+export async function getUserFeatures(user, subscription) {
+  const features = await getAllFeatures();
+  const available = [];
+
+  for (const feature of features) {
+    if (await isFeatureEnabled(feature.feature_key, user, subscription)) {
+      available.push(feature);
+    }
+  }
+
   return available;
 }
 
 /**
- * Hook React per feature gating nei componenti
+ * Feature mapping per navigazione
  */
-export function useFeatureGate(featureName) {
-  const [hasAccess, setHasAccess] = React.useState(false);
-  const [loading, setLoading] = React.useState(true);
+export const FEATURE_MAP = {
+  // Attendance
+  'attendance_tracking': { path: '/dashboard/employee/attendance', role: 'employee' },
+  'geofence_management': { path: '/dashboard/company/geofence', role: 'company_admin' },
+  'attendance_analytics': { path: '/dashboard/company/attendance', role: 'company_admin' },
+  
+  // Documents
+  'document_management': { path: '/dashboard/company/documents', role: 'company_admin' },
+  'document_templates': { path: '/dashboard/company/document-templates', role: 'company_admin' },
+  'document_signature': { path: '/dashboard/employee/documents', role: 'employee' },
+  
+  // Payroll
+  'payroll_management': { path: '/dashboard/company/payroll-export', role: 'company_admin' },
+  'expense_reimbursement': { path: '/dashboard/company/expenses', role: 'company_admin' },
+  
+  // Training
+  'training_management': { path: '/dashboard/company/training', role: 'company_admin' },
+  'training_portal': { path: '/dashboard/employee/training', role: 'employee' },
+  'certification_tracking': { path: '/dashboard/company/certification-expiry', role: 'company_admin' },
+  
+  // Performance
+  'performance_reviews': { path: '/dashboard/company/performance', role: 'company_admin' },
+  'feedback_360': { path: '/dashboard/employee/feedback', role: 'employee' },
+  
+  // Shifts
+  'shift_management': { path: '/dashboard/company/shifts', role: 'company_admin' },
+  'shift_calendar': { path: '/dashboard/employee/shifts', role: 'employee' },
+  
+  // Analytics
+  'hr_analytics': { path: '/dashboard/company/analytics', role: 'company_admin' },
+  'ai_analytics': { path: '/dashboard/company/ai-analytics', role: 'company_admin' },
+  
+  // Integrations
+  'slack_integration': { path: '/dashboard/company/integrations', role: 'company_admin' },
+  'calendar_sync': { path: '/dashboard/company/integrations', role: 'company_admin' },
+  'api_access': { path: '/dashboard/company/api', role: 'company_admin' }
+};
 
-  React.useEffect(() => {
-    (async () => {
-      try {
-        const me = await base44.auth.me();
-        const access = await hasFeature(base44, me.company_id, featureName);
-        setHasAccess(access);
-      } catch (error) {
-        console.error(`Feature gate check failed:`, error);
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, [featureName]);
+/**
+ * Filtra navigation items in base alle feature abilitate
+ */
+export async function filterNavItems(navItems, user, subscription) {
+  const features = await getUserFeatures(user, subscription);
+  const enabledFeatureKeys = features.map(f => f.feature_key);
 
-  return { hasAccess, loading };
+  // Mapping item.path -> feature_key (customizzabile per esigenze specifiche)
+  const pathToFeature = {
+    '/dashboard/company/geofence': 'geofence_management',
+    '/dashboard/company/training': 'training_management',
+    '/dashboard/company/performance': 'performance_reviews',
+    '/dashboard/company/shifts': 'shift_management',
+    '/dashboard/company/analytics': 'hr_analytics',
+    '/dashboard/company/ai-analytics': 'ai_analytics',
+    '/dashboard/employee/training': 'training_portal',
+    '/dashboard/employee/feedback': 'feedback_360',
+    '/dashboard/employee/shifts': 'shift_calendar',
+  };
+
+  return navItems.filter(item => {
+    const featureKey = pathToFeature[item.path];
+    if (!featureKey) return true; // Se non mappata, mostra sempre
+    return enabledFeatureKeys.includes(featureKey);
+  });
 }
