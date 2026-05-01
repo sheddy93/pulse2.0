@@ -4,23 +4,41 @@ import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import { Users, Clock, FileText, CalendarDays, TrendingUp, Bell } from "lucide-react";
 import { Link } from "react-router-dom";
+import OnboardingChecklist from "@/components/dashboard/OnboardingChecklist";
 
 export default function CompanyDashboard() {
   const [user, setUser] = useState(null);
+  const [company, setCompany] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [stats, setStats] = useState({ employees: 0, pendingLeave: 0, pendingOvertime: 0, documents: 0 });
+  const [stats, setStats] = useState({ employees: 0, pendingLeave: 0, pendingOvertime: 0, documents: 0, hasAdmin: false, hasConsultant: false, settingsComplete: false });
+  const [showChecklist, setShowChecklist] = useState(true);
 
   useEffect(() => {
     base44.auth.me().then(async (me) => {
       setUser(me);
       if (me.company_id) {
-        const [employees, leaves, overtime, docs] = await Promise.all([
+        const [employees, leaves, overtime, docs, links, companies, allUsers] = await Promise.all([
           base44.entities.EmployeeProfile.filter({ company_id: me.company_id, status: "active" }),
           base44.entities.LeaveRequest.filter({ company_id: me.company_id, status: "pending" }),
           base44.entities.OvertimeRequest.filter({ company_id: me.company_id, status: "pending" }),
-          base44.entities.Document.filter({ company_id: me.company_id, status: "in_revisione" }),
+          base44.entities.Document.filter({ company_id: me.company_id }),
+          base44.entities.ConsultantCompanyLink.filter({ company_id: me.company_id, status: "approved" }),
+          base44.entities.Company.filter({ id: me.company_id }),
+          base44.entities.User.list(),
         ]);
-        setStats({ employees: employees.length, pendingLeave: leaves.length, pendingOvertime: overtime.length, documents: docs.length });
+        const comp = companies[0];
+        setCompany(comp);
+        const adminUsers = allUsers.filter(u => u.company_id === me.company_id && ["company_admin", "hr_manager", "manager"].includes(u.role));
+        const settingsComplete = !!(comp?.vat_number && comp?.email && comp?.phone && comp?.address);
+        setStats({
+          employees: employees.length,
+          pendingLeave: leaves.length,
+          pendingOvertime: overtime.length,
+          documents: docs.filter(d => d.status === "in_revisione").length,
+          hasAdmin: adminUsers.length > 0,
+          hasConsultant: links.length > 0,
+          settingsComplete,
+        });
       }
     }).finally(() => setLoading(false));
   }, []);
@@ -32,8 +50,12 @@ export default function CompanyDashboard() {
       <div className="p-6 max-w-6xl mx-auto space-y-6">
         <div>
           <h1 className="text-2xl font-bold text-slate-800">Dashboard Aziendale</h1>
-          <p className="text-sm text-slate-500">Panoramica della tua azienda</p>
+          <p className="text-sm text-slate-500">{company?.name || "Panoramica della tua azienda"}</p>
         </div>
+
+        {showChecklist && stats.employees === 0 && (
+          <OnboardingChecklist stats={stats} onDismiss={() => setShowChecklist(false)} />
+        )}
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
-import { getDashboardPath } from "@/lib/roles";
+import { getDashboardPath, isCompanyRole, isConsultantRole } from "@/lib/roles";
 
 export default function RoleRedirect() {
   const navigate = useNavigate();

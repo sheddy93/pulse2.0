@@ -54,6 +54,19 @@
     },
     "temp_password": {
       "type": "string"
+    },
+    "internal_notes": {
+      "type": "string"
+    },
+    "is_deleted": {
+      "type": "boolean",
+      "default": false
+    },
+    "deleted_at": {
+      "type": "string"
+    },
+    "deleted_by": {
+      "type": "string"
     }
   },
   "required": [

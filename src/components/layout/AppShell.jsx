@@ -7,8 +7,55 @@ import {
   Menu, X, ChevronRight, UserCog, Link2, Shield, Settings as SettingsIcon,
   ClipboardList, Briefcase, CalendarDays, FileBadge, Activity, Monitor, BookOpen, Award, Heart, GraduationCap, BarChart3, MessageCircle, TrendingUp, MessageSquare, Receipt, Calendar, Bell, CreditCard, Sparkles
 } from "lucide-react";
+import { getRoleLabel, getRoleColor, isCompanyRole, isConsultantRole } from "@/lib/roles";
 import NotificationBell from "./NotificationBell";
 import HRAssistantWidget from "@/components/assistant/HRAssistantWidget";
+
+// Shared company nav (used by all company roles)
+const COMPANY_NAV = [
+    { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard/company" },
+    { label: "Dipendenti", icon: Users, path: "/dashboard/company/employees" },
+    { label: "Aggiungi lavoratore", icon: UserCog, path: "/dashboard/company/employees/new" },
+    { label: "Admin Aziendali", icon: Shield, path: "/dashboard/company/admins" },
+    { label: "Consulenti", icon: Briefcase, path: "/dashboard/company/consultants" },
+    { label: "Turni settimanali", icon: CalendarDays, path: "/dashboard/company/shifts" },
+    { label: "Presenze", icon: Clock, path: "/dashboard/company/attendance" },
+    { label: "Straordinari", icon: Clock, path: "/dashboard/company/overtime" },
+    { label: "Approvazione Ferie", icon: CalendarDays, path: "/dashboard/company/leave-requests" },
+    { label: "Competenze", icon: Award, path: "/dashboard/company/skills" },
+    { label: "Benefit", icon: Heart, path: "/dashboard/company/benefits" },
+    { label: "Annunci", icon: FileText, path: "/dashboard/company/announcements" },
+    { label: "Gestione asset", icon: Monitor, path: "/dashboard/company/assets" },
+    { label: "Documenti", icon: FileText, path: "/dashboard/company/documents" },
+    { label: "Corsi di Formazione", icon: GraduationCap, path: "/dashboard/company/training" },
+    { label: "Valutazioni 360°", icon: BarChart3, path: "/dashboard/company/performance" },
+    { label: "HR Analytics", icon: TrendingUp, path: "/dashboard/company/analytics" },
+    { label: "Analytics IA", icon: Sparkles, path: "/dashboard/company/ai-analytics" },
+    { label: "Rimborsi Spese", icon: Receipt, path: "/dashboard/company/expenses" },
+    { label: "Abbonamento", icon: CreditCard, path: "/dashboard/company/subscription" },
+    { label: "Impostazioni", icon: SettingsIcon, path: "/dashboard/company/settings" },
+];
+
+const MANAGER_NAV = [
+    { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard/company" },
+    { label: "Dipendenti", icon: Users, path: "/dashboard/company/employees" },
+    { label: "Presenze", icon: Clock, path: "/dashboard/company/attendance" },
+    { label: "Approvazione Ferie", icon: CalendarDays, path: "/dashboard/company/leave-requests" },
+    { label: "Straordinari", icon: Clock, path: "/dashboard/company/overtime" },
+    { label: "Turni settimanali", icon: CalendarDays, path: "/dashboard/company/shifts" },
+    { label: "Annunci", icon: FileText, path: "/dashboard/company/announcements" },
+];
+
+// Shared consultant nav
+const CONSULTANT_NAV = [
+    { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard/consultant" },
+    { label: "Aziende clienti", icon: Building2, path: "/dashboard/consultant/companies" },
+    { label: "Dipendenti", icon: Users, path: "/dashboard/consultant/employees" },
+    { label: "Richieste collegamento", icon: Link2, path: "/dashboard/consultant/link-requests" },
+    { label: "Revisione Documenti", icon: FileText, path: "/dashboard/consultant/document-review" },
+    { label: "Calendario HR", icon: Calendar, path: "/dashboard/consultant/calendar" },
+    { label: "Impostazioni", icon: SettingsIcon, path: "/dashboard/consultant/settings" },
+];
 
 const NAV = {
   super_admin: [
@@ -18,47 +65,15 @@ const NAV = {
     { label: "Utenti", icon: Users, path: "/dashboard/admin/users" },
     { label: "Settings", icon: SettingsIcon, path: "/dashboard/admin/settings" },
   ],
-  consultant: [
-    { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard/consultant" },
-    { label: "Aziende clienti", icon: Building2, path: "/dashboard/consultant/companies" },
-    { label: "Dipendenti", icon: Users, path: "/dashboard/consultant/employees" },
-    { label: "Richieste collegamento", icon: Link2, path: "/dashboard/consultant/link-requests" },
-    { label: "Revisione Documenti", icon: FileText, path: "/dashboard/consultant/document-review" },
-    { label: "Calendario HR", icon: Calendar, path: "/dashboard/consultant/calendar" },
-    { label: "Impostazioni", icon: SettingsIcon, path: "/dashboard/consultant/settings" },
-  ],
-  company: [
-    { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard/company" },
-    { label: "Dipendenti", icon: Users, path: "/dashboard/company/employees" },
-    { label: "Aggiungi lavoratore", icon: UserCog, path: "/dashboard/company/employees/new" },
-    { label: "Consulenti", icon: Briefcase, path: "/dashboard/company/consultants" },
-    { label: "Turni settimanali", icon: CalendarDays, path: "/dashboard/company/shifts" },
-    { label: "Presenze", icon: Clock, path: "/dashboard/company/attendance" },
-    { label: "Straordinari", icon: Clock, path: "/dashboard/company/overtime" },
-    { label: "Competenze", icon: Award, path: "/dashboard/company/skills" },
-    { label: "Benefit", icon: Heart, path: "/dashboard/company/benefits" },
-    { label: "Annunci", icon: FileText, path: "/dashboard/company/announcements" },
-    { label: "Gestione asset", icon: Monitor, path: "/dashboard/company/assets" },
-    { label: "Assegnazioni", icon: Monitor, path: "/dashboard/company/asset-assignments" },
-    { label: "Documenti", icon: FileText, path: "/dashboard/company/documents" },
-    { label: "Audit Log", icon: BookOpen, path: "/dashboard/company/audit-log" },
-    { label: "Offerte di Lavoro", icon: FileText, path: "/dashboard/company/job-postings" },
-    { label: "Candidati", icon: Users, path: "/dashboard/company/candidates" },
-    { label: "Corsi di Formazione", icon: GraduationCap, path: "/dashboard/company/training" },
-    { label: "Piani di Formazione", icon: GraduationCap, path: "/dashboard/company/training-plans" },
-    { label: "Scadenziario Certificazioni", icon: Calendar, path: "/dashboard/company/certification-expiry" },
-    { label: "Valutazioni 360°", icon: BarChart3, path: "/dashboard/company/performance" },
-    { label: "Dai Feedback", icon: MessageCircle, path: "/dashboard/company/give-feedback" },
-    { label: "Calendario HR", icon: Calendar, path: "/dashboard/company/calendar" },
-    { label: "HR Analytics", icon: TrendingUp, path: "/dashboard/company/analytics" },
-    { label: "Analytics IA", icon: Sparkles, path: "/dashboard/company/ai-analytics" },
-    { label: "Rimborsi Spese", icon: Receipt, path: "/dashboard/company/expenses" },
-    { label: "Approvazione Ferie", icon: CalendarDays, path: "/dashboard/company/leave-requests" },
-    { label: "Onboarding Dipendenti", icon: Users, path: "/dashboard/company/onboarding-tracking" },
-    { label: "Integrazioni API", icon: SettingsIcon, path: "/dashboard/company/integrations" },
-    { label: "Abbonamento", icon: CreditCard, path: "/dashboard/company/subscription" },
-    { label: "Impostazioni", icon: SettingsIcon, path: "/dashboard/company/settings" },
-  ],
+  consultant: CONSULTANT_NAV,
+  labor_consultant: CONSULTANT_NAV,
+  external_consultant: CONSULTANT_NAV,
+  safety_consultant: CONSULTANT_NAV,
+  company: COMPANY_NAV,
+  company_owner: COMPANY_NAV,
+  company_admin: COMPANY_NAV,
+  hr_manager: COMPANY_NAV,
+  manager: MANAGER_NAV,
   employee: [
     { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard/employee" },
     { label: "Timbratura", icon: Clock, path: "/dashboard/employee/attendance" },
@@ -82,14 +97,13 @@ const NAV = {
   ],
 };
 
-const ROLE_LABEL = { super_admin: "Super Admin", consultant: "Consulente", company: "Azienda", employee: "Dipendente" };
-const ROLE_COLOR = { super_admin: "bg-red-600", consultant: "bg-violet-600", company: "bg-blue-600", employee: "bg-emerald-600" };
+// Using getRoleLabel and getRoleColor from roles.js
 
 export default function AppShell({ user, children }) {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const role = user?.role || "employee";
-  const navItems = NAV[role] || [];
+  const navItems = NAV[role] || NAV["employee"] || [];
 
   return (
     <div className="flex h-screen bg-slate-50 overflow-hidden">
@@ -110,9 +124,9 @@ export default function AppShell({ user, children }) {
         </div>
 
         <div className="px-4 py-3 border-b border-slate-100">
-          <div className={cn("inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold text-white", ROLE_COLOR[role])}>
+          <div className={cn("inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold text-white", getRoleColor(role))}>
             <div className="w-1.5 h-1.5 bg-white/60 rounded-full" />
-            {ROLE_LABEL[role]}
+            {getRoleLabel(role)}
           </div>
           <p className="text-xs text-slate-400 mt-1.5 truncate">{user?.email}</p>
         </div>
@@ -160,7 +174,7 @@ export default function AppShell({ user, children }) {
           <div className="flex-1" />
           <div className="flex items-center gap-2.5">
             {user && <NotificationBell user={user} />}
-            <div className={cn("w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white", ROLE_COLOR[role])}>
+            <div className={cn("w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white", getRoleColor(role))}>
               {(user?.full_name || user?.email || "U")[0].toUpperCase()}
             </div>
             <span className="text-sm font-medium text-slate-700 hidden sm:block">{user?.full_name || user?.email}</span>

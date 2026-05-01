@@ -45,12 +45,18 @@ export default function NewEmployee() {
     if (!company) return;
     setSaving(true);
     const tempPassword = generateTempPassword();
+    // Invite user to platform with employee role
+    if (form.email) {
+      await base44.users.inviteUser(form.email, "employee");
+    }
+
     await base44.entities.EmployeeProfile.create({
       ...form,
       employee_code: form.employee_code || `EMP-${Date.now().toString().slice(-6)}`,
       company_id: company.id,
-      has_account: true,
+      has_account: !!form.email,
       temp_password: tempPassword,
+      user_email: form.email,
     });
     setDone({ tempPassword, email: form.email });
     setSaving(false);

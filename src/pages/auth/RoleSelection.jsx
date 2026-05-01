@@ -9,13 +9,20 @@ export default function RoleSelection() {
   const selectRole = async (role) => {
     setLoading(true);
     try {
-      await base44.auth.updateMe({ role });
-      setUser({ ...user, role });
+      const publicId = role === "company" 
+        ? `COMP-${Date.now().toString().slice(-6)}`
+        : role === "consultant"
+        ? `CONS-${Date.now().toString().slice(-6)}`
+        : null;
       
-      // Redirect to appropriate dashboard
+      await base44.auth.updateMe({ 
+        role,
+        ...(publicId && { public_id: publicId }),
+      });
+      
       const dashboardMap = {
-        company: "/dashboard/company",
-        consultant: "/dashboard/consultant",
+        company: "/auth/register/company",
+        consultant: "/auth/register/consultant",
         employee: "/dashboard/employee",
       };
       window.location.href = dashboardMap[role] || "/dashboard";

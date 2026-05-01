@@ -85,6 +85,11 @@ import AdminCompanies from './pages/dashboard/AdminCompanies';
 import AdminUsers from './pages/dashboard/AdminUsers';
 import AdminSystem from './pages/dashboard/AdminSystem';
 import EmployeeContract from './pages/employee/EmployeeContract';
+import CreateCompanyAdmin from './pages/company/CreateCompanyAdmin';
+import AdminsList from './pages/company/AdminsList';
+import EmployeeCard from './pages/company/EmployeeCard';
+import ForcePasswordChange from './pages/auth/ForcePasswordChange';
+import ErrorBoundary from './components/layout/ErrorBoundary.jsx';
 
 // Shared
 import ComingSoon from './components/layout/ComingSoon';
@@ -103,6 +108,11 @@ const AuthenticatedApp = () => {
   if (authError) {
     if (authError.type === 'user_not_registered') return <UserNotRegisteredError />;
     if (authError.type === 'auth_required') { navigateToLogin(); return null; }
+  }
+
+  // Force password change if needed
+  if (user?.must_change_password) {
+    return <ForcePasswordChange onComplete={() => window.location.reload()} />;
   }
 
   return (
@@ -138,14 +148,16 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/consultant/calendar" element={<HRCalendarPage />} />
       <Route path="/dashboard/consultant/documents" element={<ComingSoon title="Documenti" dashboardPath="/dashboard/consultant" />} />
       <Route path="/dashboard/consultant/settings" element={<ConsultantSettings />} />
-      <Route path="/dashboard/consultant/employees/:id" element={<ComingSoon title="Scheda dipendente" dashboardPath="/dashboard/consultant/employees" />} />
+      <Route path="/dashboard/consultant/employees/:id" element={<EmployeeCard />} />
 
       {/* Company */}
       <Route path="/dashboard/company" element={<CompanyDashboard />} />
       <Route path="/dashboard/company/employees" element={<EmployeeList />} />
       <Route path="/dashboard/company/employees/new" element={<NewEmployee />} />
       <Route path="/dashboard/company/employees/import" element={<EmployeeImport />} />
-      <Route path="/dashboard/company/employees/:id" element={<ComingSoon title="Scheda dipendente" dashboardPath="/dashboard/company/employees" />} />
+      <Route path="/dashboard/company/employees/:id" element={<EmployeeCard />} />
+      <Route path="/dashboard/company/admins" element={<AdminsList />} />
+      <Route path="/dashboard/company/admins/new" element={<CreateCompanyAdmin />} />
       <Route path="/dashboard/company/consultants" element={<CompanyConsultants />} />
       <Route path="/dashboard/company/attendance" element={<CompanyAttendancePage />} />
       <Route path="/dashboard/company/overtime" element={<OvertimePage />} />
@@ -205,14 +217,16 @@ const AuthenticatedApp = () => {
 
 function App() {
   return (
-    <AuthProvider>
-      <QueryClientProvider client={queryClientInstance}>
-        <Router>
-          <AuthenticatedApp />
-        </Router>
-        <Toaster />
-      </QueryClientProvider>
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <QueryClientProvider client={queryClientInstance}>
+          <Router>
+            <AuthenticatedApp />
+          </Router>
+          <Toaster />
+        </QueryClientProvider>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
 

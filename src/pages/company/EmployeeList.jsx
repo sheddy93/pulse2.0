@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
-import { Users, UserPlus, Search, Upload } from "lucide-react";
+import { Users, UserPlus, Search, Upload, Filter } from "lucide-react";
 
 const STATUS_BADGE = {
   active: { label: "Attivo", cls: "bg-emerald-100 text-emerald-700" },
@@ -15,15 +15,19 @@ export default function EmployeeList() {
   const [user, setUser] = useState(null);
   const [employees, setEmployees] = useState([]);
   const [search, setSearch] = useState("");
+  const [filterDept, setFilterDept] = useState("");
+  const [filterStatus, setFilterStatus] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     base44.auth.me().then(async (me) => {
       setUser(me);
       let emps = [];
-      if (me.role === "company") {
+      const companyRoles = ["company", "company_owner", "company_admin", "hr_manager", "manager"];
+      const consultantRoles = ["consultant", "labor_consultant", "external_consultant", "safety_consultant"];
+      if (companyRoles.includes(me.role)) {
         emps = await base44.entities.EmployeeProfile.filter({ company_id: me.company_id });
-      } else if (me.role === "consultant") {
+      } else if (consultantRoles.includes(me.role)) {
         const links = await base44.entities.ConsultantCompanyLink.filter({ consultant_email: me.email, status: "approved" });
         if (links.length > 0) {
           const ids = links.map(l => l.company_id);
@@ -35,12 +39,18 @@ export default function EmployeeList() {
     }).finally(() => setLoading(false));
   }, []);
 
+  const departments = [...new Set(employees.map(e => e.department).filter(Boolean))].sort();
+
   const filtered = employees.filter(e => {
     const q = search.toLowerCase();
-    return !q || `${e.first_name} ${e.last_name} ${e.email || ""} ${e.department || ""} ${e.job_title || ""}`.toLowerCase().includes(q);
+    const matchSearch = !q || `${e.first_name} ${e.last_name} ${e.email || ""} ${e.department || ""} ${e.job_title || ""}`.toLowerCase().includes(q);
+    const matchDept = !filterDept || e.department === filterDept;
+    const matchStatus = !filterStatus || e.status === filterStatus;
+    return matchSearch && matchDept && matchStatus;
   });
 
-  const basePath = user?.role === "consultant" ? "/dashboard/consultant" : "/dashboard/company";
+  const consultantRoles = ["consultant", "labor_consultant", "external_consultant", "safety_consultant"];
+  const basePath = consultantRoles.includes(user?.role) ? "/dashboard/consultant" : "/dashboard/company";
 
   if (loading) return <PageLoader />;
 
@@ -52,7 +62,7 @@ export default function EmployeeList() {
             <h1 className="text-xl font-bold text-slate-800">Dipendenti</h1>
             <p className="text-sm text-slate-500">{employees.length} lavoratori</p>
           </div>
-          {user?.role === "company" && (
+          {["company", "company_owner", "company_admin", "hr_manager"].includes(user?.role) && (
             <div className="flex gap-2">
               <Link to="/dashboard/company/employees/import" className="flex items-center gap-2 px-4 py-2 border border-blue-300 bg-blue-50 text-blue-700 rounded-lg text-sm font-semibold hover:bg-blue-100">
                 <Upload className="w-4 h-4" /> Importa CSV
@@ -64,13 +74,27 @@ export default function EmployeeList() {
           )}
         </div>
 
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-          <input
-            value={search} onChange={e => setSearch(e.target.value)}
-            placeholder="Cerca nome, email, reparto..."
-            className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+        <div className="flex gap-3 flex-wrap">
+          <div className="relative flex-1 min-w-48">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <input
+              value={search} onChange={e => setSearch(e.target.value)}
+              placeholder="Cerca nome, email, reparto..."
+              className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <select value={filterDept} onChange={e => setFilterDept(e.target.value)}
+            className="px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">Tutti i reparti</option>
+            {departments.map(d => <option key={d} value={d}>{d}</option>)}
+          </select>
+          <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)}
+            className="px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">Tutti gli stati</option>
+            <option value="active">Attivo</option>
+            <option value="onboarding">Onboarding</option>
+            <option value="inactive">Inattivo</option>
+          </select>
         </div>
 
         <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
@@ -105,7 +129,7 @@ export default function EmployeeList() {
                         <td className="px-5 py-3 text-slate-500">{emp.department || "—"}</td>
                         <td className="px-5 py-3"><span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${badge.cls}`}>{badge.label}</span></td>
                         <td className="px-5 py-3 text-right">
-                          <Link to={`${basePath}/employees/${emp.id}`} className="text-blue-600 hover:text-blue-700 font-medium text-xs">Apri scheda →</Link>
+                          <Link to={`${basePath}/employees/${emp.id}`} className="text-blue-600 hover:text-blue-700 font-medium text-xs whitespace-nowrap">Scheda →</Link>
                         </td>
                       </tr>
                     );
