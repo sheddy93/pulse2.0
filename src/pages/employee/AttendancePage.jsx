@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import { base44 } from "@/api/base44Client";
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
-import GPSValidator from "@/components/attendance/GPSValidator";
 import OfflineStatus from "@/components/attendance/OfflineStatus";
+import QuickAttendanceButton from "@/components/attendance/QuickAttendanceButton";
+import AttendanceSummaryMobile from "@/components/attendance/AttendanceSummaryMobile";
 import { Clock, LogIn, LogOut, Coffee } from "lucide-react";
 import { format } from "date-fns";
 import { it } from "date-fns/locale";
 import { saveTimeEntryOffline, syncOfflineTimeEntries, getPendingTimeEntries, cleanupSyncedEntries } from "@/lib/pwa-utils";
+import { registerDeviceToken, setupOfflineSyncHandler } from "@/lib/firebaseMessaging";
 
 const TYPES = {
   check_in: { label: "Entrata", icon: LogIn, btnLabel: "Timbra entrata", color: "text-emerald-600 bg-emerald-50", enabledWhen: false },
@@ -54,6 +56,12 @@ export default function AttendancePage() {
         const pending = await getPendingTimeEntries();
         setPendingCount(pending.length);
 
+        // Registra device token Firebase
+        await registerDeviceToken(me.email);
+
+        // Setup offline sync handler
+        setupOfflineSyncHandler();
+
         // Sincronizza se online
         if (navigator.onLine) {
           await syncEntries(me);
@@ -96,7 +104,9 @@ export default function AttendancePage() {
   };
 
   const today = format(new Date(), "yyyy-MM-dd");
-  const todayEntries = entries.filter(e => e.timestamp?.startsWith(today));
+  const todayEntries = entries.filter(e => e.timestamp?.startsWith(today)).sort((a, b) => 
+    new Date(b.timestamp) - new Date(a.timestamp)
+  );
   const lastEntry = todayEntries[0];
   const isClockedIn = lastEntry?.type === "check_in" || lastEntry?.type === "break_end";
 
@@ -157,60 +167,69 @@ export default function AttendancePage() {
   return (
     <AppShell user={user}>
       <OfflineStatus isOnline={isOnline} isSyncing={isSyncing} pendingCount={pendingCount} />
-      <div className="p-6 max-w-3xl mx-auto space-y-6">
-        <h1 className="text-xl font-bold text-slate-800">Timbratura</h1>
+      <div className="p-3 md:p-6 max-w-3xl mx-auto space-y-4 pb-20">
+        <h1 className="text-2xl font-bold text-slate-800">Timbratura</h1>
 
-        {location && (
-        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
-          <p className="text-sm text-blue-700">📍 <strong>Test mode:</strong> GPS disabilitato. Clicca i bottoni per testare le timbrature.</p>
+        {/* Mobile Summary Card */}
+        <AttendanceSummaryMobile 
+          todayEntries={todayEntries} 
+          lastEntry={lastEntry} 
+          pendingCount={pendingCount} 
+        />
+
+        {/* Quick Action Buttons - Mobile Optimized */}
+        <div className="grid grid-cols-2 gap-3">
+          <QuickAttendanceButton 
+            type="check_in" 
+            onClick={() => handleStamp("check_in")}
+            loading={stamping === "check_in"}
+            disabled={stamping !== null}
+          />
+          <QuickAttendanceButton 
+            type="check_out" 
+            onClick={() => handleStamp("check_out")}
+            loading={stamping === "check_out"}
+            disabled={stamping !== null}
+          />
+          <QuickAttendanceButton 
+            type="break_start" 
+            onClick={() => handleStamp("break_start")}
+            loading={stamping === "break_start"}
+            disabled={stamping !== null}
+          />
+          <QuickAttendanceButton 
+            type="break_end" 
+            onClick={() => handleStamp("break_end")}
+            loading={stamping === "break_end"}
+            disabled={stamping !== null}
+          />
         </div>
-      )}
 
-      <div className="bg-white rounded-xl border border-slate-200 p-6">
-          <p className="text-sm text-slate-400 mb-4">{format(new Date(), "EEEE d MMMM yyyy", { locale: it })}</p>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {(["check_in", "check_out", "break_start", "break_end"]).map((type) => {
-              const cfg = TYPES[type];
-               const Icon = cfg.icon;
-               return (
-                 <button key={type} onClick={() => handleStamp(type)} disabled={stamping === type}
-                   className="flex flex-col items-center gap-2 p-4 rounded-xl border-2 font-medium text-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed border-emerald-400 bg-emerald-50 text-emerald-700 hover:bg-emerald-100">
-                  <Icon className="w-6 h-6" />
-                  {stamping === type ? "..." : cfg.label}
-                </button>
-              );
-            })}
-          </div>
-          {lastEntry && (
-            <p className="text-xs text-slate-400 mt-4 text-center">
-              Ultima: <strong>{TYPES[lastEntry.type]?.label}</strong> alle {format(new Date(lastEntry.timestamp), "HH:mm")}
-            </p>
-          )}
-        </div>
-
-        <div className="space-y-4">
+        {/* History */}
+        <div className="space-y-3">
+          <h2 className="text-lg font-bold text-slate-800">Storico</h2>
           {Object.keys(grouped).length === 0 ? (
-            <div className="bg-white rounded-xl border border-slate-200 py-12 text-center">
+            <div className="bg-white rounded-xl border border-slate-200 py-8 text-center">
               <Clock className="w-8 h-8 text-slate-300 mx-auto mb-2" />
               <p className="text-slate-400 text-sm">Nessuna timbratura ancora</p>
             </div>
           ) : (
             Object.entries(grouped).map(([date, dayEntries]) => (
               <div key={date} className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-                <div className="px-5 py-3 bg-slate-50 border-b border-slate-100">
-                  <p className="text-sm font-semibold text-slate-700">{format(new Date(date), "EEEE d MMMM yyyy", { locale: it })}</p>
+                <div className="px-3 py-2 bg-slate-50 border-b border-slate-100">
+                  <p className="text-sm font-semibold text-slate-700">{format(new Date(date), "dd MMM", { locale: it })}</p>
                 </div>
                 <div className="divide-y divide-slate-100">
                   {dayEntries.map(e => {
                     const cfg = TYPES[e.type] || { label: e.type, color: "text-slate-500 bg-slate-100", icon: Clock };
                     const Icon = cfg.icon;
                     return (
-                      <div key={e.id} className="flex items-center gap-4 px-5 py-3">
-                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${cfg.color}`}>
-                          <Icon className="w-4 h-4" />
+                      <div key={e.id} className="flex items-center gap-3 px-3 py-2">
+                        <div className={`w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0 ${cfg.color}`}>
+                          <Icon className="w-3 h-3" />
                         </div>
                         <p className="flex-1 text-sm font-medium text-slate-700">{cfg.label}</p>
-                        <p className="text-sm font-mono text-slate-500">{format(new Date(e.timestamp), "HH:mm")}</p>
+                        <p className="text-sm font-mono font-bold text-slate-800">{format(new Date(e.timestamp), "HH:mm")}</p>
                       </div>
                     );
                   })}
