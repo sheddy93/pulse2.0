@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-// Migration: removed base44 dependency
+import { authService } from '@/services/authService';
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import { Server, Database, Activity, CheckCircle, AlertTriangle, Zap, RefreshCw } from "lucide-react";
@@ -35,12 +35,13 @@ export default function AdminSystem() {
 
   useEffect(() => {
     const init = async () => {
-    const me = await authService.me();
+      const me = await authService.me();
       if (me?.role !== "super_admin") { window.location.href = "/"; return; }
       setUser(me);
       await loadStats();
       setLoading(false);
     };
+    init();
   }, []);
 
   const handleRefresh = async () => {

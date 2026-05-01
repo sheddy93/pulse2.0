@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-// Migration: removed base44 dependency
+import { authService } from '@/services/authService';
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import { Settings, Plus, Edit2, Trash2, ChevronDown, Save } from "lucide-react";

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-// Migration: removed base44 dependency
+import { authService } from '@/services/authService';
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import ChatWindow from "@/components/chat/ChatWindow";
@@ -19,30 +19,16 @@ export default function Chat() {
 
   useEffect(() => {
     const init = async () => {
-    const me = await authService.me();
+      const me = await authService.me();
       setUser(me);
-      if (!me.company_id) { setLoading(false); return; }
+      if (!me?.company_id) { setLoading(false); return; }
 
-      const emps = await base44.entities.EmployeeProfile.filter({ user_email: me.email });
-      const emp = emps[0];
-      setEmployee(emp);
-
-      const [convs, allEmps] = await Promise.all([
-        base44.entities.WorkConversation.filter({
-          company_id: me.company_id,
-          $or: [
-            { creator_email: me.email },
-            { "participants.email": me.email }
-          ]
-        }),
-        base44.entities.EmployeeProfile.filter({ company_id: me.company_id })
-      ]);
-
-      setConversations(convs.sort((a, b) => new Date(b.last_message_at || 0) - new Date(a.last_message_at || 0)));
-      setEmployees(allEmps);
-      if (convs.length > 0) setSelectedConv(convs[0]);
+      // TODO: Replace with service calls for employees and conversations
+      setConversations([]);
+      setEmployees([]);
       setLoading(false);
     };
+    init();
   }, []);
 
   const handleCreateChat = async (e) => {
@@ -52,28 +38,7 @@ export default function Chat() {
     const targetEmp = employees.find(e => e.email === newChatEmail);
     if (!targetEmp) return;
 
-    const conv = await base44.entities.WorkConversation.create({
-      company_id: employee.company_id,
-      title: `Chat con ${targetEmp.first_name} ${targetEmp.last_name}`,
-      type: "one_on_one",
-      creator_email: user.email,
-      creator_name: user.full_name,
-      participants: [
-        { email: user.email, name: user.full_name, employee_id: employee.id },
-        { email: targetEmp.email, name: `${targetEmp.first_name} ${targetEmp.last_name}`, employee_id: targetEmp.id }
-      ]
-    });
-
-    const updated = await base44.entities.WorkConversation.filter({
-      company_id: employee.company_id,
-      $or: [
-        { creator_email: user.email },
-        { "participants.email": user.email }
-      ]
-    });
-
-    setConversations(updated.sort((a, b) => new Date(b.last_message_at || 0) - new Date(a.last_message_at || 0)));
-    setSelectedConv(conv);
+    // TODO: Replace with service call to create conversation
     setShowNewChat(false);
     setNewChatEmail("");
   };

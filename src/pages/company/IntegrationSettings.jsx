@@ -21,6 +21,8 @@ const EVENTS = [
   { id: "overtime_approved", label: "Straordinario approvato" }
 ];
 
+import { authService } from '@/services/authService';
+
 export default function IntegrationSettings() {
   const [user, setUser] = useState(null);
   const [company, setCompany] = useState(null);
@@ -43,7 +45,8 @@ export default function IntegrationSettings() {
 
   useEffect(() => {
     const init = async () => {
-    const me = await authService.me();
+      try {
+        const me = await authService.me();
       setUser(me);
       if (!me.company_id) { setLoading(false); return; }
       const [companies, webhooks, apiKeys] = await Promise.all([

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { authService } from '@/services/authService';
-import companyService from '@/services/companies.service';
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import ExpenseApprovalPanel from "@/components/company/ExpenseApprovalPanel";
@@ -29,9 +28,8 @@ export default function ExpenseManagement() {
       setUser(me);
       if (!me?.company_id) { setLoading(false); return; }
 
-      const comp = await companyService.filter({ id: me.company_id });
-      // TODO: Replace with expense service
-      setCompany(comp[0]);
+      // TODO: Replace with company service
+      setCompany(null);
       setExpenses([]);
       setLoading(false);
     };

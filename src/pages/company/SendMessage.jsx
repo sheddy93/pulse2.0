@@ -126,8 +126,7 @@ export default function SendMessage() {
       }
 
       // Create message
-      // TODO: Replace with service.CompanyMessage.create({
-      // TODO: Replace with service.CompanyMessage.create() call with all parameters
+       // TODO: Replace with service.CompanyMessage.create()
 
       // Send notifications
       const recipientEmps = employees.filter(e => recipientIds.includes(e.id));
