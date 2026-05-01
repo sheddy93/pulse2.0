@@ -89,7 +89,7 @@ import CreateCompanyAdmin from './pages/company/CreateCompanyAdmin';
 import AdminsList from './pages/company/AdminsList';
 import EmployeeCard from './pages/company/EmployeeCard';
 import ForcePasswordChange from './pages/auth/ForcePasswordChange';
-import ErrorBoundary from './components/layout/ErrorBoundary.jsx';
+import ErrorBoundary from './components/layout/ErrorBoundary';
 
 // Shared
 import ComingSoon from './components/layout/ComingSoon';

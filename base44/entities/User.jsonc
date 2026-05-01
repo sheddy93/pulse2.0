@@ -6,16 +6,23 @@
       "type": "string",
       "enum": [
         "super_admin",
-        "consultant",
         "company",
+        "company_owner",
+        "company_admin",
+        "hr_manager",
+        "manager",
+        "consultant",
+        "labor_consultant",
+        "external_consultant",
+        "safety_consultant",
         "employee"
       ],
       "default": "employee"
     },
-    "public_id": {
+    "company_id": {
       "type": "string"
     },
-    "company_id": {
+    "public_id": {
       "type": "string"
     },
     "must_change_password": {
@@ -25,9 +32,6 @@
     "is_active": {
       "type": "boolean",
       "default": true
-    },
-    "display_name": {
-      "type": "string"
     }
   }
 }
