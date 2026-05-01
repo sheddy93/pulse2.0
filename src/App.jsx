@@ -68,7 +68,7 @@ import CandidateTracking from './pages/company/CandidateTracking';
 import TrainingManagement from './pages/company/TrainingManagement';
 import GivePerformanceReview from './pages/company/GivePerformanceReview';
 import { Suspense } from 'react';
-import { LazyLoadingFallback } from '@/lib/lazyLoadConfig';
+import { LazyLoadingFallback } from '@/lib/lazyLoadConfig.jsx';
 import HRCalendarPage from './pages/company/HRCalendarPage';
 import ExpenseManagement from './pages/company/ExpenseManagement';
 
@@ -80,7 +80,7 @@ import {
   TeamAnalyticsPage,
   AdminAnalyticsDashboard,
   PerformanceManagement
-} from '@/lib/lazyLoadConfig';
+} from '@/lib/lazyLoadConfig.jsx';
 import EmployeeExpenses from './pages/employee/EmployeeExpenses';
 import LeaveBalance from './pages/employee/LeaveBalance';
 import ManagerLeaveRequests from './pages/company/ManagerLeaveRequests';
