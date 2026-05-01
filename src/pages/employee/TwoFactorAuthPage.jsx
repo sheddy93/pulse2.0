@@ -34,10 +34,10 @@ export default function TwoFactorAuthPage() {
   const handleGenerateSecret = async () => {
     setLoading(true);
     try {
-      const result = await base44.functions.invoke('generateTotpSecret', {});
+      const result = await base44.functions.invoke('generateTotpSecretReal', {});
       setTotp(result.data);
       setStep('setup');
-      toast.success('QR Code generato');
+      toast.success('QR Code generato - scansiona con Google Authenticator');
     } catch (err) {
       toast.error('Errore: ' + err.message);
     } finally {
@@ -161,12 +161,17 @@ export default function TwoFactorAuthPage() {
 
             {/* QR Code */}
             <div className="bg-slate-50 p-6 rounded-lg flex flex-col items-center gap-4">
-              <p className="text-sm text-slate-600 text-center">Scansiona questo codice QR con Google Authenticator o Authy</p>
+              <p className="text-sm text-slate-600 text-center">Scansiona questo codice QR con Google Authenticator, Authy, o Microsoft Authenticator</p>
               <div className="p-4 bg-white rounded-lg border border-slate-200">
-                {/* Placeholder QR Code - in produzione usare qr-code library */}
-                <div className="w-48 h-48 bg-gradient-to-br from-blue-100 to-slate-100 rounded flex items-center justify-center text-xs text-slate-400">
-                  QR Code
-                </div>
+                {totp?.qr_code_url && (
+                  <img 
+                    src={totp.qr_code_url} 
+                    alt="QR Code" 
+                    width={300}
+                    height={300}
+                    className="w-48 h-48"
+                  />
+                )}
               </div>
             </div>
 
