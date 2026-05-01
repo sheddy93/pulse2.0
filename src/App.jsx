@@ -111,6 +111,8 @@ import EmployeeContract from './pages/employee/EmployeeContract';
 import CreateCompanyAdmin from './pages/company/CreateCompanyAdmin';
 import AdminsList from './pages/company/AdminsList';
 import EmployeeCard from './pages/company/EmployeeCard';
+import DocumentArchive from './pages/company/DocumentArchive';
+import DocumentManagement from './pages/employee/DocumentManagement';
 import ForcePasswordChange from './pages/auth/ForcePasswordChange';
 import ErrorBoundary from './components/layout/ErrorBoundary';
 
@@ -192,6 +194,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/company/audit-log" element={<AuditLogPage />} />
       <Route path="/dashboard/company/documents" element={<DocumentsPage />} />
       <Route path="/dashboard/company/documents/expiring" element={<ExpiryCalendar />} />
+      <Route path="/dashboard/company/document-archive" element={<DocumentArchive />} />
       <Route path="/dashboard/company/benefits" element={<BenefitManagement />} />
       <Route path="/dashboard/company/integrations" element={<IntegrationSettings />} />
       <Route path="/dashboard/company/job-postings" element={<JobPostings />} />
@@ -225,6 +228,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/employee/overtime" element={<OvertimeRequestPage />} />
       <Route path="/dashboard/employee/documents" element={<DocumentSignaturePage />} />
       <Route path="/dashboard/employee/personal-documents" element={<PersonalDocuments />} />
+      <Route path="/dashboard/employee/document-management" element={<DocumentManagement />} />
       <Route path="/dashboard/employee/skills" element={<SkillsPage />} />
       <Route path="/dashboard/employee/benefits" element={<BenefitsPage />} />
       <Route path="/dashboard/employee/training" element={<TrainingPortal />} />
