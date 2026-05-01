@@ -1,154 +1,62 @@
+import { employeesService } from '@/services/employees.service';
+import { leaveService } from '@/services/leave.service';
+import { attendanceService } from '@/services/attendance.service';
+import { companiesService } from '@/services/companies.service';
+import { documentsService } from '@/services/documents.service';
+
 /**
- * src/api/adapters/restAdapter.ts
- * ================================
- * REST API client per NestJS backend
- * Usa fetch API con JWT authentication
+ * Adapter pattern per migrazione progressiva da base44 a REST API
+ * Ogni entità ha metodi standard: list, get, create, update, delete, filter
  */
-
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';
-
-const getAuthToken = () => localStorage.getItem('auth_token');
-
-const headers = () => ({
-  'Content-Type': 'application/json',
-  ...(getAuthToken() && { Authorization: `Bearer ${getAuthToken()}` }),
-});
-
-const handleResponse = async (response: Response) => {
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({}));
-    return { error: error.message || 'API Error', status: response.status };
-  }
-  const data = await response.json();
-  return { data, status: response.status };
-};
-
-const restAdapter = {
-  // Entity CRUD
-  get: async (entity: string, id: string) => {
-    try {
-      const response = await fetch(`${BASE_URL}/entities/${entity}/${id}`, {
-        headers: headers(),
-      });
-      return await handleResponse(response);
-    } catch (error: any) {
-      return { error: error.message, status: 500 };
-    }
-  },
-
-  list: async (entity: string, query = {}) => {
-    try {
-      const params = new URLSearchParams(query as any).toString();
-      const response = await fetch(`${BASE_URL}/entities/${entity}?${params}`, {
-        headers: headers(),
-      });
-      return await handleResponse(response);
-    } catch (error: any) {
-      return { error: error.message, status: 500 };
-    }
-  },
-
-  post: async (entity: string, data: any) => {
-    try {
-      const response = await fetch(`${BASE_URL}/entities/${entity}`, {
-        method: 'POST',
-        headers: headers(),
-        body: JSON.stringify(data),
-      });
-      return await handleResponse(response);
-    } catch (error: any) {
-      return { error: error.message, status: 500 };
-    }
-  },
-
-  patch: async (entity: string, id: string, data: any) => {
-    try {
-      const response = await fetch(`${BASE_URL}/entities/${entity}/${id}`, {
-        method: 'PATCH',
-        headers: headers(),
-        body: JSON.stringify(data),
-      });
-      return await handleResponse(response);
-    } catch (error: any) {
-      return { error: error.message, status: 500 };
-    }
-  },
-
-  delete: async (entity: string, id: string) => {
-    try {
-      const response = await fetch(`${BASE_URL}/entities/${entity}/${id}`, {
-        method: 'DELETE',
-        headers: headers(),
-      });
-      return await handleResponse(response);
-    } catch (error: any) {
-      return { error: error.message, status: 500 };
-    }
-  },
-
-  // File operations
-  uploadFile: async (file: File) => {
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-      const response = await fetch(`${BASE_URL}/files/upload`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${getAuthToken()}` },
-        body: formData,
-      });
-      return await handleResponse(response);
-    } catch (error: any) {
-      return { error: error.message, status: 500 };
-    }
-  },
-
-  // Auth
-  auth: {
-    me: async () => {
-      try {
-        const response = await fetch(`${BASE_URL}/auth/me`, {
-          headers: headers(),
-        });
-        return await handleResponse(response);
-      } catch (error: any) {
-        return { error: error.message, status: 401 };
-      }
+export const restAdapter = {
+  entities: {
+    Employee: {
+      list: (companyId: string) => employeesService.list(companyId),
+      get: (id: string) => employeesService.get(id),
+      create: (payload: any) => employeesService.create(payload),
+      update: (id: string, payload: any) => employeesService.update(id, payload),
+      delete: (id: string) => employeesService.delete(id),
+      filter: (companyId: string, filters?: any) => employeesService.filter(companyId, filters),
     },
-    login: async (email: string, password: string) => {
-      try {
-        const response = await fetch(`${BASE_URL}/auth/login`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password }),
-        });
-        const result = await handleResponse(response);
-        if (result.data?.token) {
-          localStorage.setItem('auth_token', result.data.token);
-        }
-        return result;
-      } catch (error: any) {
-        return { error: error.message, status: 500 };
-      }
-    },
-    logout: async () => {
-      localStorage.removeItem('auth_token');
-      return { data: { success: true }, status: 200 };
-    },
-  },
 
-  // Functions
-  invoke: async (functionName: string, payload: any) => {
-    try {
-      const response = await fetch(`${BASE_URL}/functions/${functionName}`, {
-        method: 'POST',
-        headers: headers(),
-        body: JSON.stringify(payload),
-      });
-      return await handleResponse(response);
-    } catch (error: any) {
-      return { error: error.message, status: 500 };
-    }
+    LeaveRequest: {
+      list: (companyId: string) => leaveService.listRequests(companyId),
+      get: (id: string) => leaveService.getRequest(id),
+      create: (payload: any) => leaveService.createRequest(payload),
+      update: (id: string, payload: any) => leaveService.updateRequest(id, payload),
+      delete: (id: string) => leaveService.deleteRequest(id),
+      filter: (companyId: string) => leaveService.listRequests(companyId),
+    },
+
+    AttendanceEntry: {
+      list: (companyId: string) => attendanceService.listEntries(companyId),
+      create: (payload: any) => attendanceService.checkIn(payload),
+      delete: (id: string) => attendanceService.deleteEntry(id),
+      getByEmployee: (employeeId: string) => attendanceService.getByEmployee(employeeId),
+      getByDate: (companyId: string, date: string) => attendanceService.getByDate(companyId, date),
+    },
+
+    Company: {
+      list: () => companiesService.list(),
+      get: (id: string) => companiesService.get(id),
+      create: (payload: any) => companiesService.create(payload),
+      update: (id: string, payload: any) => companiesService.update(id, payload),
+      delete: (id: string) => companiesService.delete(id),
+      filter: (ownerId: string) => companiesService.getByOwner(ownerId),
+    },
+
+    Document: {
+      list: (companyId: string) => documentsService.list(companyId),
+      get: (id: string) => documentsService.get(id),
+      create: (payload: any) => documentsService.create(payload),
+      update: (id: string, payload: any) => documentsService.update(id, payload),
+      delete: (id: string) => documentsService.delete(id),
+      getByEmployee: (employeeId: string) => documentsService.getByEmployee(employeeId),
+    },
+
+    LeaveBalance: {
+      get: (employeeId: string) => leaveService.getBalance(employeeId),
+      update: (employeeId: string, payload: any) => leaveService.updateBalance(employeeId, payload),
+    },
   },
 };
-
-export default restAdapter;

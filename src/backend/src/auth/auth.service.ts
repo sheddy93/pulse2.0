@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
@@ -7,125 +7,90 @@ import * as bcrypt from 'bcrypt';
 export class AuthService {
   constructor(
     private prisma: PrismaService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
   ) {}
 
   async register(registerDto: any) {
-    const { email, password, full_name, phone, role = 'employee' } = registerDto;
-
-    const existingUser = await this.prisma.user.findUnique({ where: { email } });
-    if (existingUser) {
-      throw new Error('User already exists');
-    }
-
-    const passwordHash = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(registerDto.password, 10);
     const user = await this.prisma.user.create({
       data: {
-        email,
-        password_hash: passwordHash,
-        full_name,
-        phone,
-        role,
-        profile_completed: false,
+        email: registerDto.email,
+        full_name: registerDto.full_name,
+        password_hash: hashedPassword,
+        role: registerDto.role || 'user',
       },
     });
 
     const token = this.jwtService.sign({
-      sub: user.id,
+      id: user.id,
       email: user.email,
       role: user.role,
     });
 
     return {
-      token,
-      user: {
-        id: user.id,
-        email: user.email,
-        full_name: user.full_name,
-        role: user.role,
-      },
+      user: { id: user.id, email: user.email, full_name: user.full_name, role: user.role },
+      access_token: token,
     };
   }
 
-  async login(email: string, password: string) {
-    const user = await this.prisma.user.findUnique({ where: { email } });
+  async login(loginDto: any) {
+    const user = await this.prisma.user.findUnique({
+      where: { email: loginDto.email },
+    });
+
     if (!user) {
-      return null;
+      throw new UnauthorizedException('Invalid credentials');
     }
 
-    const passwordMatch = await bcrypt.compare(password, user.password_hash);
-    if (!passwordMatch) {
-      return null;
+    const isPasswordValid = await bcrypt.compare(loginDto.password, user.password_hash);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Invalid credentials');
     }
 
     const token = this.jwtService.sign({
-      sub: user.id,
+      id: user.id,
       email: user.email,
       role: user.role,
     });
 
     return {
-      token,
-      user: {
-        id: user.id,
-        email: user.email,
-        full_name: user.full_name,
-        role: user.role,
-        must_change_password: user.must_change_password,
-      },
+      user: { id: user.id, email: user.email, full_name: user.full_name, role: user.role },
+      access_token: token,
     };
   }
 
-  async changePassword(userId: string, oldPassword: string, newPassword: string) {
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
-    if (!user) {
-      throw new Error('User not found');
-    }
-
-    const passwordMatch = await bcrypt.compare(oldPassword, user.password_hash);
-    if (!passwordMatch) {
-      throw new Error('Old password is incorrect');
-    }
-
-    const newPasswordHash = await bcrypt.hash(newPassword, 10);
-    await this.prisma.user.update({
+  async getProfile(userId: string) {
+    return this.prisma.user.findUnique({
       where: { id: userId },
-      data: { password_hash: newPasswordHash },
+      select: { id: true, email: true, full_name: true, role: true },
     });
-
-    return { message: 'Password changed successfully' };
-  }
-
-  async requestPasswordReset(email: string) {
-    const user = await this.prisma.user.findUnique({ where: { email } });
-    if (!user) {
-      // Don't reveal if email exists or not
-      return { message: 'If account exists, reset email sent' };
-    }
-
-    // TODO: Implement email sending for password reset
-    return { message: 'Password reset email sent' };
   }
 
   async updateProfile(userId: string, updateDto: any) {
-    const { full_name, phone, role, profile_completed } = updateDto;
-    
-    const user = await this.prisma.user.update({
+    return this.prisma.user.update({
       where: { id: userId },
-      data: {
-        ...(full_name && { full_name }),
-        ...(phone && { phone }),
-        ...(role && { role }),
-        ...(profile_completed !== undefined && { profile_completed }),
-      },
+      data: updateDto,
+      select: { id: true, email: true, full_name: true, role: true },
     });
+  }
 
-    return {
-      id: user.id,
-      email: user.email,
-      full_name: user.full_name,
-      role: user.role,
-      profile_completed: user.profile_completed,
-    };
+  async refreshToken(refreshToken: string) {
+    try {
+      const decoded = this.jwtService.verify(refreshToken);
+      const token = this.jwtService.sign({
+        id: decoded.id,
+        email: decoded.email,
+        role: decoded.role,
+      });
+      return { access_token: token };
+    } catch (error) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+  }
+
+  async validateUser(id: string, email: string) {
+    return this.prisma.user.findUnique({
+      where: { id },
+    });
   }
 }
