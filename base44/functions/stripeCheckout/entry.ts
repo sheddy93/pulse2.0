@@ -2,6 +2,53 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 const stripe = await import('npm:stripe@17.0.0').then(m => new m.default(Deno.env.get('STRIPE_SECRET_KEY')));
 
+// Rate limiting helper
+const checkRateLimit = async (base44, identifier, endpoint, maxRequests = 10, windowMinutes = 60) => {
+  const now = new Date();
+  const records = await base44.entities.ApiRateLimit.filter({ identifier, endpoint });
+  
+  if (records.length === 0) {
+    await base44.entities.ApiRateLimit.create({
+      identifier,
+      endpoint,
+      request_count: 1,
+      window_start: now.toISOString(),
+      max_requests: maxRequests,
+      window_size_minutes: windowMinutes
+    });
+    return { allowed: true, remaining: maxRequests - 1 };
+  }
+
+  const record = records[0];
+  const windowStart = new Date(record.window_start);
+  const windowEnd = new Date(windowStart.getTime() + windowMinutes * 60000);
+
+  if (now > windowEnd) {
+    await base44.entities.ApiRateLimit.update(record.id, {
+      request_count: 1,
+      window_start: now.toISOString()
+    });
+    return { allowed: true, remaining: maxRequests - 1 };
+  }
+
+  if (record.is_blocked) {
+    const blockedUntil = new Date(record.blocked_until);
+    return { allowed: now >= blockedUntil, remaining: 0 };
+  }
+
+  const newCount = record.request_count + 1;
+  if (newCount > maxRequests) {
+    await base44.entities.ApiRateLimit.update(record.id, {
+      is_blocked: true,
+      blocked_until: new Date(now.getTime() + 15 * 60000).toISOString()
+    });
+    return { allowed: false, remaining: 0 };
+  }
+
+  await base44.entities.ApiRateLimit.update(record.id, { request_count: newCount });
+  return { allowed: true, remaining: maxRequests - newCount };
+};
+
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
@@ -9,6 +56,12 @@ Deno.serve(async (req) => {
 
     if (!user) {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // Rate limit: max 10 checkout per ora
+    const rateLimit = await checkRateLimit(base44, user.email, 'stripeCheckout', 10, 60);
+    if (!rateLimit.allowed) {
+      return Response.json({ error: 'Too many checkout attempts. Try again later.' }, { status: 429 });
     }
 
     const payload = await req.json();

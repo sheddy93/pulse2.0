@@ -119,6 +119,7 @@ const NAV = {
     { label: "Miei Documenti", icon: FileText, path: "/dashboard/employee/personal-documents" },
     { label: "Documenti Aziendali", icon: FileText, path: "/dashboard/employee/document-management" },
     { label: "Messaggi", icon: MessageSquare, path: "/dashboard/employee/messages" },
+    { label: "Sicurezza (2FA)", icon: Shield, path: "/dashboard/employee/two-factor" },
     { label: "Le mie presenze", icon: ClipboardList, path: "/dashboard/employee/history" },
     { label: "Ferie & Permessi", icon: CalendarDays, path: "/dashboard/employee/leave" },
     { label: "Saldo Ferie", icon: Calendar, path: "/dashboard/employee/leave-balance" },

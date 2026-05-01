@@ -1,0 +1,41 @@
+{
+  "name": "ApiRateLimit",
+  "type": "object",
+  "properties": {
+    "identifier": {
+      "type": "string",
+      "description": "User email o IP address"
+    },
+    "endpoint": {
+      "type": "string",
+      "description": "Nome endpoint (stripeCheckout, login, etc)"
+    },
+    "request_count": {
+      "type": "number",
+      "default": 0
+    },
+    "window_start": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Inizio finestra di rate limiting"
+    },
+    "window_size_minutes": {
+      "type": "number",
+      "default": 60,
+      "description": "Durata della finestra in minuti"
+    },
+    "max_requests": {
+      "type": "number",
+      "description": "Limite massimo di richieste per finestra"
+    },
+    "is_blocked": {
+      "type": "boolean",
+      "default": false
+    },
+    "blocked_until": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": ["identifier", "endpoint", "max_requests"]
+}

@@ -98,6 +98,7 @@ import PersonalDocuments from './pages/employee/PersonalDocuments';
 import PerformanceFeedback from './pages/employee/PerformanceFeedback';
 import Chat from './pages/employee/Chat';
 import Messaging from './pages/employee/Messaging';
+import TwoFactorAuthPage from './pages/employee/TwoFactorAuthPage';
 
 // Consultant
 import LinkRequests from './pages/consultant/LinkRequests';
@@ -274,6 +275,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/employee/feedback" element={<PerformanceFeedback />} />
       <Route path="/dashboard/employee/chat" element={<Chat />} />
       <Route path="/dashboard/employee/messaging" element={<Messaging />} />
+      <Route path="/dashboard/employee/two-factor" element={<TwoFactorAuthPage />} />
       <Route path="/dashboard/employee/expenses" element={<EmployeeExpenses />} />
       <Route path="/dashboard/employee/onboarding" element={<OnboardingWizard />} />
       <Route path="/dashboard/employee/profile" element={<EmployeeProfilePage />} />
