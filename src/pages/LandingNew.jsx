@@ -3,6 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { useI18n, LANGUAGES } from "@/hooks/useI18n";
 import { Users, Clock, FileText, TrendingUp, Shield, Zap, CheckCircle2, ArrowRight, Menu, X, Star, Instagram, Facebook, Linkedin, Music } from "lucide-react";
 import { motion } from "framer-motion";
+import DemoRequestModal from "@/components/landing/DemoRequestModal";
 
 const LOGO = "https://media.base44.com/images/public/69f3ad50c2e669c8723343df/a5026eec8_generated_image.png";
 
@@ -23,6 +24,7 @@ export default function LandingNew() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [heroContent, setHeroContent] = useState(null);
   const [dbPricingPlans, setDbPricingPlans] = useState(null);
+  const [showDemoModal, setShowDemoModal] = useState(false);
 
   useEffect(() => {
     base44.entities.LandingPageContent.filter({ section: "hero" }).then(r => { if (r[0]) setHeroContent(r[0]); });
@@ -104,12 +106,12 @@ export default function LandingNew() {
           </motion.div>
 
           <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 pt-4">
-            <a
-              href="/auth/register/company"
+            <button
+              onClick={() => setShowDemoModal(true)}
               className="group px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl font-semibold hover:from-blue-600 hover:to-blue-700 flex items-center justify-center gap-2 transition-all hover:scale-105"
             >
-              {t('hero_cta_company')} <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </a>
+              ⭐ Prova gratis 14 giorni <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </button>
             <a
               href="/auth/register/consultant"
               className="px-8 py-4 border-2 border-violet-400 text-violet-300 rounded-xl font-semibold hover:bg-violet-500/10 transition-all flex items-center justify-center gap-2"
@@ -245,15 +247,15 @@ export default function LandingNew() {
                   <span className="text-slate-400">/{t('per_month')}</span>
                 </div>
                 <button
-                  onClick={handleLogin}
-                  className={`w-full py-3 rounded-lg font-semibold mb-6 transition-all ${
-                    plan.popular
-                      ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700'
-                      : 'border border-blue-500/30 text-blue-300 hover:bg-blue-500/10'
-                  }`}
-                >
-                  {t('get_started')}
-                </button>
+                   onClick={() => setShowDemoModal(true)}
+                   className={`w-full py-3 rounded-lg font-semibold mb-6 transition-all ${
+                     plan.popular
+                       ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700'
+                       : 'border border-blue-500/30 text-blue-300 hover:bg-blue-500/10'
+                   }`}
+                 >
+                   ⭐ Prova gratis
+                 </button>
                 <ul className="space-y-3">
                   {plan.features.map((feature, j) => (
                     <li key={j} className="flex items-center gap-3 text-sm text-slate-300">
@@ -280,10 +282,10 @@ export default function LandingNew() {
           <h2 className="text-4xl font-bold">{t('ready_title')}</h2>
           <p className="text-xl text-slate-300">{t('ready_subtitle')}</p>
           <button
-            onClick={handleLogin}
+            onClick={() => setShowDemoModal(true)}
             className="px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl font-semibold hover:from-blue-600 hover:to-blue-700 transition-all text-lg"
           >
-            {t('get_started')}
+            ⭐ Prova 14 giorni gratis
           </button>
         </motion.div>
       </section>
@@ -340,6 +342,8 @@ export default function LandingNew() {
           </div>
         </div>
       </footer>
+
+      {showDemoModal && <DemoRequestModal onClose={() => setShowDemoModal(false)} />}
     </div>
   );
 }

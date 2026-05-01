@@ -1,0 +1,74 @@
+{
+  "name": "TrialSubscription",
+  "type": "object",
+  "properties": {
+    "company_email": {
+      "type": "string"
+    },
+    "company_name": {
+      "type": "string"
+    },
+    "contact_name": {
+      "type": "string"
+    },
+    "contact_email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "employees_count": {
+      "type": "number"
+    },
+    "trial_start": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "trial_end": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "converted",
+        "expired",
+        "cancelled"
+      ],
+      "default": "active"
+    },
+    "stripe_customer_id": {
+      "type": "string"
+    },
+    "stripe_subscription_id": {
+      "type": "string"
+    },
+    "welcome_email_sent": {
+      "type": "boolean",
+      "default": false
+    },
+    "reminder_email_sent": {
+      "type": "boolean",
+      "default": false
+    },
+    "signup_source": {
+      "type": "string",
+      "enum": [
+        "landing_page",
+        "demo_request",
+        "organic"
+      ]
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "company_email",
+    "contact_name",
+    "contact_email",
+    "trial_start",
+    "trial_end"
+  ]
+}
