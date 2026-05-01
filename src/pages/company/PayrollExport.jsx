@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { authService } from '@/services/authService';
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
@@ -25,14 +25,10 @@ export default function PayrollExport() {
     const init = async () => {
       const me = await authService.me();
       setUser(me);
-      if (me?.company_id) {
-        const comp = await companyService.filter({ id: me.company_id });
-        const emps = await employeeService.filter({ company_id: me.company_id });
-        // TODO: Replace with payroll service
-        if (comp[0]) setCompany(comp[0]);
-        setEmployees(emps);
-        setPayrollFiles([]);
-      }
+      // TODO: Replace with company, employee, payroll services
+      setCompany(null);
+      setEmployees([]);
+      setPayrollFiles([]);
       setLoading(false);
     };
     init();
