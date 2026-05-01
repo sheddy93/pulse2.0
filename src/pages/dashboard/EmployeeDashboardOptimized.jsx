@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useState, useEffect } from 'react';
 import { useAuth } from '@/lib/AuthContextDecoupled';
 import { employeeService } from '@/services/employeeService';
 import AppShell from '@/components/layout/AppShell';
@@ -66,7 +65,7 @@ const TRANSLATIONS = {
 };
 
 export default function EmployeeDashboardOptimized() {
-  const [user, setUser] = useState(null);
+  const { user: authUser, isLoadingAuth } = useAuth();
   const [employee, setEmployee] = useState(null);
   const [loading, setLoading] = useState(true);
   const [upcomingShift, setUpcomingShift] = useState(null);
@@ -78,24 +77,24 @@ export default function EmployeeDashboardOptimized() {
   useEffect(() => {
     if (!isLoadingAuth && authUser?.email) {
       const loadData = async () => {
+        try {
+          const emps = await employeeService.listEmployees(authUser.company_id, { email: authUser.email });
+          
+          if (emps?.[0]) setEmployee(emps[0]);
+          if (emps?.[0]) setLeaveBalance({ available_leave: 20, available_permissions: 8 });
 
-        const emps = await employeeService.listEmployees(authUser.company_id, { email: authUser.email });
-        
-        if (emps?.[0]) setEmployee(emps[0]);
-        if (emps?.[0]) setLeaveBalance({ available_leave: 20, available_permissions: 8 });
-
-        // TODO: Integrate with shift/attendance services
-        setUpcomingShift(null);
-        setTodayStats({
-          checkedIn: false,
-          totalTime: '0h',
-          entriesCount: 0
-        });
-      } catch (err) {
-        console.error('Error loading employee data:', err);
-      } finally {
-        setLoading(false);
-      }
+          // TODO: Integrate with shift/attendance services
+          setUpcomingShift(null);
+          setTodayStats({
+            checkedIn: false,
+            totalTime: '0h',
+            entriesCount: 0
+          });
+        } catch (err) {
+          console.error('Error loading employee data:', err);
+        } finally {
+          setLoading(false);
+        }
       };
       loadData();
     } else if (!isLoadingAuth) {

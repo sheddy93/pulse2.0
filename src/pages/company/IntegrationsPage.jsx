@@ -2,7 +2,7 @@
  * Integrations Page
  * Overview integrazioni: Slack, Zapier, API, Webhooks
  */
-import { useAuth } from '@/lib/AuthContext';
+import { useAuth } from '@/lib/AuthContextDecoupled';
 import AppShell from '@/components/layout/AppShell';
 import { Slack, Code, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';

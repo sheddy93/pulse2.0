@@ -9,7 +9,7 @@ import PageLoader from '@/components/layout/PageLoader';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Copy, Plus, Trash2, Eye, EyeOff } from 'lucide-react';
-import { useAuth } from '@/lib/AuthContext';
+import { useAuth } from '@/lib/AuthContextDecoupled';
 import { toast } from 'sonner';
 
 const SCOPES = [

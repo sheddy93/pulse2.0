@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
 import { Bell, Mail, Clock } from 'lucide-react';
-import { useAuth } from '@/lib/AuthContext';
+import { useAuth } from '@/lib/AuthContextDecoupled';
 import { toast } from 'sonner';
 
 export default function NotificationPreferencesPage() {

@@ -8,7 +8,7 @@ import AppShell from '@/components/layout/AppShell';
 import PageLoader from '@/components/layout/PageLoader';
 import TimeOffCalendar from '@/components/time-off/TimeOffCalendar';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useAuth } from '@/lib/AuthContext';
+import { useAuth } from '@/lib/AuthContextDecoupled';
 
 export default function TimeOffCalendarPage() {
   const { user } = useAuth();
