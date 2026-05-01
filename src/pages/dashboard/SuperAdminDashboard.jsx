@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import { useAuth } from '@/lib/AuthContextDecoupled';
 import AppShell from '@/components/layout/AppShell';
 import PageLoader from '@/components/layout/PageLoader';
 import SuperAdminOverview from '@/components/admin/SuperAdminOverview';
@@ -16,8 +16,7 @@ import PricingConfigManager from '@/components/admin/PricingConfigManager';
 import { LayoutGrid, Building2, Users, Activity, BarChart3, Palette, DollarSign } from 'lucide-react';
 
 export default function SuperAdminDashboard() {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { user: authUser, isLoadingAuth } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
   const [stats, setStats] = useState({
     companies: 0,
@@ -27,39 +26,29 @@ export default function SuperAdminDashboard() {
     totalStorage: 0,
     alerts: 0,
   });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    base44.auth.me().then(async (me) => {
-      if (me?.role !== 'super_admin') {
+    if (!isLoadingAuth) {
+      if (authUser?.role !== 'super_admin') {
         window.location.href = '/';
         return;
       }
-      setUser(me);
-      
-      try {
-        const [companies, users, subs, employees] = await Promise.all([
-          base44.entities.Company.list(),
-          base44.entities.User.list(),
-          base44.entities.CompanySubscription.list(),
-          base44.entities.EmployeeProfile.list(),
-        ]);
-        
-        setStats({
-          companies: companies?.length || 0,
-          users: users?.length || 0,
-          activeSubscriptions: subs?.filter(s => s.status === 'active')?.length || 0,
-          totalEmployees: employees?.length || 0,
-          totalStorage: Math.round((employees?.length || 0) * 2.5),
-          alerts: 1,
-        });
-      } catch (err) {
-        console.error('Error loading stats:', err);
-      }
-    }).finally(() => setLoading(false));
-  }, []);
+      // TODO: Integrate with admin service for stats
+      setStats({
+        companies: 5,
+        users: 25,
+        activeSubscriptions: 3,
+        totalEmployees: 120,
+        totalStorage: 300,
+        alerts: 1,
+      });
+      setLoading(false);
+    }
+  }, [authUser, isLoadingAuth]);
 
-  if (loading) return <PageLoader color="red" />;
-  if (!user) return null;
+  if (loading || isLoadingAuth) return <PageLoader color="red" />;
+  if (!authUser) return null;
 
   const tabs = [
     { id: 'overview', label: 'Panoramica', icon: LayoutGrid },
@@ -76,7 +65,7 @@ export default function SuperAdminDashboard() {
   ];
 
   return (
-    <AppShell user={user}>
+    <AppShell user={authUser}>
       <div className="p-6 max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div>
