@@ -1,0 +1,54 @@
+{
+  "name": "PermissionChangeRequest",
+  "type": "object",
+  "properties": {
+    "requester_email": {
+      "type": "string"
+    },
+    "requester_type": {
+      "type": "string",
+      "enum": [
+        "consultant",
+        "company_admin"
+      ]
+    },
+    "company_id": {
+      "type": "string"
+    },
+    "company_name": {
+      "type": "string"
+    },
+    "requested_permissions": {
+      "type": "object"
+    },
+    "current_permissions": {
+      "type": "object"
+    },
+    "request_note": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected"
+      ],
+      "default": "pending"
+    },
+    "reviewed_by": {
+      "type": "string"
+    },
+    "reviewed_at": {
+      "type": "string"
+    },
+    "review_note": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "requester_email",
+    "company_id",
+    "requested_permissions"
+  ]
+}

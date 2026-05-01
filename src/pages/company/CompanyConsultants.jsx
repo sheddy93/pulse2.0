@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
-import { Briefcase, Send, Check, X, Settings } from "lucide-react";
+import { Briefcase, Send, Check, X, Settings, Clock } from "lucide-react";
 import PermissionsEditor from "@/components/admin/PermissionsEditor";
+import PermissionRequestsPanel from "@/components/admin/PermissionRequestsPanel";
 
 const STATUS_MAP = {
   approved: { label: "Collegato", cls: "bg-emerald-100 text-emerald-700" },
@@ -22,6 +23,8 @@ export default function CompanyConsultants() {
   const [sending, setSending] = useState(false);
   const [msg, setMsg] = useState("");
   const [editingPermissions, setEditingPermissions] = useState(null);
+  const [showRequests, setShowRequests] = useState(false);
+  const [pendingCount, setPendingCount] = useState(0);
 
   const loadLinks = async (comp) => {
     const l = await base44.entities.ConsultantCompanyLink.filter({ company_id: comp.id });
@@ -35,7 +38,11 @@ export default function CompanyConsultants() {
         const companies = await base44.entities.Company.filter({ id: me.company_id });
         const comp = companies[0];
         setCompany(comp || null);
-        if (comp) await loadLinks(comp);
+        if (comp) {
+          await loadLinks(comp);
+          const pending = await base44.entities.PermissionChangeRequest.filter({ company_id: comp.id, status: "pending" });
+          setPendingCount(pending.length);
+        }
       }
     }).finally(() => setLoading(false));
   }, []);
@@ -82,9 +89,20 @@ export default function CompanyConsultants() {
   return (
     <AppShell user={user}>
       <div className="p-6 max-w-4xl mx-auto space-y-6">
-        <div>
-          <h1 className="text-xl font-bold text-slate-800">Consulenti</h1>
-          <p className="text-sm text-slate-500">Gestisci i consulenti autorizzati ad accedere ai dati aziendali</p>
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h1 className="text-xl font-bold text-slate-800">Consulenti</h1>
+            <p className="text-sm text-slate-500">Gestisci i consulenti autorizzati ad accedere ai dati aziendali</p>
+          </div>
+          {pendingCount > 0 && (
+            <button
+              onClick={() => setShowRequests(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-amber-50 border border-amber-200 text-amber-700 rounded-lg text-sm font-semibold hover:bg-amber-100"
+            >
+              <Clock className="w-4 h-4" />
+              {pendingCount} richiesta{pendingCount !== 1 ? "e" : ""} permessi
+            </button>
+          )}
         </div>
 
         <div className="bg-white rounded-xl border border-slate-200 p-5">
@@ -149,7 +167,7 @@ export default function CompanyConsultants() {
                       <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${badge.cls}`}>{badge.label}</span>
                       {link.status === "approved" && (
                         <button
-                          onClick={() => setEditingPermissions({ email: link.consultant_email, full_name: link.consultant_email })}
+                          onClick={() => setEditingPermissions({ email: link.consultant_email, full_name: link.consultant_email, isConsultant: true })}
                           className="flex items-center gap-1.5 px-3 py-1.5 border border-slate-200 text-slate-600 rounded-lg text-xs font-medium hover:bg-slate-50"
                         >
                           <Settings className="w-3.5 h-3.5" />
@@ -170,7 +188,15 @@ export default function CompanyConsultants() {
           targetUser={editingPermissions}
           companyId={company?.id}
           grantedBy={user?.email}
+          isConsultant={editingPermissions.isConsultant}
           onClose={() => setEditingPermissions(null)}
+        />
+      )}
+
+      {showRequests && (
+        <PermissionRequestsPanel
+          companyId={company?.id}
+          onClose={() => { setShowRequests(false); base44.entities.PermissionChangeRequest.filter({ company_id: company?.id, status: "pending" }).then(r => setPendingCount(r.length)); }}
         />
       )}
     </AppShell>
