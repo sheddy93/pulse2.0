@@ -1,0 +1,59 @@
+{
+  "name": "APIKey",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string",
+      "description": "Nome descrittivo della key"
+    },
+    "key_hash": {
+      "type": "string",
+      "description": "Hash della key (non salvare plain text)"
+    },
+    "key_prefix": {
+      "type": "string",
+      "description": "Prefisso visibile (es. pk_live_abc123)"
+    },
+    "scopes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "read:employees",
+          "write:employees",
+          "read:leave",
+          "write:leave",
+          "read:attendance",
+          "write:attendance",
+          "read:documents",
+          "read:payroll"
+        ]
+      }
+    },
+    "rate_limit": {
+      "type": "number",
+      "description": "Richieste al minuto",
+      "default": 100
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "last_used_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "created_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "company_id",
+    "name",
+    "key_hash",
+    "key_prefix"
+  ]
+}

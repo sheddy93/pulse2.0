@@ -26,7 +26,7 @@ import { cn } from "@/lib/utils";
 import {
   LayoutDashboard, Users, Building2, FileText, Clock, LogOut,
   Menu, X, ChevronRight, UserCog, Link2, Shield, Settings as SettingsIcon,
-  ClipboardList, Briefcase, CalendarDays, FileBadge, Activity, Monitor, BookOpen, Award, Heart, GraduationCap, BarChart3, MessageCircle, TrendingUp, MessageSquare, Receipt, Calendar, Bell, CreditCard, Sparkles
+  ClipboardList, Briefcase, CalendarDays, FileBadge, Activity, Monitor, BookOpen, Award, Heart, GraduationCap, BarChart3, MessageCircle, TrendingUp, MessageSquare, Receipt, Calendar, Bell, CreditCard, Sparkles, Code, Zap
 } from "lucide-react";
 import { getRoleLabel, getRoleColor, isCompanyRole, isConsultantRole } from "@/lib/roles";
 import NotificationBell from "./NotificationBell";
@@ -64,6 +64,8 @@ const COMPANY_NAV = [
     { label: "Team Analytics", icon: TrendingUp, path: "/dashboard/company/team-analytics" },
     { label: "Template Documenti", icon: FileText, path: "/dashboard/company/document-templates" },
     { label: "Esportazione Payroll", icon: FileText, path: "/dashboard/company/payroll-export" },
+    { label: "Integrazioni", icon: Zap, path: "/dashboard/company/integrations" },
+    { label: "API Management", icon: Code, path: "/dashboard/company/api" },
     { label: "Abbonamento", icon: CreditCard, path: "/dashboard/company/subscription" },
     { label: "Il mio account", icon: UserCog, path: "/dashboard/company/my-account" },
     { label: "Impostazioni", icon: SettingsIcon, path: "/dashboard/company/settings" },

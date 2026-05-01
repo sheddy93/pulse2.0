@@ -77,6 +77,8 @@ import TrainingPlanManagement from './pages/company/TrainingPlanManagement';
 import TimeOffCalendarPage from './pages/company/TimeOffCalendarPage';
 import DocumentTemplatePage from './pages/company/DocumentTemplatePage';
 import TeamAnalyticsPage from './pages/company/TeamAnalyticsPage';
+import APIManagement from './pages/company/APIManagement';
+import IntegrationsPage from './pages/company/IntegrationsPage';
 import TrainingDashboard from './pages/employee/TrainingDashboard';
 import CertificationExpiry from './pages/company/CertificationExpiry';
 import SuperAdminSettings from './pages/dashboard/SuperAdminSettings';
@@ -102,7 +104,7 @@ import DocumentSignaturePage from './pages/employee/DocumentSignaturePage';
 import OvertimeRequestPage from './pages/employee/OvertimeRequestPage';
 import SkillsPage from './pages/employee/SkillsPage';
 import BenefitsPage from './pages/employee/BenefitsPage';
-import NotificationSettings from './pages/employee/NotificationSettings';
+import NotificationPreferencesPage from './pages/employee/NotificationPreferencesPage';
 import SubscriptionPage from './pages/company/SubscriptionPage';
 import CheckoutPage from './pages/company/CheckoutPage';
 import MyAccountSubscription from './pages/company/MyAccountSubscription';
@@ -237,6 +239,8 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/company/document-templates" element={<DocumentTemplatePage />} />
       <Route path="/dashboard/company/team-analytics" element={<TeamAnalyticsPage />} />
       <Route path="/dashboard/company/settings" element={<CompanySettings />} />
+      <Route path="/dashboard/company/api" element={<APIManagement />} />
+      <Route path="/dashboard/company/integrations" element={<IntegrationsPage />} />
 
       {/* Employee */}
       <Route path="/dashboard/employee" element={<EmployeeDashboardBasic />} />
@@ -259,7 +263,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/employee/expenses" element={<EmployeeExpenses />} />
       <Route path="/dashboard/employee/onboarding" element={<OnboardingWizard />} />
       <Route path="/dashboard/employee/profile" element={<EmployeeProfilePage />} />
-      <Route path="/dashboard/employee/notification-settings" element={<NotificationSettings />} />
+      <Route path="/dashboard/employee/notification-settings" element={<NotificationPreferencesPage />} />
       <Route path="/dashboard/employee/contract" element={<EmployeeContract />} />
       <Route path="/dashboard/employee/my-profile" element={<MyProfile />} />
 

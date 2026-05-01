@@ -1,0 +1,133 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "PulseHR API",
+    "version": "1.0.0",
+    "description": "REST API for PulseHR HR Management System",
+    "contact": {
+      "name": "PulseHR Support",
+      "url": "https://pulsehr.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.pulsehr.com/api/v1",
+      "description": "Production API"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "API key from dashboard"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/employees": {
+      "get": {
+        "summary": "List all employees",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": { "type": "integer", "default": 50 }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": { "type": "integer", "default": 0 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of employees",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": { "type": "array" },
+                    "total": { "type": "integer" },
+                    "limit": { "type": "integer" },
+                    "offset": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create employee",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "first_name": { "type": "string" },
+                  "last_name": { "type": "string" },
+                  "email": { "type": "string" },
+                  "job_title": { "type": "string" }
+                },
+                "required": ["first_name", "last_name", "email"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Employee created" }
+        }
+      }
+    },
+    "/leave": {
+      "get": {
+        "summary": "List leave requests",
+        "parameters": [
+          {
+            "name": "employee_id",
+            "in": "query",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "List of leave requests" }
+        }
+      },
+      "post": {
+        "summary": "Create leave request",
+        "responses": {
+          "201": { "description": "Leave request created" }
+        }
+      }
+    },
+    "/attendance": {
+      "get": {
+        "summary": "List attendance records",
+        "parameters": [
+          {
+            "name": "employee_id",
+            "in": "query",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "List of attendance records" }
+        }
+      }
+    }
+  }
+}

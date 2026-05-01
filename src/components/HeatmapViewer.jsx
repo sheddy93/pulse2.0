@@ -85,10 +85,10 @@ export default function HeatmapViewer({ companyId }) {
             <Marker
               key={idx}
               position={[point.latitude, point.longitude]}
-              icon={{
+              icon={(() => ({
                 className: `heatmap-marker`,
                 html: `<div style="background-color: ${getColor(point.intensity)}; width: 30px; height: 30px; border-radius: 50%; opacity: ${point.intensity}; border: 2px solid white;"></div>`,
-              } as any}
+              }))()} 
             >
               <Popup>
                 <div className="text-sm">
