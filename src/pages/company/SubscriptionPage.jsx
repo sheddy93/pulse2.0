@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { useAuth } from "@/hooks/useAuth";
+import { billingService } from "@/services/billingService";
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import StripeCheckoutModal from "@/components/checkout/StripeCheckoutModal";
@@ -31,7 +32,7 @@ const COLOR_MAP = {
  */
 export default function SubscriptionPage() {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const { user, isLoadingAuth } = useAuth();
   const [plans, setPlans] = useState([]);
   const [currentSub, setCurrentSub] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -39,16 +40,23 @@ export default function SubscriptionPage() {
   const [checkoutModal, setCheckoutModal] = useState({ isOpen: false, plan: null });
 
   useEffect(() => {
-    base44.auth.me().then(async (me) => {
-      setUser(me);
-      const [p, subs] = await Promise.all([
-        base44.entities.SubscriptionPlan.filter({ is_active: true }),
-        base44.entities.CompanySubscription.filter({ company_email: me.email }),
+    if (!isLoadingAuth && user?.company_id) {
+      loadSubscriptionData();
+    }
+  }, [user, isLoadingAuth]);
+
+  const loadSubscriptionData = async () => {
+    try {
+      const [p, sub] = await Promise.all([
+        billingService.listPlans(user.company_id),
+        billingService.getStatus(user.company_id),
       ]);
       setPlans(p.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0)));
-      setCurrentSub(subs[0] || null);
-    }).finally(() => setLoading(false));
-  }, []);
+      setCurrentSub(sub || null);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   /**
    * handleCheckout(plan)

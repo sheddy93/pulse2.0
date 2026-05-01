@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import AppShell from '@/components/layout/AppShell';
 import PageLoader from '@/components/layout/PageLoader';
-import { createNewEmployee, fetchDepartments } from '@/services/employeeService';
+import { employeeService } from '@/services/employeeService';
 import { ArrowLeft, Plus } from 'lucide-react';
 
 export default function EmployeeCreateNew() {
@@ -41,7 +41,7 @@ export default function EmployeeCreateNew() {
       setUser(me);
 
       try {
-        const depts = await fetchDepartments(me.company_id);
+        const depts = await employeeService.fetchDepartments(me.company_id);
         setDepartments(depts || []);
       } catch (err) {
         console.error('Error loading departments:', err);
@@ -58,7 +58,7 @@ export default function EmployeeCreateNew() {
 
     setSaving(true);
     try {
-      await createNewEmployee(user.company_id, formData);
+      await employeeService.createNewEmployee(user.company_id, formData);
       alert('Dipendente creato con successo');
       navigate('/dashboard/company/employees');
     } catch (err) {
