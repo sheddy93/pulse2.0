@@ -328,11 +328,7 @@ function DiscountEditor({ subscription, onClose }) {
   const total = subtotal - discountAmount;
 
   const handleSave = async () => {
-    // TODO: Replace with service.CompanySubscription.update(subscription.id, {
-      discount_percentage: discountPercentage,
-      discount_reason: discountReason,
-      total_monthly: total,
-    });
+    // TODO: Replace with service.CompanySubscription.update() call
     onClose();
   };
 

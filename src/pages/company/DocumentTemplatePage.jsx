@@ -33,10 +33,8 @@ export default function DocumentTemplatePage() {
   const loadTemplates = async () => {
     try {
       if (!user?.company_id) return;
-      const tmpl = // TODO: Replace with service.DocumentTemplate.filter({
-        company_id: user.company_id
-      });
-      setTemplates(tmpl);
+      // TODO: Replace with service.DocumentTemplate.filter() call
+      setTemplates([]);
     } catch (error) {
       toast.error('Errore caricamento template');
     } finally {
@@ -48,14 +46,10 @@ export default function DocumentTemplatePage() {
     e.preventDefault();
     try {
       if (editingId) {
-        // TODO: Replace with service.DocumentTemplate.update(editingId, formData);
+        // TODO: Replace with service.DocumentTemplate.update() call
         toast.success('Template aggiornato');
       } else {
-        // TODO: Replace with service.DocumentTemplate.create({
-          ...formData,
-          company_id: user.company_id,
-          created_by: user.email
-        });
+        // TODO: Replace with service.DocumentTemplate.create() call
         toast.success('Template creato');
       }
       setShowForm(false);
@@ -76,7 +70,7 @@ export default function DocumentTemplatePage() {
   const handleDelete = async (id) => {
     if (confirm('Elimina questo template?')) {
       try {
-        // TODO: Replace with service.DocumentTemplate.delete(id);
+        // TODO: Replace with service.DocumentTemplate.delete() call
         toast.success('Template eliminato');
         loadTemplates();
       } catch (error) {

@@ -33,9 +33,8 @@ export default function MyAccountSubscription() {
         if (comp[0]) setCompany(comp[0]);
         if (subs[0]) {
           setSubscription(subs[0]);
-          // Carica il piano
-          const plans = // TODO: Replace with service.SubscriptionPlan.filter({ id: subs[0].plan_id });
-          if (plans[0]) setPlan(plans[0]);
+          // TODO: Replace with service.SubscriptionPlan.filter() call
+          // setPlan(plans[0]);
           // Carica cronologia pagamenti
           await loadPaymentHistory(subs[0].stripe_customer_id);
         }

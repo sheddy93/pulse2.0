@@ -58,12 +58,9 @@ export default function IntegrationSettings() {
 
   const handleAddWebhook = async (e) => {
     e.preventDefault();
-    // TODO: Replace with service.WebhookIntegration.create({
-      company_id: company.id,
-      ...webhookForm
-    });
-    const updated = // TODO: Replace with service.WebhookIntegration.filter({ company_id: company.id });
-    setWebhooks(updated);
+    // TODO: Replace with service.WebhookIntegration.create() call
+    // TODO: Replace with service.WebhookIntegration.filter() call
+    setWebhooks([]);
     setShowWebhookForm(false);
     setWebhookForm({ name: "", integration_type: "custom", webhook_url: "", events: [] });
   };
@@ -81,14 +78,9 @@ export default function IntegrationSettings() {
     const key = `pk_live_${Math.random().toString(36).substring(2, 15)}`;
     setGeneratedKey(key);
     
-    // TODO: Replace with service.APIKey.create({
-      company_id: company.id,
-      ...apiKeyForm,
-      key_hash: key.substring(8), // Simulated hash
-      prefix: `pk_live_${key.substring(8, 15)}`
-    });
-    const updated = // TODO: Replace with service.APIKey.filter({ company_id: company.id });
-    setApiKeys(updated);
+    // TODO: Replace with service.APIKey.create() call
+    // TODO: Replace with service.APIKey.filter() call
+    setApiKeys([]);
     setApiKeyForm({ name: "", permissions: [] });
   };
 

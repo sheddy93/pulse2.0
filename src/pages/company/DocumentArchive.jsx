@@ -81,20 +81,7 @@ export default function DocumentArchive() {
         file: formData.file
       });
 
-      // Create document record
-      // TODO: Replace with service.Document.create({
-        company_id: user.company_id,
-        title: formData.title,
-        doc_type: formData.doc_type,
-        description: formData.description,
-        file_url: uploadResult.file_url,
-        uploaded_by: user.email,
-        visibility: formData.visibility,
-        expiry_date: formData.expiry_date,
-        signature_required: formData.require_signature,
-        status: "approvato"
-      });
-
+      // TODO: Replace with service.Document.create() call
       toast.success("Documento caricato");
       setShowUploadModal(false);
       setFormData({
@@ -109,10 +96,8 @@ export default function DocumentArchive() {
         file: null
       });
 
-      const docs = // TODO: Replace with service.Document.filter({
-        company_id: user.company_id
-      });
-      setDocuments(docs);
+      // TODO: Replace with service.Document.filter() call
+      setDocuments([]);
     } catch (e) {
       toast.error(e.message);
     } finally {
@@ -124,12 +109,10 @@ export default function DocumentArchive() {
     if (!window.confirm("Sei sicuro di voler eliminare questo documento?")) return;
     
     try {
-      // TODO: Replace with service.Document.delete(docId);
+      // TODO: Replace with service.Document.delete(docId)
       toast.success("Documento eliminato");
-      const docs = // TODO: Replace with service.Document.filter({
-        company_id: user.company_id
-      });
-      setDocuments(docs);
+      // TODO: Replace with service.Document.filter() call
+      setDocuments([]);
     } catch (e) {
       toast.error(e.message);
     }
@@ -148,17 +131,12 @@ export default function DocumentArchive() {
     if (!selectedDoc) return;
 
     try {
-      // TODO: Replace with service.Document.update(selectedDoc.id, {
-        allowed_employees: permissionsData.employees,
-        visibility: permissionsData.visibility
-      });
+      // TODO: Replace with service.Document.update() call
       toast.success("Permessi aggiornati");
       setShowPermissionsModal(false);
       
-      const docs = // TODO: Replace with service.Document.filter({
-        company_id: user.company_id
-      });
-      setDocuments(docs);
+      // TODO: Replace with service.Document.filter() call
+      setDocuments([]);
     } catch (e) {
       toast.error(e.message);
     }

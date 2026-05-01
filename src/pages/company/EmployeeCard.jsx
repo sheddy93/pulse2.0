@@ -49,16 +49,11 @@ export default function EmployeeCard() {
       const emp = emps[0];
       setEmployee(emp);
       if (emp) {
-        const [entries, ctrs, docs, lvs] = await Promise.all([
-          // TODO: Replace with service.TimeEntry.filter({ employee_id: emp.id }),
-          // TODO: Replace with service.EmployeeContract.filter({ employee_id: emp.id }),
-          // TODO: Replace with service.Document.filter({ employee_id: emp.id }),
-          // TODO: Replace with service.LeaveRequest.filter({ employee_id: emp.id }),
-        ]);
-        setTimeEntries(entries.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)));
-        setContracts(ctrs.sort((a, b) => new Date(b.start_date) - new Date(a.start_date)));
-        setDocuments(docs.sort((a, b) => new Date(b.created_date) - new Date(a.created_date)));
-        setLeaves(lvs.sort((a, b) => new Date(b.start_date) - new Date(a.start_date)));
+        // TODO: Replace with service calls to fetch all employee data
+        setTimeEntries([]);
+        setContracts([]);
+        setDocuments([]);
+        setLeaves([]);
         setNote(emp.internal_notes || "");
       }
     }).finally(() => setLoading(false));

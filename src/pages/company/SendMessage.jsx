@@ -133,20 +133,7 @@ export default function SendMessage() {
 
       // Create message
       // TODO: Replace with service.CompanyMessage.create({
-        company_id: user.company_id,
-        sender_email: user.email,
-        sender_name: user.full_name,
-        subject: formData.subject,
-        content: formData.content,
-        message_type: formData.message_type,
-        priority: formData.priority,
-        recipient_type: formData.recipient_type,
-        recipient_employees: recipientIds,
-        recipient_department: formData.recipient_department,
-        due_date: formData.due_date,
-        attachments,
-        sent_at: new Date().toISOString()
-      });
+      // TODO: Replace with service.CompanyMessage.create() call with all parameters
 
       // Send notifications
       const recipientEmps = employees.filter(e => recipientIds.includes(e.id));

@@ -25,12 +25,13 @@ export default function CheckoutPage() {
       
       // Carica il piano selezionato
       if (planId) {
-        const plans = // TODO: Replace with service.SubscriptionPlan.filter({ id: planId });
+        // TODO: Replace with service.SubscriptionPlan.filter({ id: planId })
+        const plans = [];
         if (plans[0]) setPlan(plans[0]);
       }
 
-      // Carica tutti gli add-ons
-      const addons = // TODO: Replace with service.SubscriptionAddon.filter({ is_active: true });
+      // TODO: Replace with service.SubscriptionAddon.filter({ is_active: true })
+      const addons = [];
       setAllAddons(addons.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0)));
     }).finally(() => setLoading(false));
   }, [planId]);

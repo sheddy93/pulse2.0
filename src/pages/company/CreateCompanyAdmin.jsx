@@ -38,18 +38,8 @@ export default function CreateCompanyAdmin() {
     // Invite user to platform
     await base44.users.inviteUser(form.email, form.role);
 
-    // Create employee profile for admin
-    // TODO: Replace with service.EmployeeProfile.create({
-      first_name: form.first_name,
-      last_name: form.last_name,
-      email: form.email,
-      company_id: company.id,
-      job_title: COMPANY_SUB_ROLES.find(r => r.value === form.role)?.label || form.role,
-      status: "active",
-      has_account: true,
-      temp_password: tempPassword,
-      user_email: form.email,
-    });
+    // TODO: Replace with service.EmployeeProfile.create() call
+    // Stub profile creation - service integration pending
 
     setDone({ tempPassword, email: form.email, role: form.role, name: `${form.first_name} ${form.last_name}`, publicId });
     setSaving(false);

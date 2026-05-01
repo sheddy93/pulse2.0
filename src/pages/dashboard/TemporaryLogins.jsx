@@ -79,18 +79,7 @@ export default function TemporaryLogins() {
       const expiresAt = new Date();
       expiresAt.setHours(expiresAt.getHours() + formData.expiry_hours);
 
-      const tempLogin = // TODO: Replace with service.TemporaryLogin.create({
-        company_id: isCompanyAdmin ? user.company_id : null,
-        user_email: formData.user_email,
-        user_role: formData.user_role,
-        temp_password: plainPassword,
-        plain_password: plainPassword,
-        generated_by: user.email,
-        expires_at: expiresAt.toISOString(),
-        created_at: new Date().toISOString(),
-        expiry_hours: formData.expiry_hours,
-        status: "active"
-      });
+      // TODO: Replace with service.TemporaryLogin.create() call
 
       // Send email with temporary login
       await base44.integrations.Core.SendEmail({
@@ -103,10 +92,8 @@ export default function TemporaryLogins() {
       setShowModal(false);
       setFormData({ user_email: "", user_role: "employee", expiry_hours: 48 });
 
-      const result = // TODO: Replace with service.TemporaryLogin.filter(
-        isAdmin ? { company_id: null } : { company_id: user.company_id }
-      );
-      setLogins(result.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
+      // TODO: Replace with service.TemporaryLogin.filter() call
+      setLogins([]);
     } catch (e) {
       toast.error(e.message);
     } finally {
@@ -118,13 +105,11 @@ export default function TemporaryLogins() {
     if (!window.confirm("Revocare questo login temporaneo?")) return;
 
     try {
-      // TODO: Replace with service.TemporaryLogin.update(loginId, { status: "revoked" });
+      // TODO: Replace with service.TemporaryLogin.update(loginId, { status: "revoked" })
       toast.success("Login revocato");
 
-      const result = // TODO: Replace with service.TemporaryLogin.filter(
-        isAdmin ? { company_id: null } : { company_id: user.company_id }
-      );
-      setLogins(result.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
+      // TODO: Replace with service.TemporaryLogin.filter() call
+      setLogins([]);
     } catch (e) {
       toast.error(e.message);
     }
