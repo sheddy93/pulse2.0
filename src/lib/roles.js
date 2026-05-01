@@ -1,22 +1,42 @@
 /**
  * lib/roles.js
- * Centralizzata fonte di verità per ruoli e loro proprietà
- * Pronto per futura migrazione: roles da DB PostgreSQL
+ * ============
+ * Gestione centralizzata dei ruoli e permessi AldevionHR.
+ * 
+ * ⚠️ IMPORTANTE: Questo è il single source of truth per i ruoli.
+ * Se aggiungi/modifichi un ruolo:
+ * 1. Aggiungi qui in ROLES
+ * 2. Aggiungi in ROLE_LABELS e ROLE_COLORS
+ * 3. Aggiungi in ROLE_HIERARCHY
+ * 4. Aggiungi permessi in lib/permissions.js (ROLE_PERMISSIONS_MAP)
+ * 5. Aggiungi routing in App.jsx (NAV object in AppShell)
+ * 
+ * Gerarchia ruoli:
+ *   super_admin (7) > company_owner (6) > company_admin (5) > 
+ *   hr_manager (4) > manager (3) > employee (2) > consultant (1)
+ * 
+ * TODO MIGRATION: Quando pronto, migrare roles a PostgreSQL 
+ * per permettere ruoli custom per azienda (es. "Safety Officer")
  */
 
+/**
+ * ROLES
+ * Tutti i ruoli disponibili nel sistema
+ */
 export const ROLES = {
-  SUPER_ADMIN: 'super_admin',
-  COMPANY_OWNER: 'company_owner',
-  COMPANY_ADMIN: 'company_admin',
-  HR_MANAGER: 'hr_manager',
-  MANAGER: 'manager',
-  EMPLOYEE: 'employee',
-  EXTERNAL_CONSULTANT: 'external_consultant',
+  SUPER_ADMIN: 'super_admin',           // Admin piattaforma: vede tutto
+  COMPANY_OWNER: 'company_owner',       // Proprietario azienda: accesso completo
+  COMPANY_ADMIN: 'company_admin',       // Admin azienda: gestisce HR
+  HR_MANAGER: 'hr_manager',             // Manager HR: approva ferie, payroll
+  MANAGER: 'manager',                   // Manager team: approva ferie team
+  EMPLOYEE: 'employee',                 // Dipendente: vede propri dati
+  EXTERNAL_CONSULTANT: 'external_consultant', // Consulente esterno: vede dati clienti
 };
 
 /**
- * Ruoli che hanno accesso agli strumenti di amministrazione dell'azienda
- * TODO MIGRATION: Questi ruoli avranno permessi specifici nel backend
+ * COMPANY_SUB_ROLES
+ * Ruoli che hanno accesso all'area company (non super admin)
+ * Usato in dropdown per assegnazione ruoli
  */
 export const COMPANY_SUB_ROLES = [
   {
@@ -42,9 +62,20 @@ export const COMPANY_SUB_ROLES = [
 ];
 
 /**
- * Genera una password temporanea sicura (10 caratteri)
- * Formato: 2 maiuscole + 2 minuscole + 2 numeri + 4 caratteri speciali
- * TODO MIGRATION: Questa logica si sposterà nel backend per maggiore sicurezza
+ * generateTempPassword()
+ * =====================
+ * Genera password temporanea sicura per nuovi admin
+ * 
+ * Formato: 2 maiuscole + 2 minuscole + 2 numeri + 4 speciali
+ * Esempio: "Rk9#$pL5!@"
+ * 
+ * Usata in:
+ *   - Creazione admin company
+ *   - Reset password
+ *   - Login temporanei
+ * 
+ * ⚠️ TODO MIGRATION: Spostare logica in backend per maggiore sicurezza.
+ * Al momento è client-side per UX, ma rischio è minimo se HTTPS sempre.
  */
 export const generateTempPassword = () => {
   const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -88,54 +119,102 @@ export const ROLE_COLORS = {
   [ROLES.EXTERNAL_CONSULTANT]: 'bg-orange-100 text-orange-800',
 };
 
-// Gerarchia ruoli per controlli di accesso
+/**
+ * ROLE_HIERARCHY
+ * Numerazione per controllo accesso
+ * Usata per verificare se user A può modificare user B
+ * 
+ * Esempio: 
+ *   - company_owner (6) PUÒ modificare hr_manager (4) ✓
+ *   - manager (3) NON PUÒ modificare company_admin (5) ✗
+ *   - super_admin (7) PUÒ fare tutto ✓
+ */
 export const ROLE_HIERARCHY = {
-  [ROLES.SUPER_ADMIN]: 7,
-  [ROLES.COMPANY_OWNER]: 6,
-  [ROLES.COMPANY_ADMIN]: 5,
-  [ROLES.HR_MANAGER]: 4,
-  [ROLES.MANAGER]: 3,
-  [ROLES.EMPLOYEE]: 2,
-  [ROLES.EXTERNAL_CONSULTANT]: 1,
+  [ROLES.SUPER_ADMIN]: 7,               // Admin piattaforma
+  [ROLES.COMPANY_OWNER]: 6,             // Proprietario azienda
+  [ROLES.COMPANY_ADMIN]: 5,             // Admin azienda
+  [ROLES.HR_MANAGER]: 4,                // Manager HR
+  [ROLES.MANAGER]: 3,                   // Manager team
+  [ROLES.EMPLOYEE]: 2,                  // Dipendente base
+  [ROLES.EXTERNAL_CONSULTANT]: 1,       // Consulente esterno (minore)
 };
 
+/**
+ * isRoleHigherThan(userRole, targetRole)
+ * ========================================
+ * Verifica se user ha ruolo superiore per modificare target
+ * 
+ * Uso:
+ *   if (isRoleHigherThan(user.role, target.role)) {
+ *     // Permesso: user può modificare target
+ *   }
+ */
 export const isRoleHigherThan = (userRole, targetRole) => {
   return (ROLE_HIERARCHY[userRole] || 0) > (ROLE_HIERARCHY[targetRole] || 0);
 };
 
+/**
+ * isCompanyRole(role)
+ * User appartiene a un'azienda? (non super admin, non consultant)
+ */
 export const isCompanyRole = (role) => {
   return [ROLES.COMPANY_OWNER, ROLES.COMPANY_ADMIN, ROLES.HR_MANAGER, ROLES.MANAGER, ROLES.EMPLOYEE].includes(role);
 };
 
+/**
+ * isConsultantRole(role)
+ * Consulente esterno che collega a multiple aziende
+ */
 export const isConsultantRole = (role) => {
   return role === ROLES.EXTERNAL_CONSULTANT;
 };
 
+/**
+ * isSuperAdmin(role)
+ * Admin della piattaforma intera (accesso a tutte aziende)
+ */
 export const isSuperAdmin = (role) => {
   return role === ROLES.SUPER_ADMIN;
 };
 
 /**
- * Mappa ruolo → dashboard path
- * TODO MIGRATION: Logica di routing deve restare nel frontend anche dopo migrazione
- */
-/**
- * Ritorna il label leggibile del ruolo
+ * getRoleLabel(role)
+ * Traduzione ruolo → label italiano per UI
+ * Usato in badge, dropdown, pagine
+ * 
+ * Esempio: 'company_owner' → 'Titolare'
  */
 export const getRoleLabel = (role) => {
   return ROLE_LABELS[role] || 'Utente';
 };
 
 /**
- * Ritorna le classi Tailwind per il colore del ruolo
+ * getRoleColor(role)
+ * Classi Tailwind per styling ruolo (background + text color)
+ * Usato in badge nelle liste utenti, header dashboard
+ * 
+ * Esempio: 'company_owner' → 'bg-purple-100 text-purple-800'
  */
 export const getRoleColor = (role) => {
   return ROLE_COLORS[role] || 'bg-slate-100 text-slate-800';
 };
 
 /**
- * Mappa ruolo → dashboard path
- * TODO MIGRATION: Logica di routing deve restare nel frontend anche dopo migrazione
+ * getDashboardPath(role)
+ * =====================
+ * Mappa ruolo → path principale dashboard
+ * 
+ * Usato in:
+ *   - RoleRedirect.jsx (dopo login, dove mandare user?)
+ *   - AppShell.jsx (breadcrumb home)
+ * 
+ * Nota: Aggiungere nuovi ruoli qui E in App.jsx <Route>
+ * 
+ * Paths:
+ *   - super_admin → /dashboard/admin
+ *   - company_* → /dashboard/company
+ *   - manager/employee → /dashboard/employee
+ *   - consultant → /dashboard/consultant
  */
 export const getDashboardPath = (role) => {
   const paths = {
