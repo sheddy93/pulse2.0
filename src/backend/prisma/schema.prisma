@@ -1,4 +1,3 @@
-// This is your Prisma schema file
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,177 +7,204 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Users & Auth
 model User {
-  id                String    @id @default(cuid())
-  email             String    @unique
-  password_hash     String
-  full_name         String
-  role              String    @default("user") // super_admin, company_owner, hr_manager, manager, employee
-  company_id        String?
-  company           Company?  @relation(fields: [company_id], references: [id])
-  employee          Employee?
-  created_at        DateTime  @default(now())
-  updated_at        DateTime  @updatedAt
-  deleted_at        DateTime?
-
-  @@index([company_id])
-  @@index([email])
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password_hash String
+  full_name     String?
+  phone         String?
+  role          String    @default("employee") // super_admin, company_owner, company_admin, hr_manager, manager, employee, labor_consultant, external_consultant, safety_consultant
+  is_active     Boolean   @default(true)
+  profile_completed Boolean @default(false)
+  must_change_password Boolean @default(false)
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+  
+  // Relations
+  companies     CompanyUser[]
+  employees     Employee[]
+  leaves        LeaveRequest[]
+  attendance    AttendanceEntry[]
+  documents     Document[]
+  
+  @@map("users")
 }
 
-// Companies
 model Company {
-  id                String    @id @default(cuid())
-  name              String
-  email             String    @unique
+  id              String  @id @default(cuid())
+  public_id       String  @unique // COMP-XXXXX
+  name            String
+  vat_number      String  @unique
+  email           String
+  phone           String?
+  owner_id        String
+  is_active       Boolean @default(true)
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+  
+  // Relations
+  users           CompanyUser[]
+  employees       Employee[]
+  locations       CompanyLocation[]
+  leaves          LeaveRequest[]
+  attendance      AttendanceEntry[]
+  documents       Document[]
+  subscriptions   CompanySubscription[]
+  
+  @@map("companies")
+}
+
+model CompanyUser {
+  id        String   @id @default(cuid())
+  company_id String
+  user_id   String
+  role      String   // company_owner, company_admin, hr_manager, manager
+  joined_at DateTime @default(now())
+  
+  company   Company  @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  
+  @@unique([company_id, user_id])
+  @@map("company_users")
+}
+
+model Employee {
+  id                String   @id @default(cuid())
+  company_id        String
+  user_id           String
+  employee_code     String?
+  first_name        String
+  last_name         String
+  email             String
   phone             String?
-  industry          String?
-  employees         Employee[]
-  subscriptions     Subscription[]
+  job_title         String?
+  department        String?
+  manager_id        String?
+  hire_date         DateTime?
+  location_id       String?
+  status            String   @default("active") // active, inactive, onboarding
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+  
+  // Relations
+  company           Company  @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  user              User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  location          CompanyLocation? @relation(fields: [location_id], references: [id])
   leaves            LeaveRequest[]
   attendance        AttendanceEntry[]
   documents         Document[]
-  users             User[]
-  created_at        DateTime  @default(now())
-  updated_at        DateTime  @updatedAt
-  deleted_at        DateTime?
-
-  @@index([name])
+  
+  @@unique([company_id, email])
+  @@map("employees")
 }
 
-// Employees
-model Employee {
-  id                String    @id @default(cuid())
-  user_id           String    @unique
-  user              User      @relation(fields: [user_id], references: [id])
-  company_id        String
-  company           Company   @relation(fields: [company_id], references: [id])
-  first_name        String
-  last_name         String
-  job_title         String?
-  department        String?
-  hire_date         DateTime
-  status            String    @default("active") // active, inactive, onboarding
-  salary            Float?
-  leaves            LeaveRequest[]
-  attendance        AttendanceEntry[]
-  leave_balances    LeaveBalance[]
-  created_at        DateTime  @default(now())
-  updated_at        DateTime  @updatedAt
-  deleted_at        DateTime?
-
-  @@index([company_id])
-  @@index([user_id])
+model CompanyLocation {
+  id        String    @id @default(cuid())
+  company_id String
+  name      String
+  address   String?
+  latitude  Float?
+  longitude Float?
+  created_at DateTime @default(now())
+  
+  company   Company   @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  employees Employee[]
+  
+  @@map("company_locations")
 }
 
-// Attendance
-model AttendanceEntry {
-  id                String    @id @default(cuid())
-  employee_id       String
-  company_id        String
-  company           Company   @relation(fields: [company_id], references: [id])
-  type              String    // check_in, check_out, break_start, break_end
-  timestamp         DateTime
-  latitude          Float?
-  longitude         Float?
-  location_name     String?
-  status            String    @default("pending") // pending, approved, rejected
-  created_at        DateTime  @default(now())
-  updated_at        DateTime  @updatedAt
-
-  @@index([employee_id])
-  @@index([company_id])
-  @@index([timestamp])
-}
-
-// Leave Requests
 model LeaveRequest {
-  id                String    @id @default(cuid())
-  employee_id       String
-  company_id        String
-  company           Company   @relation(fields: [company_id], references: [id])
-  start_date        DateTime
-  end_date          DateTime
-  leave_type        String    // vacation, sick, personal, unpaid
-  reason            String?
-  status            String    @default("pending") // pending, approved, rejected, cancelled
-  notes             String?
-  created_at        DateTime  @default(now())
-  updated_at        DateTime  @updatedAt
-
-  @@index([employee_id])
-  @@index([company_id])
-  @@index([status])
+  id              String   @id @default(cuid())
+  company_id      String
+  employee_id     String
+  leave_type      String   // ferie, permesso, malattia, extra
+  start_date      DateTime
+  end_date        DateTime
+  days_count      Int
+  status          String   @default("pending") // pending, manager_approved, approved, rejected
+  requester_email String
+  note            String?
+  admin_note      String?
+  approved_at     DateTime?
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+  
+  company         Company  @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  employee        Employee @relation(fields: [employee_id], references: [id], onDelete: Cascade)
+  
+  @@map("leave_requests")
 }
 
-// Leave Balances
 model LeaveBalance {
-  id                String    @id @default(cuid())
-  employee_id       String
-  company_id        String
-  year              Int
-  available_leave   Int       @default(20)
-  used_leave        Int       @default(0)
+  id                   String @id @default(cuid())
+  employee_id          String @unique
+  company_id           String
+  year                 Int
+  available_leave      Int    @default(20)
+  used_leave           Int    @default(0)
   available_permissions Int   @default(8)
-  used_permissions  Int       @default(0)
-  notes             String?
-  created_at        DateTime  @default(now())
-  updated_at        DateTime  @updatedAt
-
-  @@unique([employee_id, year])
-  @@index([employee_id])
+  used_permissions     Int    @default(0)
+  
+  @@map("leave_balances")
 }
 
-// Documents
+model AttendanceEntry {
+  id              String   @id @default(cuid())
+  company_id      String
+  employee_id     String
+  user_email      String
+  employee_name   String
+  timestamp       DateTime
+  type            String   // check_in, check_out, break_start, break_end
+  latitude        Float?
+  longitude       Float?
+  location        String?
+  ip_address      String?
+  user_agent      String?
+  created_at      DateTime @default(now())
+  
+  company         Company  @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  employee        Employee @relation(fields: [employee_id], references: [id], onDelete: Cascade)
+  user            User     @relation(fields: [user_email], references: [email], onDelete: Cascade)
+  
+  @@index([company_id, employee_id, timestamp])
+  @@map("attendance_entries")
+}
+
 model Document {
-  id                String    @id @default(cuid())
-  company_id        String
-  company           Company   @relation(fields: [company_id], references: [id])
-  name              String
-  document_type     String    // contract, invoice, certificate, other
-  file_url          String
-  status            String    @default("active") // active, archived, deleted
-  expiry_date       DateTime?
-  created_at        DateTime  @default(now())
-  updated_at        DateTime  @updatedAt
-
-  @@index([company_id])
-  @@index([document_type])
+  id              String   @id @default(cuid())
+  company_id      String
+  employee_id     String?
+  user_id         String?
+  title           String
+  doc_type        String   // contratto, busta_paga, certificato, corso, altro
+  file_url        String?
+  status          String   @default("draft") // draft, approvato, rifiutato
+  created_date    DateTime @default(now())
+  expiry_date     DateTime?
+  created_by      String?
+  
+  company         Company  @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  employee        Employee? @relation(fields: [employee_id], references: [id], onDelete: Cascade)
+  user            User?    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  
+  @@map("documents")
 }
 
-// Subscriptions
-model Subscription {
-  id                String    @id @default(cuid())
-  company_id        String    @unique
-  company           Company   @relation(fields: [company_id], references: [id])
-  plan_id           String
+model CompanySubscription {
+  id                String   @id @default(cuid())
+  company_id        String   @unique
   stripe_customer_id String?
   stripe_subscription_id String?
-  status            String    @default("active") // active, trialing, past_due, cancelled
-  current_period_end DateTime?
-  amount            Float
-  billing_interval  String    @default("monthly") // monthly, yearly
-  created_at        DateTime  @default(now())
-  updated_at        DateTime  @updatedAt
-
-  @@index([company_id])
-  @@index([status])
-}
-
-// Subscription Plans
-model SubscriptionPlan {
-  id                String    @id @default(cuid())
-  name              String
-  description       String?
-  price_monthly     Float
-  price_yearly      Float?
-  max_employees     Int
-  features          String[]  @default([])
-  stripe_price_id   String?
-  is_active         Boolean   @default(true)
-  sort_order        Int       @default(0)
-  created_at        DateTime  @default(now())
-  updated_at        DateTime  @updatedAt
-
-  @@index([is_active])
+  plan              String   // startup, professional, enterprise
+  status            String   @default("active") // active, canceled, past_due
+  current_period_start DateTime?
+  current_period_end   DateTime?
+  canceled_at       DateTime?
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+  
+  company           Company  @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  
+  @@map("company_subscriptions")
 }
