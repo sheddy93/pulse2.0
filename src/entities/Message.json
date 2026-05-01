@@ -110,7 +110,9 @@
     "reply_to_id": {
       "type": "string",
       "description": "ID del messaggio a cui si risponde"
-    }
+    },
+    "is_deleted": { "type": "boolean", "default": false },
+    "deleted_at": { "type": "string", "format": "date-time" }
   },
   "required": [
     "conversation_id",

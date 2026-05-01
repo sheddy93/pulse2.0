@@ -1,0 +1,21 @@
+{
+  "name": "Asset",
+  "type": "object",
+  "properties": {
+    "company_id": { "type": "string" },
+    "name": { "type": "string" },
+    "asset_type": { "type": "string", "enum": ["computer", "phone", "vehicle", "furniture", "other"] },
+    "serial_number": { "type": "string" },
+    "purchase_date": { "type": "string", "format": "date" },
+    "purchase_price": { "type": "number" },
+    "depreciation_years": { "type": "number" },
+    "status": { "type": "string", "enum": ["available", "assigned", "maintenance", "retired"], "default": "available" },
+    "assigned_to_email": { "type": "string" },
+    "assigned_date": { "type": "string", "format": "date-time" },
+    "description": { "type": "string" },
+    "location": { "type": "string" },
+    "is_deleted": { "type": "boolean", "default": false },
+    "deleted_at": { "type": "string", "format": "date-time" }
+  },
+  "required": ["company_id", "name", "asset_type", "serial_number"]
+}

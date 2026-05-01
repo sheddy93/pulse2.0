@@ -2,94 +2,23 @@
   "name": "PerformanceReview",
   "type": "object",
   "properties": {
-    "company_id": {
-      "type": "string"
-    },
-    "review_period": {
-      "type": "string",
-      "description": "Es. Q1-2026, semestrale, annuale"
-    },
-    "employee_id": {
-      "type": "string"
-    },
-    "employee_name": {
-      "type": "string"
-    },
-    "employee_email": {
-      "type": "string"
-    },
-    "reviewer_id": {
-      "type": "string",
-      "description": "ID dell'utente che fa la valutazione"
-    },
-    "reviewer_name": {
-      "type": "string"
-    },
-    "reviewer_email": {
-      "type": "string"
-    },
-    "reviewer_role": {
-      "type": "string",
-      "enum": [
-        "manager",
-        "peer",
-        "direct_report",
-        "self"
-      ],
-      "description": "Ruolo di chi valuta rispetto al dipendente"
-    },
-    "overall_rating": {
-      "type": "number",
-      "minimum": 1,
-      "maximum": 5,
-      "description": "Valutazione complessiva 1-5"
-    },
-    "criteria_ratings": {
-      "type": "object",
-      "properties": {
-        "communication": { "type": "number", "minimum": 1, "maximum": 5 },
-        "teamwork": { "type": "number", "minimum": 1, "maximum": 5 },
-        "technical_skills": { "type": "number", "minimum": 1, "maximum": 5 },
-        "reliability": { "type": "number", "minimum": 1, "maximum": 5 },
-        "leadership": { "type": "number", "minimum": 1, "maximum": 5 }
-      },
-      "description": "Valutazioni per singoli criteri"
-    },
-    "strengths": {
-      "type": "string",
-      "description": "Punti di forza"
-    },
-    "areas_for_improvement": {
-      "type": "string",
-      "description": "Aree di miglioramento"
-    },
-    "comments": {
-      "type": "string",
-      "description": "Commenti aggiuntivi"
-    },
-    "status": {
-      "type": "string",
-      "enum": [
-        "draft",
-        "submitted",
-        "reviewed"
-      ],
-      "default": "draft"
-    },
-    "submitted_at": {
-      "type": "string"
-    },
-    "is_anonymous": {
-      "type": "boolean",
-      "default": false,
-      "description": "Feedback anonimo dai colleghi"
-    }
+    "company_id": { "type": "string" },
+    "employee_id": { "type": "string" },
+    "employee_email": { "type": "string" },
+    "employee_name": { "type": "string" },
+    "review_period": { "type": "string", "description": "es: 2025-Q1" },
+    "reviewer_email": { "type": "string" },
+    "reviewer_name": { "type": "string" },
+    "rating": { "type": "number", "minimum": 1, "maximum": 5 },
+    "summary": { "type": "string" },
+    "strengths": { "type": "string" },
+    "areas_for_improvement": { "type": "string" },
+    "goals": { "type": "string" },
+    "status": { "type": "string", "enum": ["draft", "submitted", "acknowledged"], "default": "draft" },
+    "submitted_at": { "type": "string", "format": "date-time" },
+    "acknowledged_at": { "type": "string", "format": "date-time" },
+    "is_deleted": { "type": "boolean", "default": false },
+    "deleted_at": { "type": "string", "format": "date-time" }
   },
-  "required": [
-    "company_id",
-    "employee_id",
-    "reviewer_id",
-    "overall_rating",
-    "review_period"
-  ]
+  "required": ["company_id", "employee_id", "employee_email", "review_period", "reviewer_email"]
 }

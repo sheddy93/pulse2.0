@@ -5,21 +5,18 @@
     "company_id": { "type": "string" },
     "employee_id": { "type": "string" },
     "title": { "type": "string" },
-    "description": { "type": "string" },
-    "category": { "type": "string", "enum": ["contract", "payslip", "policy", "certificate", "medical", "safety", "other"] },
+    "doc_type": { "type": "string", "enum": ["contratto", "busta_paga", "certificato", "corso", "altro"] },
     "file_url": { "type": "string" },
-    "file_name": { "type": "string" },
-    "file_size": { "type": "number" },
-    "mime_type": { "type": "string" },
-    "visibility": { "type": "string", "enum": ["company", "employee", "hr_only", "consultant"], "default": "company" },
-    "requires_confirmation": { "type": "boolean", "default": false },
-    "confirmed_by": { "type": "string" },
-    "confirmed_at": { "type": "string", "format": "date-time" },
     "uploaded_by": { "type": "string" },
-    "expires_at": { "type": "string", "format": "date" },
-    "status": { "type": "string", "enum": ["active", "archived", "expired"], "default": "active" },
-    "created_at": { "type": "string", "format": "date-time" },
-    "updated_at": { "type": "string", "format": "date-time" }
+    "visibility": { "type": "string", "enum": ["employee", "company", "consultant", "all"], "default": "all" },
+    "expiry_date": { "type": "string", "format": "date" },
+    "notes": { "type": "string" },
+    "status": { "type": "string", "enum": ["in_revisione", "approvato", "rifiutato"], "default": "in_revisione" },
+    "signature_required": { "type": "boolean", "default": false },
+    "signature_status": { "type": "string", "enum": ["pending", "signed", "rejected"] },
+    "created_date": { "type": "string", "format": "date-time" },
+    "is_deleted": { "type": "boolean", "default": false },
+    "deleted_at": { "type": "string", "format": "date-time" }
   },
-  "required": ["company_id", "title", "category"]
+  "required": ["company_id", "title", "doc_type", "file_url"]
 }

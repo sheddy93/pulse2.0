@@ -2,66 +2,23 @@
   "name": "TrainingEnrollment",
   "type": "object",
   "properties": {
-    "company_id": {
-      "type": "string"
-    },
-    "course_id": {
-      "type": "string"
-    },
-    "course_title": {
-      "type": "string"
-    },
-    "employee_id": {
-      "type": "string"
-    },
-    "employee_name": {
-      "type": "string"
-    },
-    "employee_email": {
-      "type": "string"
-    },
-    "enrollment_date": {
-      "type": "string"
-    },
-    "status": {
-      "type": "string",
-      "enum": [
-        "enrolled",
-        "in_progress",
-        "completed",
-        "failed",
-        "expired",
-        "cancelled"
-      ],
-      "default": "enrolled"
-    },
-    "completion_date": {
-      "type": "string"
-    },
-    "completion_percentage": {
-      "type": "number",
-      "minimum": 0,
-      "maximum": 100,
-      "default": 0
-    },
-    "expiry_date": {
-      "type": "string"
-    },
-    "certificate_url": {
-      "type": "string"
-    },
-    "custom_certificate_url": {
-      "type": "string",
-      "description": "Certificato caricato dal dipendente"
-    },
-    "notes": {
-      "type": "string"
-    }
+    "company_id": { "type": "string" },
+    "employee_id": { "type": "string" },
+    "employee_email": { "type": "string" },
+    "course_id": { "type": "string" },
+    "course_name": { "type": "string" },
+    "provider": { "type": "string" },
+    "start_date": { "type": "string", "format": "date-time" },
+    "completion_date": { "type": "string", "format": "date-time" },
+    "status": { "type": "string", "enum": ["enrolled", "in_progress", "completed", "dropped"], "default": "enrolled" },
+    "progress_percentage": { "type": "number", "minimum": 0, "maximum": 100, "default": 0 },
+    "certificate_url": { "type": "string" },
+    "expiry_date": { "type": "string", "format": "date" },
+    "cost": { "type": "number" },
+    "approved_by": { "type": "string" },
+    "notes": { "type": "string" },
+    "is_deleted": { "type": "boolean", "default": false },
+    "deleted_at": { "type": "string", "format": "date-time" }
   },
-  "required": [
-    "company_id",
-    "course_id",
-    "employee_id",
-    "enrollment_date"
-  ]
+  "required": ["company_id", "employee_id", "employee_email", "course_id", "course_name"]
 }

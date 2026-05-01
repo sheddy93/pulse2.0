@@ -1,0 +1,19 @@
+{
+  "name": "Announcement",
+  "type": "object",
+  "properties": {
+    "company_id": { "type": "string" },
+    "title": { "type": "string" },
+    "content": { "type": "string" },
+    "author_email": { "type": "string" },
+    "author_name": { "type": "string" },
+    "priority": { "type": "number", "minimum": 1, "maximum": 5, "default": 3 },
+    "is_pinned": { "type": "boolean", "default": false },
+    "visibility": { "type": "string", "enum": ["all", "employees", "managers", "admins"], "default": "all" },
+    "published_at": { "type": "string", "format": "date-time" },
+    "expires_at": { "type": "string", "format": "date-time" },
+    "is_deleted": { "type": "boolean", "default": false },
+    "deleted_at": { "type": "string", "format": "date-time" }
+  },
+  "required": ["company_id", "title", "content", "author_email"]
+}
