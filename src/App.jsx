@@ -74,6 +74,9 @@ import AdminAnalytics from './pages/dashboard/AdminAnalytics';
 import OnboardingWizard from './pages/employee/OnboardingWizard';
 import OnboardingTracking from './pages/company/OnboardingTracking';
 import TrainingPlanManagement from './pages/company/TrainingPlanManagement';
+import TimeOffCalendarPage from './pages/company/TimeOffCalendarPage';
+import DocumentTemplatePage from './pages/company/DocumentTemplatePage';
+import TeamAnalyticsPage from './pages/company/TeamAnalyticsPage';
 import TrainingDashboard from './pages/employee/TrainingDashboard';
 import CertificationExpiry from './pages/company/CertificationExpiry';
 import SuperAdminSettings from './pages/dashboard/SuperAdminSettings';
@@ -217,6 +220,7 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/company/analytics" element={<HRAnalytics />} />
       <Route path="/dashboard/company/ai-analytics" element={<AdvancedAnalytics />} />
       <Route path="/dashboard/company/calendar" element={<HRCalendarPage />} />
+      <Route path="/dashboard/company/time-off-calendar" element={<TimeOffCalendarPage />} />
       <Route path="/dashboard/company/expenses" element={<ExpenseManagement />} />
       <Route path="/dashboard/company/leave-requests" element={<ManagerLeaveRequests />} />
       <Route path="/dashboard/company/onboarding-tracking" element={<OnboardingTracking />} />
@@ -230,6 +234,8 @@ const AuthenticatedApp = () => {
       <Route path="/dashboard/company/report-generator" element={<ReportGenerator />} />
       <Route path="/dashboard/company/workflow-configuration" element={<WorkflowConfiguration />} />
       <Route path="/dashboard/company/geofence" element={<GeofenceManagement />} />
+      <Route path="/dashboard/company/document-templates" element={<DocumentTemplatePage />} />
+      <Route path="/dashboard/company/team-analytics" element={<TeamAnalyticsPage />} />
       <Route path="/dashboard/company/settings" element={<CompanySettings />} />
 
       {/* Employee */}

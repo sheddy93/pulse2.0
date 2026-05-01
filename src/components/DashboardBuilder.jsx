@@ -154,7 +154,7 @@ export default function DashboardBuilder({ companyId, userEmail, onLayoutSaved }
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
           <p className="text-sm font-medium text-blue-900 mb-3">Add Widgets:</p>
           <div className="flex flex-wrap gap-2">
-            {(['kpi', 'chart', 'table', 'trend', 'gauge'] as const).map(type => (
+            {['kpi', 'chart', 'table', 'trend', 'gauge'].map(type => (
               <Button
                 key={type}
                 variant="outline"

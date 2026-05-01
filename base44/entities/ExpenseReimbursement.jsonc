@@ -1,0 +1,89 @@
+{
+  "name": "ExpenseReimbursement",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "employee_id": {
+      "type": "string"
+    },
+    "employee_name": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Importo in euro"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "travel",
+        "meals",
+        "accommodation",
+        "equipment",
+        "training",
+        "other"
+      ]
+    },
+    "description": {
+      "type": "string"
+    },
+    "receipt_url": {
+      "type": "string",
+      "description": "URL dello scontrino/ricevuta"
+    },
+    "expense_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "submitted",
+        "approved",
+        "rejected",
+        "paid"
+      ],
+      "default": "draft"
+    },
+    "approver_email": {
+      "type": "string"
+    },
+    "approver_name": {
+      "type": "string"
+    },
+    "approval_notes": {
+      "type": "string"
+    },
+    "approved_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "payment_method": {
+      "type": "string",
+      "enum": [
+        "bank_transfer",
+        "cash",
+        "card"
+      ],
+      "default": "bank_transfer"
+    },
+    "paid_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "submitted_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "company_id",
+    "employee_id",
+    "amount",
+    "category",
+    "expense_date"
+  ]
+}

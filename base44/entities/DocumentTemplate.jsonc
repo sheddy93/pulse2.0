@@ -1,0 +1,82 @@
+{
+  "name": "DocumentTemplate",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string",
+      "description": "Nome template (es. Contratto Lavoro Indeterminato)"
+    },
+    "template_type": {
+      "type": "string",
+      "enum": [
+        "employment_contract",
+        "offer_letter",
+        "termination_letter",
+        "nda",
+        "agreement",
+        "custom"
+      ],
+      "default": "custom"
+    },
+    "description": {
+      "type": "string"
+    },
+    "html_content": {
+      "type": "string",
+      "description": "Contenuto HTML con variabili {{name}}, {{date}}, etc."
+    },
+    "variables": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "text",
+              "date",
+              "number",
+              "email"
+            ]
+          }
+        }
+      },
+      "description": "Variabili disponibili nel template"
+    },
+    "signature_required": {
+      "type": "boolean",
+      "default": true
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "employment",
+        "legal",
+        "agreements",
+        "other"
+      ]
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "created_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "company_id",
+    "name",
+    "template_type",
+    "html_content"
+  ]
+}

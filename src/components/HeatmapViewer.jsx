@@ -37,7 +37,7 @@ export default function HeatmapViewer({ companyId }) {
   };
 
   // Color intensity (red = more employees)
-  const getColor = (intensity: number) => {
+  const getColor = (intensity) => {
     if (intensity > 0.8) return '#ff0000'; // Red
     if (intensity > 0.6) return '#ff6600'; // Orange
     if (intensity > 0.4) return '#ffff00'; // Yellow
