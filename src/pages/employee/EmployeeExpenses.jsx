@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-// Migration: removed base44 dependency
+import { authService } from '@/services/authService';
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import { Plus, X, FileImage, Trash2 } from "lucide-react";
@@ -43,18 +43,14 @@ export default function EmployeeExpenses() {
 
   useEffect(() => {
     const init = async () => {
-    const me = await authService.me();
+      const me = await authService.me();
       setUser(me);
-      const emps = await base44.entities.EmployeeProfile.filter({ user_email: me.email });
-      const emp = emps[0];
-      setEmployee(emp);
-
-      if (emp) {
-        const exps = await base44.entities.ExpenseReimbursement.filter({ employee_id: emp.id });
-        setExpenses(exps.sort((a, b) => new Date(b.created_date) - new Date(a.created_date)));
-      }
+      // TODO: Replace with employee and expense services
+      setEmployee(null);
+      setExpenses([]);
       setLoading(false);
     };
+    init();
   }, []);
 
   const handleReceiptUpload = async (e) => {
@@ -86,8 +82,8 @@ export default function EmployeeExpenses() {
       status: "draft"
     };
 
-    await base44.entities.ExpenseReimbursement.create(newExpense);
-    const updated = await base44.entities.ExpenseReimbursement.filter({ employee_id: employee.id });
+    // TODO: Replace with expense service
+    const updated = [];
     setExpenses(updated.sort((a, b) => new Date(b.created_date) - new Date(a.created_date)));
 
     setShowForm(false);
@@ -97,14 +93,13 @@ export default function EmployeeExpenses() {
   };
 
   const handleSubmitExpense = async (id) => {
-    await base44.entities.ExpenseReimbursement.update(id, { status: "submitted" });
-    const updated = await base44.entities.ExpenseReimbursement.filter({ employee_id: employee.id });
-    setExpenses(updated.sort((a, b) => new Date(b.created_date) - new Date(a.created_date)));
+    // TODO: Replace with expense service
+    setExpenses([]);
   };
 
   const handleDelete = async (id) => {
     if (confirm("Elimina questa richiesta?")) {
-      await base44.entities.ExpenseReimbursement.delete(id);
+      // TODO: Replace with expense service
       setExpenses(expenses.filter(e => e.id !== id));
     }
   };

@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import { authService } from '@/services/authService';
-import companyService from '@/services/companies.service';
-import employeeService from '@/services/employees.service';
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import { Download, FileText, Calendar, Users, Loader } from "lucide-react";

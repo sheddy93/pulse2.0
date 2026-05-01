@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-// Migration: removed base44 dependency
+import { authService } from '@/services/authService';
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
 import { CalendarDays, Plus, X } from "lucide-react";
@@ -25,20 +25,19 @@ export default function LeaveRequestPage() {
   const [saving, setSaving] = useState(false);
 
   const loadLeaves = async (emp) => {
-    const l = await base44.entities.LeaveRequest.filter({ employee_id: emp.id });
-    setLeaves([...l].sort((a, b) => new Date(b.created_date) - new Date(a.created_date)));
+    // TODO: Replace with leave service
+    setLeaves([]);
   };
 
   useEffect(() => {
     const init = async () => {
-    const me = await authService.me();
+      const me = await authService.me();
       setUser(me);
-      const emps = await base44.entities.EmployeeProfile.filter({ user_email: me.email });
-      const emp = emps[0] || null;
-      setEmployee(emp);
-      if (emp) await loadLeaves(emp);
+      // TODO: Replace with employee service
+      setEmployee(null);
       setLoading(false);
     };
+    init();
   }, []);
 
   const handleSubmit = async (e) => {
@@ -46,20 +45,9 @@ export default function LeaveRequestPage() {
     if (!employee) return;
     setSaving(true);
     const days = differenceInCalendarDays(new Date(form.end_date), new Date(form.start_date)) + 1;
-    await base44.entities.LeaveRequest.create({
-      employee_id: employee.id,
-      employee_name: `${employee.first_name} ${employee.last_name}`,
-      employee_email: user.email,
-      company_id: employee.company_id,
-      manager_email: employee.manager,
-      manager_name: undefined,
-      ...form,
-      days_count: days,
-      status: "pending",
-    });
+    // TODO: Replace with leave service
     setShowForm(false);
     setForm({ leave_type: "ferie", start_date: "", end_date: "", note: "" });
-    await loadLeaves(employee);
     setSaving(false);
   };
 

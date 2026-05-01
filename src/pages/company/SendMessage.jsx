@@ -132,11 +132,12 @@ export default function SendMessage() {
       const recipientEmps = employees.filter(e => recipientIds.includes(e.id));
       for (let emp of recipientEmps) {
         if (emp.email) {
-          await base44.integrations.Core.SendEmail({
-            to: emp.email,
-            subject: `Nuovo messaggio: ${formData.subject}`,
-            body: `Hai ricevuto un nuovo messaggio da ${user.full_name}.\n\nOggetto: ${formData.subject}\n\nVisita la dashboard per visualizzare il messaggio completo e gli allegati.`
-          });
+          // TODO: Replace with integration SendEmail
+          // {
+          //   to: emp.email,
+          //   subject: `Nuovo messaggio: ${formData.subject}`,
+          //   body: `Hai ricevuto un nuovo messaggio da ${user.full_name}...`
+          // }
         }
       }
 
