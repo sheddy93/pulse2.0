@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
+import LazyImage from "@/components/LazyImage";
 import { useApiCache } from "@/hooks/useApiCache";
 import { Plus, Trash2, Pin, X } from "lucide-react";
 import { format } from "date-fns";

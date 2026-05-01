@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import AppShell from "@/components/layout/AppShell";
 import PageLoader from "@/components/layout/PageLoader";
+import LazyImage from "@/components/LazyImage";
 import { FileText, Upload, AlertTriangle, CalendarDays, Trash2, ExternalLink, X, Signature } from "lucide-react";
 import { format, differenceInDays } from "date-fns";
 import { it } from "date-fns/locale";

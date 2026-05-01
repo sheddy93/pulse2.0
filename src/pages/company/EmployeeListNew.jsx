@@ -8,6 +8,7 @@ import { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import AppShell from '@/components/layout/AppShell';
 import PageLoader from '@/components/layout/PageLoader';
+import LazyImage from '@/components/LazyImage';
 import { fetchEmployees, fetchDepartments, filterAndSort } from '@/services/employeeService';
 import { useApiCache, clearApiCache } from '@/hooks/useApiCache';
 import { Users, Plus, Search, ChevronRight } from 'lucide-react';
