@@ -3,10 +3,8 @@
   "type": "object",
   "properties": {
     "conversation_id": {
-      "type": "string"
-    },
-    "company_id": {
-      "type": "string"
+      "type": "string",
+      "description": "ID della conversazione"
     },
     "sender_email": {
       "type": "string"
@@ -14,41 +12,60 @@
     "sender_name": {
       "type": "string"
     },
-    "sender_employee_id": {
+    "receiver_email": {
+      "type": "string"
+    },
+    "company_id": {
       "type": "string"
     },
     "content": {
       "type": "string",
       "description": "Testo del messaggio"
     },
+    "message_type": {
+      "type": "string",
+      "enum": ["text", "request", "approval", "file"],
+      "default": "text"
+    },
+    "request_type": {
+      "type": "string",
+      "enum": ["leave", "overtime", "expense", "document", "other"],
+      "description": "Tipo richiesta se message_type=request"
+    },
+    "request_id": {
+      "type": "string",
+      "description": "ID della richiesta collegata"
+    },
+    "request_data": {
+      "type": "object",
+      "description": "Snapshot dati richiesta"
+    },
     "attachments": {
       "type": "array",
       "items": {
         "type": "object",
         "properties": {
-          "file_url": { "type": "string" },
-          "file_name": { "type": "string" },
-          "file_size": { "type": "number" },
-          "file_type": { "type": "string" }
+          "url": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
         }
       },
-      "description": "File allegati al messaggio"
+      "default": []
     },
-    "is_edited": {
-      "type": "boolean",
-      "default": false
-    },
-    "edited_at": {
-      "type": "string"
+    "read_at": {
+      "type": "string",
+      "format": "date-time"
     },
     "sent_at": {
-      "type": "string"
+      "type": "string",
+      "format": "date-time"
     }
   },
-  "required": [
-    "conversation_id",
-    "company_id",
-    "sender_email",
-    "content"
-  ]
+  "required": ["conversation_id", "sender_email", "content", "company_id"]
 }

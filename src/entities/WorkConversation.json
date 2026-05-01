@@ -5,47 +5,41 @@
     "company_id": {
       "type": "string"
     },
-    "title": {
+    "participant_1_email": {
       "type": "string"
     },
-    "type": {
-      "type": "string",
-      "enum": ["one_on_one", "group"],
-      "default": "one_on_one"
-    },
-    "creator_email": {
+    "participant_1_name": {
       "type": "string"
     },
-    "creator_name": {
+    "participant_2_email": {
       "type": "string"
     },
-    "participants": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "email": { "type": "string" },
-          "name": { "type": "string" },
-          "employee_id": { "type": "string" }
-        }
-      },
-      "description": "Lista partecipanti alla conversazione"
+    "participant_2_name": {
+      "type": "string"
+    },
+    "subject": {
+      "type": "string"
+    },
+    "last_message": {
+      "type": "string"
     },
     "last_message_at": {
-      "type": "string"
+      "type": "string",
+      "format": "date-time"
     },
-    "last_message_preview": {
-      "type": "string"
+    "unread_count_p1": {
+      "type": "number",
+      "default": 0
     },
-    "is_archived": {
-      "type": "boolean",
-      "default": false
+    "unread_count_p2": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "archived", "closed"],
+      "default": "active"
     }
   },
-  "required": [
-    "company_id",
-    "title",
-    "creator_email",
-    "participants"
-  ]
+  "required": ["company_id", "participant_1_email", "participant_2_email"]
 }
