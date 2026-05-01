@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+// All base44 references removed - Stripe plans via backend functions
 import { Plus, Trash2, Save, RefreshCw, Check, CreditCard, Star, ChevronDown, ChevronUp } from "lucide-react";
 import { toast } from "sonner";
 

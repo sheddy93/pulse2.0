@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { base44 } from "@/api/base44Client";
+// All base44 references removed - payroll via service layer
 import { Download, FileSpreadsheet, X, Loader2 } from "lucide-react";
 import { format, startOfMonth, endOfMonth, parseISO, differenceInMinutes } from "date-fns";
 import { it } from "date-fns/locale";

@@ -4,7 +4,7 @@
  */
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { base44 } from "@/api/base44Client";
+// All base44 references removed - shell via service layer
 import { cn } from "@/lib/utils";
 import useDarkMode from "@/hooks/useDarkMode";
 import { filterNavItems } from "@/lib/featureGating";

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+// All base44 references removed - calendar sync via service layer
 import { Calendar, Check, X, Loader2, Unlink } from "lucide-react";
 
 export default function CalendarSyncSettings({ employeeId, userEmail }) {

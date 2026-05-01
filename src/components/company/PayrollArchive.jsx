@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { base44 } from "@/api/base44Client";
+// All base44 references removed - payroll via service layer
 import { Download, X, Loader2, FileArchive, Search } from "lucide-react";
 import { format, parseISO, differenceInMinutes } from "date-fns";
 import JSZip from "jszip";

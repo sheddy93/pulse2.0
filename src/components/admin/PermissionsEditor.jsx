@@ -25,7 +25,7 @@
  *  2. Clicca "Salva permessi" → salva direttamente su UserPermissions
  */
 import { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+// All base44 references removed - permissions via service layer
 import { Shield, Save, X, AlertCircle, Clock } from "lucide-react";
 import { toast } from "sonner";
 

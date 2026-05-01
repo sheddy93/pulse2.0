@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+// All base44 references removed - announcements via service layer
 import { Bell, X } from "lucide-react";
 import { format } from "date-fns";
 import { it } from "date-fns/locale";

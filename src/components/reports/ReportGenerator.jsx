@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { base44 } from "@/api/base44Client";
+// Base44 dependency removed
 import { FileText, Download, Loader2, BarChart3, User, Building2, X } from "lucide-react";
 
 const REPORT_TYPES = [

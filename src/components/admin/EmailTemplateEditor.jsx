@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+// All base44 references removed - email templates via service layer
 import { Mail, Save, Copy, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 

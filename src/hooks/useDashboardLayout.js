@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+// All base44 references removed - dashboard layouts via service layer
 
 export const useDashboardLayout = (userEmail, dashboardType, defaultLayout) => {
   const [layout, setLayout] = useState(defaultLayout);

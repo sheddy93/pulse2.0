@@ -15,7 +15,7 @@
  *  - Rifiuto → imposta request status "rejected" con nota opzionale
  */
 import { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+// All base44 references removed - permissions via service layer
 import { Shield, Check, X, ChevronDown, ChevronUp, Clock } from "lucide-react";
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+// All base44 references removed - notifications via service layer
 import { Link } from "react-router-dom";
 import { Bell, Check, X, Settings } from "lucide-react";
 

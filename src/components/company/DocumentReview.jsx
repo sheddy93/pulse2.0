@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { base44 } from "@/api/base44Client";
+// All base44 references removed - documents via service layer
 import { Check, X, FileText, Loader2, AlertCircle, Eye } from "lucide-react";
 import { format, parseISO } from "date-fns";
 import { it } from "date-fns/locale";

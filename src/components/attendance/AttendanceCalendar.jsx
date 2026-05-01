@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { format, getDaysInMonth, startOfMonth, addMonths, subMonths } from "date-fns";
 import { it } from "date-fns/locale";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+// All base44 references removed - attendance via service layer
 
 const BADGES = {
   present: { label: "Presente", color: "bg-emerald-500", icon: "✓" },
